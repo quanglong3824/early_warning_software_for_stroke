@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "484558690842",
+    "firebase_url": "https://warning-software-stroke-default-rtdb.firebaseio.com",
+    "project_id": "warning-software-stroke",
+    "storage_bucket": "warning-software-stroke.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484558690842:android:0145c3822607f9f05f4fa3",
+        "android_client_info": {
+          "package_name": "com.example.early_warning_software_for_stroke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484558690842-o8paac719fa5qbe1pispm4ji2ocn06aj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc2rnas6kGOJGqQ4CgJGCSL6-qZM0SoT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484558690842-o8paac719fa5qbe1pispm4ji2ocn06aj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

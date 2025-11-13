@@ -1,0 +1,169 @@
+//// Cài đặt chung cho Project
+Project du_an_tot_nghiep_dot_quy {
+  database_type: 'PostgreSQL' // Hoặc 'MySQL'
+  Note: 'Database cho He thong Giam sat Rui ro Dot quy'
+}
+
+//// Bảng 1: Bảng Lõi Xác thực & Vai trò
+Table nguoi_dung {
+  id varchar(36) [pk, note: 'UUID']
+  email varchar(255) [unique, not null]
+  mat_khau varchar(255) [not null, note: 'Da duoc hash']
+  vai_tro ENUM('BENH_NHAN', 'NGUOI_THAN', 'BAC_SI') [not null, note: 'Phan quyen he thong']
+  ngay_tao timestamp [default: `now()`, not null]
+
+  Note: 'Bang loi de quan ly dang nhap va vai tro'
+}
+
+//// Bảng 2: Ho so Benh nhan (1-1 voi nguoi_dung)
+Table ho_so_benh_nhan {
+  id varchar(36) [pk, note: 'UUID']
+  nguoi_dung_id varchar(36) [unique, not null, note: 'FK 1-1 toi nguoi_dung']
+  ho_ten varchar(100) [not null]
+  ngay_sinh date [note: 'De tinh tuoi cho model']
+  gioi_tinh ENUM('NAM', 'NU')
+  tien_su_cao_huyet_ap boolean [default: false]
+  tien_su_benh_tim boolean [default: false]
+  tinh_trang_hut_thuoc ENUM('KHONG_BAO_GIO', 'DA_TUNG', 'DANG_HUT')
+  loai_cu_tru ENUM('THANH_THI', 'NONG_THON')
+  ghi_chu_tien_su text
+
+  Note: 'Luu cac thong tin TINH (it thay doi) cua benh nhan'
+}
+
+//// Bảng 3: Ho so Nguoi than (1-1 voi nguoi_dung)
+Table ho_so_nguoi_than {
+  id varchar(36) [pk, note: 'UUID']
+  nguoi_dung_id varchar(36) [unique, not null, note: 'FK 1-1 toi nguoi_dung']
+  ho_ten varchar(100) [not null]
+  so_dien_thoai varchar(20) [note: 'De nhan canh bao']
+
+  Note: 'Thong tin Nguoi than (Caregiver)'
+}
+
+//// Bảng 4: Ho so Bac si (1-1 voi nguoi_dung)
+Table ho_so_bac_si {
+  id varchar(36) [pk, note: 'UUID']
+  nguoi_dung_id varchar(36) [unique, not null, note: 'FK 1-1 toi nguoi_dung']
+  ho_ten varchar(100) [not null]
+  chuyen_khoa varchar(100) [note: 'Vi du: Tim mach, SV Y khoa Nam 5']
+  don_vi_cong_tac varchar(255) [note: 'Vi du: Benh vien X, Truong Y Y']
+  
+  Note: 'Thong tin Bac si / Sinh vien Y khoa'
+}
+
+//// Bảng 5: Bang Chi so Suc khoe (Du lieu DONG)
+Table chi_so_suc_khoe {
+  id varchar(36) [pk, note: 'UUID']
+  benh_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  ngay_do timestamp [not null, default: `now()`, note: 'Thoi diem benh nhan nhap chi so']
+  
+  // Cac chi so dau vao cho model .pkl
+  huyet_ap_tam_thu int [note: 'Vi du: 140']
+  huyet_ap_tam_truong int [note: 'Vi du: 90']
+  duong_huyet float [note: 'Vi du: 120.5']
+  bmi float [note: 'Vi du: 28.5']
+  nhip_tim int [note: 'Co the null']
+  
+  ghi_chu_benh_nhan text [note: 'Vi du: Hom nay thay met']
+
+  Note: 'Bang quan trong nhat, luu du lieu benh nhan nhap hang ngay'
+}
+
+//// Bảng 6: Bang Ket qua Du doan (Tu model .pkl)
+Table ket_qua_du_doan {
+  id varchar(36) [pk, note: 'UUID']
+  benh_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  chi_so_id varchar(36) [unique, not null, note: 'FK 1-1 toi chi_so_suc_khoe']
+  ngay_du_doan timestamp [not null, default: `now()`]
+  
+  diem_rui_ro float [not null, note: 'Ket qua raw tu model, vd: 0.753']
+  muc_do_rui_ro ENUM('THAP', 'TRUNG_BINH', 'CAO', 'RAT_CAO') [note: 'Da phan loai tu diem_rui_ro']
+  input_snapshot json [note: 'Luu lai JSON dau vao da gui cho model de debug']
+
+  Note: 'Luu ket qua sau moi lan goi API /predict'
+}
+
+//// Bảng 7: Bang Lien ket Benh nhan - Nguoi than (N-N)
+Table lien_ket_benh_nhan_nguoi_than {
+  id varchar(36) [pk, note: 'UUID']
+  benh_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  nguoi_than_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  moi_quan_he varchar(50) [note: 'Vi du: Con trai, Vo']
+  trang_thai ENUM('DANG_CHO', 'DA_KET_NOI') [not null, default: 'DANG_CHO']
+  
+  Indexes {
+    (benh_nhan_id, nguoi_than_id) [unique] // Dam bao khong trung lien ket
+  }
+}
+
+//// Bảng 8: Bang Lien ket Benh nhan - Bac si (N-N)
+Table lien_ket_benh_nhan_bac_si {
+  id varchar(36) [pk, note: 'UUID']
+  benh_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  bac_si_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  trang_thai ENUM('DANG_CHO', 'DA_KET_NOI') [not null, default: 'DANG_CHO']
+  
+  Indexes {
+    (benh_nhan_id, bac_si_id) [unique] // Dam bao khong trung lien ket
+  }
+}
+
+//// Bảng 9: Bang Khuyen nghi (Tu Bac si)
+Table khuyen_nghi {
+  id varchar(36) [pk, note: 'UUID']
+  bac_si_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  benh_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  tieu_de varchar(255)
+  noi_dung text [not null]
+  da_doc boolean [default: false, note: 'Benh nhan da doc chua?']
+  ngay_tao timestamp [default: `now()`, not null]
+
+  Note: 'Luu cac phan hoi tu Doctor Portal gui cho Patient App'
+}
+
+//// Bảng 10: Bang Thong bao (Push Notifications)
+Table thong_bao {
+  id varchar(36) [pk, note: 'UUID']
+  nguoi_nhan_id varchar(36) [not null, note: 'FK toi nguoi_dung']
+  tieu_de varchar(100) [not null]
+  noi_dung text
+  loai_thong_bao ENUM('RUI_RO_CAO', 'KHUYEN_NGHI_MOI', 'NHAC_NHO') [not null]
+  lien_ket_id varchar(36) [note: 'ID cua ket_qua_du_doan hoac khuyen_nghi de dieu huong']
+  da_doc boolean [default: false]
+  ngay_tao timestamp [default: `now()`, not null]
+
+  Note: 'Quan ly hang doi Push Notification cho cac app'
+}
+
+
+//// Định nghĩa các Mối quan hệ (Relationships)
+
+// Lien ket 1-1 giua nguoi_dung va cac Ho so
+Ref: nguoi_dung.id - ho_so_benh_nhan.nguoi_dung_id
+Ref: nguoi_dung.id - ho_so_nguoi_than.nguoi_dung_id
+Ref: nguoi_dung.id - ho_so_bac_si.nguoi_dung_id
+
+// Lien ket 1-N (Benh nhan co nhieu chi so suc khoe)
+Ref: nguoi_dung.id < chi_so_suc_khoe.benh_nhan_id
+
+// Lien ket 1-N (Benh nhan co nhieu ket qua du doan)
+Ref: nguoi_dung.id < ket_qua_du_doan.benh_nhan_id
+
+// Lien ket 1-1 (Moi chi so suc khoe chi co 1 ket qua du doan)
+Ref: chi_so_suc_khoe.id - ket_qua_du_doan.chi_so_id
+
+// Lien ket N-N (Benh nhan - Nguoi than)
+Ref: nguoi_dung.id < lien_ket_benh_nhan_nguoi_than.benh_nhan_id
+Ref: nguoi_dung.id < lien_ket_benh_nhan_nguoi_than.nguoi_than_id
+
+// Lien ket N-N (Benh nhan - Bac si)
+Ref: nguoi_dung.id < lien_ket_benh_nhan_bac_si.benh_nhan_id
+Ref: nguoi_dung.id < lien_ket_benh_nhan_bac_si.bac_si_id
+
+// Lien ket Khuyen nghi (Bac si -> Benh nhan)
+Ref: nguoi_dung.id < khuyen_nghi.bac_si_id
+Ref: nguoi_dung.id < khuyen_nghi.benh_nhan_id
+
+// Lien ket Thong bao (Gui toi 1 nguoi dung)
+Ref: nguoi_dung.id < thong_bao.nguoi_nhan_id
