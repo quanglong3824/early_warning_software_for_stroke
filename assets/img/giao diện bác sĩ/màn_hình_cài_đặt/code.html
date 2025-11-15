@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEWS - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#007AFF",
+              "background-light": "#F9F9F9",
+              "background-dark": "#101622",
+              "neutral": "#8E8E93",
+              "success": "#34C759",
+              "warning": "#FF9500",
+              "danger": "#FF3B30",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1c2431",
+              "subtle-light": "#e5e5e5",
+              "subtle-dark": "#2a3443",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 24px;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-10 p-4 pb-3 justify-between border-b border-subtle-light dark:border-subtle-dark">
+<div class="flex size-10 shrink-0 items-center justify-start text-neutral">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight flex-1 text-center">Settings</h1>
+<div class="flex w-10 items-center justify-end">
+</div>
+</div>
+<!-- Profile Header -->
+<div class="flex p-4">
+<div class="flex w-full flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-20 w-20" data-alt="Profile picture of Dr. Jane Doe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIs_vqywXzcMMtKMa08POUWgpxcP3j5e4bosxqBapJ1LvRzDaQEOQrNiNK-w0fF176VxKOTunyGlt_WLZRkQeleZM6aBg9X1iMG13i7fXcSp9KzLh8M1xuiOjoleBuGuQZF700V7NXpz7-YkBHlEK02HOGIXavFUggUsJudnSP8fH3nM8ReMC3HV8OzUxwQSKtx7xn3vD_C6Qm0xHp68MGe9gpcnDb3IuJtOAe3xYPDlfkNicZY35h4eTeA9jQyJg4dIc5zVjIty0");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Dr. Jane Doe</p>
+<p class="text-neutral text-base font-normal leading-normal">Cardiologist</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Segmented Buttons -->
+<div class="flex px-4 py-3">
+<div class="flex h-11 flex-1 items-center justify-center rounded-lg bg-subtle-light dark:bg-subtle-dark p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-surface-light dark:has-[:checked]:bg-surface-dark has-[:checked]:shadow-sm has-[:checked]:text-primary text-neutral text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Personal Information</span>
+<input checked="" class="invisible w-0" name="settings-tab" type="radio" value="Personal Information"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-surface-light dark:has-[:checked]:bg-surface-dark has-[:checked]:shadow-sm has-[:checked]:text-primary text-neutral text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Schedule &amp; Availability</span>
+<input class="invisible w-0" name="settings-tab" type="radio" value="Schedule &amp; Availability"/>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-6 px-4 py-3">
+<!-- Personal Information Section -->
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pt-2">Profile Details</h3>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden">
+<div class="flex items-center gap-4 p-4 min-h-14 justify-between border-b border-subtle-light dark:border-subtle-dark">
+<div class="flex items-center gap-4">
+<div class="text-neutral flex items-center justify-center rounded-lg bg-subtle-light dark:bg-subtle-dark shrink-0 size-10">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Contact Information</p>
+</div>
+<div class="shrink-0">
+<div class="text-neutral flex size-7 items-center justify-center">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 min-h-14 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-neutral flex items-center justify-center rounded-lg bg-subtle-light dark:bg-subtle-dark shrink-0 size-10">
+<span class="material-symbols-outlined">school</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Credentials</p>
+</div>
+<div class="shrink-0">
+<div class="text-neutral flex size-7 items-center justify-center">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Account Settings Section -->
+<div class="flex flex-col gap-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pt-2">Account</h3>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden">
+<div class="flex items-center gap-4 p-4 min-h-14 justify-between border-b border-subtle-light dark:border-subtle-dark">
+<div class="flex items-center gap-4">
+<div class="text-neutral flex items-center justify-center rounded-lg bg-subtle-light dark:bg-subtle-dark shrink-0 size-10">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Change Password</p>
+</div>
+<div class="shrink-0">
+<div class="text-neutral flex size-7 items-center justify-center">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 min-h-14 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-neutral flex items-center justify-center rounded-lg bg-subtle-light dark:bg-subtle-dark shrink-0 size-10">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal flex-1 truncate">Notifications</p>
+</div>
+<div class="shrink-0">
+<div class="text-neutral flex size-7 items-center justify-center">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Log Out Button -->
+<div class="flex flex-col gap-2 pt-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-surface-light dark:bg-surface-dark text-danger gap-2 text-base font-medium leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined">logout</span>
+<span>Log Out</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

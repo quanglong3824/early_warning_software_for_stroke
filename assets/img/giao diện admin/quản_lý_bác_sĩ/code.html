@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Bác sĩ - SEWS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative mx-auto flex h-auto min-h-screen w-full max-w-md flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex flex-col bg-background-light dark:bg-background-dark pt-4">
+<div class="flex items-center bg-transparent p-4 pb-2 justify-between">
+<div class="text-[#111418] dark:text-white flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h1 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Quản lý Bác sĩ</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-[#111418] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-2xl">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-white dark:bg-gray-800 shadow-sm">
+<div class="text-[#617589] dark:text-gray-400 flex border-none bg-transparent items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-[#617589] dark:placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm kiếm theo tên, chuyên khoa..." value=""/>
+</div>
+</label>
+</div>
+</div>
+<!-- Doctor List -->
+<div class="flex flex-col gap-2 p-4 pt-2 pb-24">
+<!-- Doctor Card 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-gray-800 p-3 min-h-[72px] justify-between rounded-xl shadow-sm">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar of Doctor Nguyen Van A" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrk9aLTQd83zoP4Pe3yxnfv8khoJqA-jJvP7NxcBKhDnDqQo1fJd8msPjU3FJThUl6mN3ca56jckBHqfT7UXVnmOzXbxeVF3pvTtsbR1VcBlCApOb1Y5OZ_bsjCf96A8jGOpaFbpOzdpfo0jpru4WCRdIjSMW2pA1FXvNvjKGb62Zlg11GXq-IWYBwcg7psqQcnSiFYms3qpRpbmBvZOnWOkRTxXL5y5K7xOFmomZ6tUmLfDpyoaYcxphSdrQL0o20aLj6hY-BMls");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-gray-800"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">BS. Nguyễn Văn A</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Khoa Tim mạch</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="text-[#111418] dark:text-gray-400 flex size-7 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Doctor Card 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-gray-800 p-3 min-h-[72px] justify-between rounded-xl shadow-sm">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar of Doctor Tran Thi B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAlqUDgZYBCDyI4nE2pp-D7pTZeN3l4i4mL7dBR-v_Dcfsc7mY_DU0ObpLFKHh4PQ3d5-loh0LNaI_jd8nkmUsRtKSSo_foqXaEx3DXzW-RJFHuYjep7Fx3Uoy_PJvi5lSlFSOxOyLDQZIKJO-6oogPcvH0Upw13nf7RMclQka2CDniDPjqTu9CeJ518sCqbU9DfkaAXr9kBnuZBFbWOqQDsD_K5aObAmgXkMP_LrytLC4CY2bQ4xJFBiOU1uY4cruw0Uc-1maWPps");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-red-500 border-2 border-white dark:border-gray-800"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">BS. Trần Thị B</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Khoa Da liễu</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="text-[#111418] dark:text-gray-400 flex size-7 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Doctor Card 3 -->
+<div class="flex items-center gap-4 bg-white dark:bg-gray-800 p-3 min-h-[72px] justify-between rounded-xl shadow-sm">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar of Doctor Le Hoang C" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCxgu_xROGMqy3ulQ7quBbj6F3l2Ikh62ayODLcQI0H68X2Iza8x5axEUxUT67x6lvSB33ohwRp9c3mhw3jNukA7aVMgpFWBRQKXrzb_CTGiDxwbO-KFqQs7SBuPRWCroo3opLi0npSTBHuIFRgYcywYN7Hq8E6xvjL6eLO146uq2uk6lsg__nBNBMz73lNanUlVYtqUqWlX8euCRlO6r9mv74WpdfuEme0SnDt__hcdZCkDR6hLX359RO_ifOCj4wG2B3nNVgj7X4");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-gray-800"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">BS. Lê Hoàng C</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Khoa Nhi</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="text-[#111418] dark:text-gray-400 flex size-7 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Empty State Example (Commented out) -->
+<!--
+            <div class="flex flex-col items-center justify-center text-center mt-16 p-4">
+                <div class="text-gray-400 dark:text-gray-500 mb-4">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8v-2c0-2.209-1.791-4-4-4s-4 1.791-4 4v2h-2.021c-.531.01-1.02.261-1.328.672-.307.411-.426.938-.328 1.444l1.352 7.37c.307 1.674 1.771 2.923 3.473 2.923h3.704c1.702 0 3.166-1.249 3.473-2.923l1.352-7.37c.098-.506-.021-1.033-.328-1.444-.308-.411-.797-.662-1.328-.672h-2.021zm-6-2c0-1.104.896-2 2-2s2 .896 2 2v2h-4v-2zm-1.894 8.795c-.184.996-1.056 1.748-2.062 1.748-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2c0 .416-.131.799-.348 1.121.21.05.426.079.646.079.229 0 .451-.032.662-.088-.179-.327-.286-.711-.286-1.112 0-1.104.896-2 2-2s2 .896 2 2c0 .401-.107.785-.286 1.112.211.056.433.088.662.088s.451-.032.662-.088c-.179-.327-.286-.711-.286-1.112 0-1.104.896-2 2-2s2 .896 2 2-.896 2-2 2c-1.006 0-1.878-.752-2.062-1.748-.204 1.05-1.196 1.837-2.316 1.837s-2.112-.787-2.316-1.837z"/></svg>
+                </div>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">Chưa có bác sĩ nào</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Bắt đầu quản lý bằng cách thêm bác sĩ mới.</p>
+                <button class="mt-6 flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary/90">
+                    <span class="material-symbols-outlined">add</span>
+                    Thêm bác sĩ
+                </button>
+            </div>
+            -->
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-6 right-6 z-20">
+<button class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</div>
+</body></html>

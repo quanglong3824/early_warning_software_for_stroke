@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEWS Messages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex flex-col bg-background-light dark:bg-background-dark shadow-sm dark:shadow-md dark:shadow-black/20">
+<div class="flex items-center p-4">
+<h1 class="text-2xl font-bold leading-tight tracking-[-0.015em] flex-1 text-slate-900 dark:text-white">Messages</h1>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-slate-600 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">edit_square</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content: Conversation List -->
+<main class="flex-1 flex-col pb-4">
+<!-- Conversation Row Item 1: Unread message from colleague -->
+<div class="flex cursor-pointer gap-4 px-4 py-3 justify-between items-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50">
+<div class="flex items-center gap-4">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Profile picture of Dr. Emily Carter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmQ1fom0pxzYV_9VDTdtKuhOPdwJP4DhERUk-vpapLkFgSsanOkrr6uW8eqhsNRHtYxNfNZr2Z2j6k30jKU22YDAHSqslhbE3K4whhZBaNpvxlj9b7VUPieio3Wf0ykyLSIitc25lZb5xtDmA1rXTfd4bTeFM_fg_rz7vCTWyILQMMnOJEpLxUHBQxA1XGnScd7_s0Q8rDPuhG_ko-HRFehdLMsZfMLLrPLoiHlzKHigzq4ve6jJD-zDyQQL9YLnM_xgFcxyF0B68");'></div>
+<span class="absolute bottom-0 right-0 block h-3.5 w-3.5 rounded-full border-2 border-background-light dark:border-background-dark bg-[#34C759]"></span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal">Dr. Emily Carter</p>
+<p class="text-slate-800 dark:text-slate-100 text-sm font-medium leading-normal">Sounds good, I will check the latest labs.</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Cardiology</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1.5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">10:42 AM</p>
+<span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs font-bold">2</span>
+</div>
+</div>
+<!-- Conversation Row Item 2: High-priority message from patient -->
+<div class="flex cursor-pointer gap-4 px-4 py-3 justify-between items-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50 bg-red-500/10 dark:bg-red-500/10">
+<div class="flex items-center gap-4">
+<div class="relative shrink-0 flex items-center justify-center bg-slate-200 dark:bg-slate-700 rounded-full h-14 w-14 font-semibold text-slate-800 dark:text-slate-200 text-xl">
+                        JD
+                        <span class="material-symbols-outlined text-red-500 absolute -top-1 -right-1" style="font-size: 20px;">priority_high</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal">John Doe</p>
+<p class="text-slate-600 dark:text-slate-300 text-sm font-normal leading-normal truncate max-w-xs">I'm feeling a bit dizzy, is that a normal side...</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Patient ID: 12345</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1.5">
+<p class="text-primary text-xs font-semibold">10:35 AM</p>
+<span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs font-bold">1</span>
+</div>
+</div>
+<!-- Conversation Row Item 3: Group conversation -->
+<div class="flex cursor-pointer gap-4 px-4 py-3 justify-between items-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50">
+<div class="flex items-center gap-4">
+<div class="text-white flex items-center justify-center rounded-full bg-[#232f48] shrink-0 size-14">
+<span class="material-symbols-outlined">group</span>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal">ER Team</p>
+<p class="text-slate-600 dark:text-slate-300 text-sm font-normal leading-normal truncate max-w-xs">Dr. Smith: Patient in bay 3 needs urgent...</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Group Conversation</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1.5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">9:15 AM</p>
+</div>
+</div>
+<!-- Conversation Row Item 4: Read message from patient -->
+<div class="flex cursor-pointer gap-4 px-4 py-3 justify-between items-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50">
+<div class="flex items-center gap-4">
+<div class="relative shrink-0 flex items-center justify-center bg-slate-200 dark:bg-slate-700 rounded-full h-14 w-14 font-semibold text-slate-800 dark:text-slate-200 text-xl">
+                        SJ
+                    </div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal">Sarah Jenkins</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Thank you for the prescription information.</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Patient ID: 67890</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1.5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Yesterday</p>
+</div>
+</div>
+<!-- Conversation Row Item 5: Read message from colleague -->
+<div class="flex cursor-pointer gap-4 px-4 py-3 justify-between items-center transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50">
+<div class="flex items-center gap-4">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Profile picture of Dr. Ben Miller" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDVAztB1V-kmpbjv_UFxtIGMIpRBNHjy7SIDvY4A7rvfeVTYXxGqmys0YZqttBqLvFezMSTa5Rik2I0IKMmyX9qdbuXQ6vfLohOpTnlOdumCGDkEO-5uRA7ogA7K4xH_ik73IgdQ-ptTU3KpG_zY1LdwIJDKM9fwdBED2N-TR29MXaSuBHB0IhmDK5gE1MHP0t-KiLDExpRDy0D9npvq0-Zb7T-ctX7EjOkzKBLx40-34TW88MZ3OJGZzFSHWZGTVitjKX9oVr4WmY");'></div>
+</div>
+<div class="flex flex-1 flex-col justify-center gap-0.5">
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal">Dr. Ben Miller</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Okay, I'm on my way now.</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Oncology</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1.5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Yesterday</p>
+</div>
+</div>
+</main>
+</div>
+</body></html>

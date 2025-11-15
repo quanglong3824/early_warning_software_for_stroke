@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOS Call Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0d59f2",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101622",
+            "sos-red": "#D93434",
+            "sos-blue": "#3498DB",
+            "sos-gray": "#1E1E1E",
+            "sos-light-gray": "#90a4cb",
+            "sos-border": "#314368"
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-sos-gray group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-sos-gray p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-white flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-3xl">arrow_back</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Case #SOS-1138</h2>
+<div class="flex size-12 shrink-0 items-center"></div>
+</div>
+<div class="flex-grow p-4 space-y-6">
+<!-- Status Banner Card -->
+<div class="bg-sos-red/10 border border-sos-red rounded-lg p-4">
+<div class="flex flex-col gap-1">
+<p class="text-sos-red text-base font-bold leading-tight">Status: Active - En Route</p>
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Patient is experiencing chest pains.</p>
+</div>
+</div>
+<!-- Patient Information -->
+<div>
+<h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2">Patient Information</h3>
+<div class="bg-[#2a2a2e] rounded-lg p-4">
+<div class="grid grid-cols-[auto_1fr] gap-x-6">
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Patient Name</p>
+<p class="text-white text-sm font-medium leading-normal">Jane Doe</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Age &amp; Gender</p>
+<p class="text-white text-sm font-medium leading-normal">45, Female</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Emergency Contact</p>
+<p class="text-white text-sm font-medium leading-normal">John Doe (Spouse)</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Medical Notes</p>
+<p class="text-white text-sm font-medium leading-normal">Allergy: Penicillin, Condition: Asthma</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Incident Details -->
+<div>
+<h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2">Incident Details</h3>
+<div class="bg-[#2a2a2e] rounded-lg p-4">
+<div class="grid grid-cols-[auto_1fr] gap-x-6">
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Reported Issue</p>
+<p class="text-white text-sm font-medium leading-normal">Chest Pains, Difficulty Breathing</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Call Timestamp</p>
+<p class="text-white text-sm font-medium leading-normal">14:32, Oct 26, 2023</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Patient's Address</p>
+<p class="text-white text-sm font-medium leading-normal">123 Maple Street, Anytown, USA</p>
+</div>
+<div class="col-span-2 grid grid-cols-subgrid border-t border-t-sos-border py-4">
+<p class="text-sos-light-gray text-sm font-normal leading-normal">Dispatcher Notes</p>
+<p class="text-white text-sm font-medium leading-normal">Patient is conscious but in distress. Family member is on site.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Map and Actions -->
+<div class="flex-grow flex flex-col">
+<!-- Interactive Map -->
+<div class="relative h-96 w-full flex-grow">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover" data-alt="A map view showing a route from the responder's location to the patient's location in a city." data-location="Anytown, USA" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEaAyaXtuxf05x8nDFQmDGCu4dFK5CI33r0-Xo7Z0c1cc-Dw31-4VVKdXpoVkj6cPfUuO42DhCDwGJDBGhBc0YMUvruTGr7_3hSn7Zvb8xc9k-GIsegiyTFHqZs0sQeXIWY_Jzm7QKxRFbC5DSxIAIM4R6B03DZQUzs7gmV9zNDJ8BQLG67jhdLF0SuJ4wT_rwu8ct6hcXNe1EWZhf7pgmUBi9vnLuDU0P8nZtNj2NfX9DMNAA35VvQhlGEZV6bpuiUsFgaow6IZY");'></div>
+<div class="absolute top-4 right-4 flex flex-col space-y-2">
+<button class="bg-gray-800/80 text-white rounded-lg p-2 shadow-lg"><span class="material-symbols-outlined">add</span></button>
+<button class="bg-gray-800/80 text-white rounded-lg p-2 shadow-lg"><span class="material-symbols-outlined">remove</span></button>
+<button class="bg-gray-800/80 text-white rounded-lg p-2 mt-4 shadow-lg"><span class="material-symbols-outlined">my_location</span></button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="bg-sos-gray p-4 pt-6 space-y-4 sticky bottom-0 border-t border-sos-border">
+<button class="w-full bg-sos-red text-white font-bold py-4 px-4 rounded-xl flex items-center justify-center gap-2 text-lg">
+<span class="material-symbols-outlined">navigation</span>
+          Start Navigation
+        </button>
+<div class="flex gap-4">
+<button class="w-full bg-sos-blue text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">call</span>
+            Call Patient
+          </button>
+<button class="w-full bg-[#39393e] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">update</span>
+            Update Status
+          </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

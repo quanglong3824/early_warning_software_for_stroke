@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bảng điều khiển Trực ca</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                        "sos-red": "#FF3B30",
+                        "sos-red-bg": "rgba(255, 59, 48, 0.15)",
+                        "pending-orange": "#FF9500",
+                        "success-green": "#34C759"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col text-white dark group/design-root overflow-x-hidden pb-28">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80 p-4 pb-2 justify-between backdrop-blur-sm">
+<div class="flex size-12 shrink-0 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNRAbSNekqdKmjzwoq3ZaGiIsCuAbxdm1gOw5EWyLpc7gX5dEtFv7zJIq2WNM8u7dfhEgO2JSHUomUUHAFbDILvYbhAgkmu46nehNCj7VTs-OLth3s3JVpzjxh26GZjjHz-I9tKptP_cSY2YB2QiPXXPz9v6Ou9z0RKFZ7fv9vyYwpQLvopnm8Ro126h8Uf9QLvosUKv_94akKkWZbG4SIwnYfvk15Hzv9pLwJL5TsdcNbqkVmc87chh1CsX7dOpBOQq2qIwlTmT4");'></div>
+</div>
+<h1 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Bảng điều khiển Trực ca</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="flex-grow">
+<!-- SOS Alert Section -->
+<section class="mt-4">
+<div class="flex items-center justify-between px-4 pb-3 pt-5">
+<h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">CẢNH BÁO SOS MỚI</h2>
+<span class="bg-sos-red text-white text-xs font-bold px-2.5 py-1 rounded-full">3</span>
+</div>
+<div class="flex flex-col gap-2 px-4">
+<!-- SOS Alert Card 1 -->
+<div class="flex flex-col gap-3 rounded-xl bg-gray-100 dark:bg-white/5 p-4">
+<div class="flex gap-4">
+<div class="relative flex items-center justify-center rounded-lg bg-sos-red-bg shrink-0 size-12 text-sos-red">
+<span class="absolute top-1 right-1 h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sos-red opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-sos-red"></span>
+</span>
+<span class="material-symbols-outlined text-3xl">sos</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Nguyễn Văn A</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">2 phút trước - 1.5km</p>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Tai nạn giao thông</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 rounded-lg bg-gray-200 dark:bg-white/10 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200">Xem chi tiết</button>
+<button class="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white">Tiếp nhận</button>
+</div>
+</div>
+<!-- SOS Alert Card 2 -->
+<div class="flex flex-col gap-3 rounded-xl bg-gray-100 dark:bg-white/5 p-4">
+<div class="flex gap-4">
+<div class="relative flex items-center justify-center rounded-lg bg-sos-red-bg shrink-0 size-12 text-sos-red">
+<span class="absolute top-1 right-1 h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sos-red opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-sos-red"></span>
+</span>
+<span class="material-symbols-outlined text-3xl">cardiology</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Trần Thị B</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">5 phút trước - 3.2km</p>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Đột quỵ</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 rounded-lg bg-gray-200 dark:bg-white/10 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200">Xem chi tiết</button>
+<button class="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white">Tiếp nhận</button>
+</div>
+</div>
+<!-- SOS Alert Card 3 -->
+<div class="flex flex-col gap-3 rounded-xl bg-gray-100 dark:bg-white/5 p-4">
+<div class="flex gap-4">
+<div class="relative flex items-center justify-center rounded-lg bg-sos-red-bg shrink-0 size-12 text-sos-red">
+<span class="absolute top-1 right-1 h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sos-red opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-sos-red"></span>
+</span>
+<span class="material-symbols-outlined text-3xl">personal_injury</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Lê Văn C</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">11 phút trước - 5.1km</p>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Ngã từ trên cao</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 rounded-lg bg-gray-200 dark:bg-white/10 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200">Xem chi tiết</button>
+<button class="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white">Tiếp nhận</button>
+</div>
+</div>
+</div>
+</section>
+<!-- New Appointments Section -->
+<section class="mt-8">
+<div class="flex items-center justify-between px-4 pb-3 pt-5">
+<h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Lịch hẹn mới</h2>
+<span class="bg-pending-orange text-white text-xs font-bold px-2.5 py-1 rounded-full">2</span>
+</div>
+<div class="flex flex-col gap-2 px-4">
+<!-- Appointment Card 1 -->
+<div class="flex flex-col gap-3 rounded-xl bg-gray-100 dark:bg-white/5 p-4">
+<div class="flex gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-12">
+<span class="material-symbols-outlined text-3xl">calendar_month</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Phạm Thị D</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">14:30 - 25/10/2023</p>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Khám định kỳ</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 rounded-lg bg-gray-200 dark:bg-white/10 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200">Xem chi tiết</button>
+<button class="flex-1 rounded-lg bg-success-green px-4 py-2.5 text-sm font-semibold text-white">Xác nhận</button>
+</div>
+</div>
+<!-- Appointment Card 2 -->
+<div class="flex flex-col gap-3 rounded-xl bg-gray-100 dark:bg-white/5 p-4">
+<div class="flex gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-12">
+<span class="material-symbols-outlined text-3xl">calendar_month</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Vũ Ngọc E</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">09:00 - 26/10/2023</p>
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal">Tái khám sau phẫu thuật</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 rounded-lg bg-gray-200 dark:bg-white/10 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200">Xem chi tiết</button>
+<button class="flex-1 rounded-lg bg-success-green px-4 py-2.5 text-sm font-semibold text-white">Xác nhận</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-6 z-20">
+<button class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-10 flex justify-around border-t border-gray-200 dark:border-white/10 bg-background-light/80 dark:bg-background-dark/80 p-2 backdrop-blur-sm">
+<a class="flex flex-col items-center justify-center text-primary w-1/4" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-1/4" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-xs">Lịch hẹn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-1/4" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-xs">Bản đồ</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-1/4" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span class="text-xs">Tin nhắn</span>
+</a>
+</nav>
+</div>
+</body></html>

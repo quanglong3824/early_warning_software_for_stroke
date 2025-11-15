@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Gia đình</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- App Bar/Header -->
+<div class="flex items-center gap-2 p-4 bg-white dark:bg-background-dark/50 sticky top-0 z-10 shadow-sm dark:shadow-none">
+<button class="flex size-10 shrink-0 items-center justify-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold text-slate-900 dark:text-slate-50 flex-1">Gia đình của bạn</h1>
+<button class="flex size-10 shrink-0 items-center justify-center text-slate-800 dark:text-slate-200">
+<span class="material-symbols-outlined text-2xl">add</span>
+</button>
+</div>
+<!-- Main Content -->
+<main class="flex-1 p-4 space-y-4">
+<!-- Member List -->
+<div class="space-y-3">
+<!-- Member Card 1: Connected -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 p-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<img class="h-14 w-14 rounded-full object-cover" data-alt="Portrait of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfdAR2s2VFbWvOu1EW2nr4HRWaKRK_RbilbSihVa0yEkAIzXcz53ZUCzdn0bEC0l_4dca6drCYSghXijWP6ls5iPLJvFK9ilWZapNyrqxIaCEFMVxkOkRYZhiYS9wxbMgq2VNGlur8MmCQdLQSvNAKtn32jNbYVMcP9u1oKKbUiZO9-rUfBDJQMgpyO6Ggr0mpOWyAezkkQ138tleKH30tJIYHGQ5AuJyWWYZxUTtE-knQltJr_9KP_8uYAJokBvrlRF48bCbPRPM"/>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium text-slate-900 dark:text-slate-50 line-clamp-1">Trần Thị Bích</p>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400 line-clamp-2">Con gái</p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<div class="flex items-center gap-1.5 rounded-full bg-green-100 dark:bg-green-500/20 px-2.5 py-1">
+<div class="size-2 rounded-full bg-[#07883b]"></div>
+<p class="text-xs font-medium text-green-800 dark:text-green-300">Đã kết nối</p>
+</div>
+<button class="flex size-8 items-center justify-center text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Member Card 2: Pending -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 p-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<img class="h-14 w-14 rounded-full object-cover" data-alt="Portrait of a man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR0TA-upZOzSW0flr5WZPpbW75-kJLeDzBcbMwrj4I19TG6uNIxX7VDlXSLNta8o4tmEgcsyiKp6Wsk5Fa6baQlblA_XN9UmNhc_lXPU_5zp3gSCtGCM9JHuSi6ZOiAK-_bQQ755UBIURfQl8JMKlVqp6aayAdnBF2wPyHvKjSM2cE2dEjdfSEhOFutbQyHfVL_apMULVPr_ulCzFDbsyYAJunzzxi4gssP3ieUpjGkDH4770OBDxfFLrQLwMlV5rvBEr6OIr4ciY"/>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium text-slate-900 dark:text-slate-50 line-clamp-1">Nguyễn Văn An</p>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400 line-clamp-2">Người giám hộ</p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<div class="flex items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 px-2.5 py-1">
+<div class="size-2 rounded-full bg-amber-500"></div>
+<p class="text-xs font-medium text-amber-800 dark:text-amber-300">Đang chờ</p>
+</div>
+<button class="flex size-8 items-center justify-center text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Member Card 3: Main Patient -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 p-3 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<img class="h-14 w-14 rounded-full object-cover" data-alt="Portrait of another man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiyBYQJkCMcP-AGyYILZtsM4h3ItH6N-bZ5rL19-K3wcLvjeba1zHHvPghvUXyKYh_7SCA4W8bVRwFrXiEUhnRwGj_hqhrzWtnxJSBZOKKn5hzTYni2W3No_gR9Wo7b7h-69h6m6jtuYffSb7PTWooOvH93631yOr3IEjouBFiQd0IAmpOp-BLYrfnfbUqKW9TOBt-Er6CHZ86MHy8yuzmpDPqRTnrO7gcO9jtvrDptBw-6SWhfIW5-VVTDzAYtYfVD_YEoANDb-4"/>
+<div class="flex flex-col justify-center">
+<p class="text-base font-medium text-slate-900 dark:text-slate-50 line-clamp-1">Lê Minh Cường</p>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400 line-clamp-2">Bệnh nhân chính (Bạn)</p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<div class="flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-700 px-2.5 py-1">
+<p class="text-xs font-medium text-slate-800 dark:text-slate-300">Cá nhân</p>
+</div>
+<button class="flex size-8 items-center justify-center text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Example, commented out) -->
+<!--
+            <div class="flex flex-col px-4 py-16">
+                <div class="flex flex-col items-center gap-6 text-center">
+                    <div class="flex items-center justify-center text-primary dark:text-primary/80">
+                         <span class="material-symbols-outlined !text-7xl">groups</span>
+                    </div>
+                    <div class="flex max-w-[480px] flex-col items-center gap-2">
+                        <p class="text-lg font-bold text-slate-900 dark:text-slate-50">Chưa có thành viên nào</p>
+                        <p class="text-sm font-normal text-slate-600 dark:text-slate-400">Bắt đầu bằng cách thêm thành viên gia đình để cùng nhau theo dõi sức khỏe.</p>
+                    </div>
+                    <button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                        <span class="material-symbols-outlined text-xl">add</span>
+                        <span class="truncate">Thêm thành viên</span>
+                    </button>
+                </div>
+            </div>
+            -->
+</main>
+</div>
+</body></html>

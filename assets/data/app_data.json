@@ -1,0 +1,351 @@
+{
+  "currentUser": {
+    "id": "user_001",
+    "name": "Nguyễn Văn Admin",
+    "email": "admin@sews.vn",
+    "phone": "0912 345 678",
+    "avatarUrl": "https://ui-avatars.com/api/?name=Admin&background=135BEC&color=fff&size=200",
+    "role": "admin",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  "patients": [
+    {
+      "id": "patient_001",
+      "name": "Nguyễn Văn A",
+      "status": "high_risk",
+      "mainValue": "145/95",
+      "unit": "mmHg",
+      "lastUpdate": "2024-11-15T10:30:00.000Z"
+    },
+    {
+      "id": "patient_002",
+      "name": "Trần Thị B",
+      "status": "warning",
+      "mainValue": "98",
+      "unit": "BPM",
+      "lastUpdate": "2024-11-15T09:15:00.000Z"
+    },
+    {
+      "id": "patient_003",
+      "name": "Lê Văn C",
+      "status": "stable",
+      "mainValue": "120/80",
+      "unit": "mmHg",
+      "lastUpdate": "2024-11-15T08:00:00.000Z"
+    },
+    {
+      "id": "patient_004",
+      "name": "Phạm Thị D",
+      "status": "stable",
+      "mainValue": "72",
+      "unit": "BPM",
+      "lastUpdate": "2024-11-15T07:45:00.000Z"
+    },
+    {
+      "id": "patient_005",
+      "name": "Hoàng Văn E",
+      "status": "warning",
+      "mainValue": "135/88",
+      "unit": "mmHg",
+      "lastUpdate": "2024-11-15T06:30:00.000Z"
+    },
+    {
+      "id": "patient_006",
+      "name": "Vũ Thị F",
+      "status": "stable",
+      "mainValue": "118/78",
+      "unit": "mmHg",
+      "lastUpdate": "2024-11-15T05:20:00.000Z"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert_001",
+      "patientId": "patient_001",
+      "patientName": "Nguyễn Văn A",
+      "level": "high",
+      "message": "Huyết áp tăng cao đột ngột. Cần kiểm tra ngay lập tức. Các chỉ số quan trọng đã vượt ngưỡng an toàn.",
+      "createdAt": "2024-11-15T10:30:00.000Z",
+      "isRead": false
+    },
+    {
+      "id": "alert_002",
+      "patientId": "patient_002",
+      "patientName": "Trần Thị B",
+      "level": "medium",
+      "message": "Nhịp tim cao hơn bình thường. Khuyến nghị theo dõi thêm.",
+      "createdAt": "2024-11-15T09:15:00.000Z",
+      "isRead": false
+    },
+    {
+      "id": "alert_003",
+      "patientId": "patient_005",
+      "patientName": "Hoàng Văn E",
+      "level": "medium",
+      "message": "Huyết áp có xu hướng tăng. Cần điều chỉnh chế độ ăn uống.",
+      "createdAt": "2024-11-15T06:30:00.000Z",
+      "isRead": true
+    }
+  ],
+  "dashboardStats": {
+    "totalPatients": 42,
+    "alertsLast24h": 8,
+    "stablePatients": 34,
+    "highRiskPatients": 3,
+    "warningPatients": 5
+  },
+  "forumPosts": [
+    {
+      "id": "post_001",
+      "authorId": "user_002",
+      "authorName": "Nguyễn Văn A",
+      "title": "Kinh nghiệm kiểm soát đường huyết cho người mới mắc tiểu đường type 2",
+      "content": "Xin chào mọi người, mình mới được chẩn đoán tiểu đường type 2 cách đây 3 tháng. Sau một thời gian tìm hiểu và thực hành, mình muốn chia sẻ một số kinh nghiệm giúp kiểm soát đường huyết hiệu quả:\n\n1. Ăn đúng giờ, đủ bữa\n2. Tập thể dục nhẹ nhàng mỗi ngày\n3. Theo dõi chỉ số đường huyết thường xuyên\n4. Giảm tinh bột, tăng rau xanh\n5. Uống đủ nước\n\nHy vọng những chia sẻ này hữu ích cho các bạn!",
+      "likes": 42,
+      "comments": 15,
+      "createdAt": "2024-11-15T05:00:00.000Z",
+      "tags": ["tiểu đường", "kinh nghiệm", "sức khỏe"]
+    },
+    {
+      "id": "post_002",
+      "authorId": "doctor_001",
+      "authorName": "Bác sĩ Minh",
+      "title": "Các dấu hiệu sớm của đột quỵ mà gia đình cần chú ý",
+      "content": "Đột quỵ là tình trạng cấp cứu y tế nghiêm trọng. Nhận biết sớm các dấu hiệu có thể cứu sống người bệnh:\n\n🚨 Dấu hiệu cảnh báo:\n- Méo miệng đột ngột\n- Yếu hoặc tê một bên cơ thể\n- Nói ngọng, khó nói\n- Đau đầu dữ dội\n- Chóng mặt, mất thăng bằng\n- Nhìn mờ hoặc đôi\n\n⏰ Thời gian vàng: 3-4.5 giờ đầu\n\nNếu phát hiện các dấu hiệu trên, hãy gọi cấp cứu 115 ngay lập tức!\n\n#StrokeAwareness #CấpCứu #SứcKhỏe",
+      "likes": 98,
+      "comments": 32,
+      "createdAt": "2024-11-14T08:00:00.000Z",
+      "tags": ["đột quỵ", "cấp cứu", "y tế"]
+    },
+    {
+      "id": "post_003",
+      "authorId": "user_003",
+      "authorName": "Chuyên gia Dinh dưỡng Lan",
+      "title": "Thực đơn 7 ngày giúp giảm nguy cơ mỡ máu cao",
+      "content": "Chế độ ăn uống đóng vai trò quan trọng trong việc kiểm soát mỡ máu. Dưới đây là thực đơn mẫu 7 ngày:\n\n📅 Thứ 2:\n- Sáng: Yến mạch + sữa không đường + chuối\n- Trưa: Cơm gạo lứt + cá hồi nướng + rau xào\n- Tối: Súp rau củ + salad\n\n📅 Thứ 3:\n- Sáng: Bánh mì nguyên cám + trứng luộc + cà chua\n- Trưa: Cơm gạo lứt + gà luộc + canh rau\n- Tối: Cháo yến mạch + rau luộc\n\n... (tiếp tục cho các ngày còn lại)\n\n💡 Lưu ý:\n- Hạn chế dầu mỡ\n- Tăng omega-3\n- Ăn nhiều rau xanh\n- Uống đủ nước",
+      "likes": 76,
+      "comments": 25,
+      "createdAt": "2024-11-12T10:30:00.000Z",
+      "tags": ["dinh dưỡng", "mỡ máu", "thực đơn"]
+    },
+    {
+      "id": "post_004",
+      "authorId": "user_004",
+      "authorName": "Trần Văn B",
+      "title": "Chia sẻ về hành trình phục hồi sau đột quỵ của bố tôi",
+      "content": "Bố tôi bị đột quỵ cách đây 6 tháng. Nhờ phát hiện sớm và điều trị kịp thời, bố đã hồi phục tốt. Tôi muốn chia sẻ hành trình này để động viên các gia đình đang trong hoàn cảnh tương tự.\n\nGiai đoạn 1 (Tháng 1-2): Điều trị tích cực tại bệnh viện\nGiai đoạn 2 (Tháng 3-4): Vật lý trị liệu, tập phục hồi chức năng\nGiai đoạn 3 (Tháng 5-6): Tập luyện tại nhà, cải thiện dần\n\nBây giờ bố đã có thể tự đi lại và sinh hoạt cơ bản. Điều quan trọng nhất là:\n- Kiên trì tập luyện\n- Hỗ trợ tinh thần\n- Theo dõi sức khỏe thường xuyên\n- Tuân thủ điều trị\n\nĐừng bao giờ từ bỏ hy vọng!",
+      "likes": 156,
+      "comments": 48,
+      "createdAt": "2024-11-10T14:20:00.000Z",
+      "tags": ["đột quỵ", "phục hồi", "chia sẻ"]
+    },
+    {
+      "id": "post_005",
+      "authorId": "user_005",
+      "authorName": "Phạm Thị C",
+      "title": "Hỏi về thuốc điều trị huyết áp cao",
+      "content": "Chào mọi người, mình đang dùng thuốc điều trị huyết áp cao được bác sĩ kê. Nhưng gần đây mình hay bị chóng mặt. Không biết có phải tác dụng phụ của thuốc không?\n\nCó ai gặp tình trạng tương tự không? Mình nên làm gì đây?",
+      "likes": 23,
+      "comments": 18,
+      "createdAt": "2024-11-15T11:00:00.000Z",
+      "tags": ["huyết áp", "thuốc", "tư vấn"]
+    }
+  ],
+  "knowledgeArticles": [
+    {
+      "id": "article_001",
+      "type": "article",
+      "title": "5 thói quen hàng ngày giúp giảm nguy cơ đột quỵ",
+      "description": "Một vài thay đổi nhỏ trong lối sống có thể tạo ra sự khác biệt lớn trong việc phòng ngừa đột quỵ.",
+      "imageUrl": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800",
+      "meta": "Bài viết • 5 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Phòng ngừa Đột quỵ", "Lối sống"],
+      "publishedAt": "2024-11-10T08:00:00.000Z"
+    },
+    {
+      "id": "article_002",
+      "type": "video",
+      "title": "Video: Hướng dẫn các bài tập tốt cho tim",
+      "description": "Thực hiện các bài tập đơn giản tại nhà để cải thiện sức khỏe tim mạch và giảm nguy cơ đột quỵ.",
+      "imageUrl": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800",
+      "meta": "Video • 10:30",
+      "videoUrl": "https://www.youtube.com/watch?v=example",
+      "categories": ["Tất cả", "Sức khỏe Tim mạch", "Lối sống"],
+      "publishedAt": "2024-11-09T10:00:00.000Z"
+    },
+    {
+      "id": "article_003",
+      "type": "article",
+      "title": "Chế độ ăn DASH: Lựa chọn thông minh cho người huyết áp cao",
+      "description": "Tìm hiểu về chế độ ăn được thiết kế đặc biệt để chống lại bệnh cao huyết áp và bảo vệ tim mạch.",
+      "imageUrl": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800",
+      "meta": "Bài viết • 8 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Sức khỏe Tim mạch", "Dinh dưỡng"],
+      "publishedAt": "2024-11-08T09:00:00.000Z"
+    },
+    {
+      "id": "article_004",
+      "type": "article",
+      "title": "Hiểu về chỉ số đường huyết và cách kiểm soát",
+      "description": "Những kiến thức cơ bản về tiểu đường và cách quản lý hiệu quả chỉ số đường huyết hàng ngày.",
+      "imageUrl": "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800",
+      "meta": "Bài viết • 6 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Tiểu đường", "Dinh dưỡng"],
+      "publishedAt": "2024-11-07T11:00:00.000Z"
+    },
+    {
+      "id": "article_005",
+      "type": "article",
+      "title": "Stress và nguy cơ đột quỵ: Mối liên hệ bạn cần biết",
+      "description": "Tìm hiểu cách stress ảnh hưởng đến sức khỏe tim mạch và các phương pháp quản lý stress hiệu quả.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800",
+      "meta": "Bài viết • 7 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Phòng ngừa Đột quỵ", "Lối sống"],
+      "publishedAt": "2024-11-06T14:00:00.000Z"
+    },
+    {
+      "id": "article_006",
+      "type": "video",
+      "title": "Video: Yoga cho người huyết áp cao",
+      "description": "Các động tác yoga nhẹ nhàng giúp giảm huyết áp và cải thiện tuần hoàn máu.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
+      "meta": "Video • 15:00",
+      "videoUrl": "https://www.youtube.com/watch?v=example2",
+      "categories": ["Tất cả", "Sức khỏe Tim mạch", "Lối sống"],
+      "publishedAt": "2024-11-05T08:30:00.000Z"
+    },
+    {
+      "id": "article_007",
+      "type": "article",
+      "title": "10 thực phẩm vàng cho người tiểu đường",
+      "description": "Danh sách các thực phẩm giúp kiểm soát đường huyết và cung cấp dinh dưỡng cần thiết.",
+      "imageUrl": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800",
+      "meta": "Bài viết • 5 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Tiểu đường", "Dinh dưỡng"],
+      "publishedAt": "2024-11-04T10:00:00.000Z"
+    },
+    {
+      "id": "article_008",
+      "type": "article",
+      "title": "Giấc ngủ và sức khỏe tim mạch",
+      "description": "Tầm quan trọng của giấc ngủ chất lượng đối với sức khỏe tim mạch và phòng ngừa đột quỵ.",
+      "imageUrl": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800",
+      "meta": "Bài viết • 6 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Sức khỏe Tim mạch", "Lối sống"],
+      "publishedAt": "2024-11-03T09:00:00.000Z"
+    },
+    {
+      "id": "article_009",
+      "type": "article",
+      "title": "Hút thuốc lá và nguy cơ đột quỵ tăng gấp đôi",
+      "description": "Tác hại của thuốc lá đối với hệ tim mạch và lợi ích của việc bỏ thuốc.",
+      "imageUrl": "https://images.unsplash.com/photo-1605117882932-f9e32b03fea9?w=800",
+      "meta": "Bài viết • 7 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Phòng ngừa Đột quỵ", "Lối sống"],
+      "publishedAt": "2024-11-02T13:00:00.000Z"
+    },
+    {
+      "id": "article_010",
+      "type": "article",
+      "title": "Kiểm tra sức khỏe định kỳ: Tần suất và các chỉ số cần theo dõi",
+      "description": "Hướng dẫn về các xét nghiệm và kiểm tra sức khỏe cần thiết để phát hiện sớm nguy cơ.",
+      "imageUrl": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800",
+      "meta": "Bài viết • 9 phút đọc",
+      "videoUrl": null,
+      "categories": ["Tất cả", "Phòng ngừa Đột quỵ", "Sức khỏe Tim mạch"],
+      "publishedAt": "2024-11-01T08:00:00.000Z"
+    }
+  ],
+  "predictionResults": [
+    {
+      "id": "prediction_001",
+      "userId": "user_001",
+      "type": "stroke",
+      "riskScore": 0.75,
+      "riskLevel": "high",
+      "inputData": {
+        "age": 65,
+        "gender": "male",
+        "hypertension": true,
+        "heartDisease": true,
+        "avgGlucoseLevel": 228.5,
+        "bmi": 28.5,
+        "smokingStatus": "formerly smoked"
+      },
+      "createdAt": "2024-11-15T10:00:00.000Z"
+    },
+    {
+      "id": "prediction_002",
+      "userId": "user_001",
+      "type": "diabetes",
+      "riskScore": 0.62,
+      "riskLevel": "medium",
+      "inputData": {
+        "age": 45,
+        "bmi": 32.5,
+        "bloodPressure": 85,
+        "glucose": 148,
+        "insulin": 125,
+        "familyHistory": true
+      },
+      "createdAt": "2024-11-14T14:30:00.000Z"
+    },
+    {
+      "id": "prediction_003",
+      "userId": "user_001",
+      "type": "stroke",
+      "riskScore": 0.35,
+      "riskLevel": "low",
+      "inputData": {
+        "age": 42,
+        "gender": "female",
+        "hypertension": false,
+        "heartDisease": false,
+        "avgGlucoseLevel": 95.2,
+        "bmi": 24.1,
+        "smokingStatus": "never smoked"
+      },
+      "createdAt": "2024-11-13T09:15:00.000Z"
+    },
+    {
+      "id": "prediction_004",
+      "userId": "user_001",
+      "type": "diabetes",
+      "riskScore": 0.82,
+      "riskLevel": "high",
+      "inputData": {
+        "age": 58,
+        "bmi": 35.8,
+        "bloodPressure": 92,
+        "glucose": 185,
+        "insulin": 168,
+        "familyHistory": true
+      },
+      "createdAt": "2024-11-12T11:20:00.000Z"
+    },
+    {
+      "id": "prediction_005",
+      "userId": "user_001",
+      "type": "stroke",
+      "riskScore": 0.48,
+      "riskLevel": "medium",
+      "inputData": {
+        "age": 52,
+        "gender": "male",
+        "hypertension": true,
+        "heartDisease": false,
+        "avgGlucoseLevel": 142.3,
+        "bmi": 27.2,
+        "smokingStatus": "smokes"
+      },
+      "createdAt": "2024-11-10T16:45:00.000Z"
+    }
+  ]
+}

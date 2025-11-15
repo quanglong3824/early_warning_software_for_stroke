@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lịch sử Sức khỏe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden text-[#111318] dark:text-gray-200">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center justify-between bg-background-light dark:bg-background-dark p-4 pb-2">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl text-[#111318] dark:text-gray-200">arrow_back</span>
+</div>
+<h1 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-[#111318] dark:text-gray-200">Lịch sử Sức khỏe</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex h-12 min-w-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg bg-transparent p-0 text-base font-bold leading-normal tracking-[0.015em] text-[#111318] dark:text-gray-200">
+<span class="material-symbols-outlined text-2xl">share</span>
+</button>
+</div>
+</div>
+<!-- Segmented Buttons -->
+<div class="px-4 py-3">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-gray-200/60 dark:bg-gray-800/60 p-1">
+<label class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium leading-normal text-gray-500 dark:text-gray-400 has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] dark:has-[:checked]:bg-gray-700 dark:has-[:checked]:text-white">
+<span class="truncate">7 ngày</span>
+<input checked="" class="invisible w-0" name="date-range" type="radio" value="7 ngày"/>
+</label>
+<label class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium leading-normal text-gray-500 dark:text-gray-400 has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] dark:has-[:checked]:bg-gray-700 dark:has-[:checked]:text-white">
+<span class="truncate">30 ngày</span>
+<input class="invisible w-0" name="date-range" type="radio" value="30 ngày"/>
+</label>
+<label class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium leading-normal text-gray-500 dark:text-gray-400 has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] dark:has-[:checked]:bg-gray-700 dark:has-[:checked]:text-white">
+<span class="truncate">3 tháng</span>
+<input class="invisible w-0" name="date-range" type="radio" value="3 tháng"/>
+</label>
+</div>
+</div>
+<!-- Stats Summary Cards -->
+<div class="flex flex-wrap gap-4 p-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<p class="text-base font-medium leading-normal text-[#111318] dark:text-gray-200">Huyết áp</p>
+<p class="tracking-light text-2xl font-bold leading-tight text-green-600 dark:text-green-400">120/80 <span class="text-base font-normal text-gray-500 dark:text-gray-400">mmHg</span></p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<p class="text-base font-medium leading-normal text-[#111318] dark:text-gray-200">Nhịp tim</p>
+<p class="tracking-light text-2xl font-bold leading-tight text-yellow-500 dark:text-yellow-400">85 <span class="text-base font-normal text-gray-500 dark:text-gray-400">bpm</span></p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<p class="text-base font-medium leading-normal text-[#111318] dark:text-gray-200">SpO2</p>
+<p class="tracking-light text-2xl font-bold leading-tight text-green-600 dark:text-green-400">98%</p>
+</div>
+</div>
+<!-- Section Header for Charts -->
+<h2 class="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-[#111318] dark:text-gray-200">Biểu đồ xu hướng</h2>
+<!-- Charts -->
+<div class="flex flex-col gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 mx-4 p-4">
+<div class="flex min-w-72 flex-1 flex-col gap-1">
+<p class="text-base font-medium leading-normal text-[#111318] dark:text-gray-200">Huyết áp (mmHg)</p>
+<p class="tracking-light truncate text-[32px] font-bold leading-tight text-[#111318] dark:text-gray-200">125/82</p>
+<div class="flex gap-1">
+<p class="text-base font-normal leading-normal text-gray-500 dark:text-gray-400">Trong 7 ngày qua</p>
+<p class="text-base font-medium leading-normal text-red-500 dark:text-red-400">+2%</p>
+</div>
+<div class="flex min-h-[180px] flex-1 flex-col gap-4 py-4">
+<svg fill="none" height="148" preserveaspectratio="none" viewbox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="chart-gradient" x1="236" x2="236" y1="1" y2="149">
+<stop stop-color="#135bec" stop-opacity="0.2"></stop>
+<stop offset="1" stop-color="#135bec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H0V109Z" fill="url(#chart-gradient)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#135bec" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="flex justify-around">
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T2</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T3</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T4</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T5</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T6</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">T7</p>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em] text-gray-500 dark:text-gray-400">CN</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Section Header for Data List -->
+<h2 class="px-4 pb-3 pt-8 text-[22px] font-bold leading-tight tracking-[-0.015em] text-[#111318] dark:text-gray-200">Lịch sử đo</h2>
+<!-- Data List -->
+<div class="flex flex-col gap-3 px-4 pb-8">
+<!-- List Item 1 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<div class="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></div>
+<div class="flex-1">
+<p class="font-semibold text-[#111318] dark:text-gray-200">Hôm nay, 08:15</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">HA: 145/92, Nhịp tim: 95, SpO2: 96%</p>
+</div>
+<span class="material-symbols-outlined text-lg text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<div class="h-2.5 w-2.5 shrink-0 rounded-full bg-yellow-500"></div>
+<div class="flex-1">
+<p class="font-semibold text-[#111318] dark:text-gray-200">Hôm qua, 20:30</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">HA: 135/88, Nhịp tim: 88, SpO2: 97%</p>
+</div>
+<span class="material-symbols-outlined text-lg text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<div class="h-2.5 w-2.5 shrink-0 rounded-full bg-green-500"></div>
+<div class="flex-1">
+<p class="font-semibold text-[#111318] dark:text-gray-200">25/07/2024, 07:45</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">HA: 122/81, Nhịp tim: 76, SpO2: 98%</p>
+</div>
+<span class="material-symbols-outlined text-lg text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+<!-- List Item 4 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+<div class="h-2.5 w-2.5 shrink-0 rounded-full bg-green-500"></div>
+<div class="flex-1">
+<p class="font-semibold text-[#111318] dark:text-gray-200">24/07/2024, 21:00</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">HA: 118/78, Nhịp tim: 72, SpO2: 99%</p>
+</div>
+<span class="material-symbols-outlined text-lg text-gray-400 dark:text-gray-500">chevron_right</span>
+</div>
+</div>
+</div>
+</body></html>

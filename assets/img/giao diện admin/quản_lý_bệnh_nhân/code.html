@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Danh sách Bệnh nhân - SEWS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007AFF", // Medical Blue as requested, but I will use the theme's default #137fec
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "status-green": "#34C759",
+                        "status-yellow": "#FFCC00",
+                        "status-red": "#FF3B30",
+                        "text-primary-light": "#1C1C1E",
+                        "text-secondary-light": "#8E8E93",
+                        "text-primary-dark": "#FFFFFF",
+                        "text-secondary-dark": "#8E8E93",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex w-full flex-col bg-background-light shadow-sm">
+<div class="flex items-center p-4">
+<h1 class="flex-1 text-xl font-bold text-text-primary-light">Danh sách Bệnh nhân</h1>
+<div class="flex items-center justify-end gap-1">
+<button class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-text-primary-light">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+<button class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-text-primary-light">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 pb-4">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+<div class="text-text-secondary-light flex border-none bg-white items-center justify-center pl-4 rounded-l-xl border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-text-primary-light focus:outline-0 focus:ring-0 border-none bg-white h-full placeholder:text-text-secondary-light px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm theo tên, mã bệnh nhân..." value=""/>
+</div>
+</label>
+</div>
+</div>
+<!-- Patient List -->
+<div class="flex flex-col gap-px pt-2 pb-4">
+<!-- Patient Card 1 - Critical -->
+<div class="flex items-center gap-4 bg-white px-4 min-h-[88px] py-3 justify-between">
+<div class="flex items-center gap-4">
+<img class="object-cover h-14 w-14 rounded-full" data-alt="Female nurse avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVdyUjHFdcr3Emw1m0UbigEXkt_a_ov4wwGvqfVKqfeMOXXKcRaFaQ0RWdv-lDCxojBoRHOtqfO941lbU-4Rf38Y_61md3Dzzjl-hg07CjMbvo53gQqdHeGp3VNKn6UuHqXoGEzR-rHhUo3HyHwvCU8MmveRX67RUwEhSI9L8qDkWTiO8K-NZjQq7jm6t3lyG8LVHOfcGBn0wOZZuJQzZwh5kvJzZXolisPDjpUxB2NS0l0RQ4oo5uIFbfC7ZeCgpiZY-hIlaSEUU"/>
+<div class="flex flex-col justify-center">
+<p class="text-text-primary-light text-base font-bold leading-normal">Nguyễn Văn An</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">Mã BN: 123456</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">01/01/1985 - Nam</p>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex h-7 w-7 items-center justify-center rounded-full bg-status-red">
+<span class="text-sm font-bold text-white">9</span>
+</div>
+<span class="material-symbols-outlined text-text-secondary-light">chevron_right</span>
+</div>
+</div>
+<!-- Patient Card 2 - Warning -->
+<div class="flex items-center gap-4 bg-white px-4 min-h-[88px] py-3 justify-between">
+<div class="flex items-center gap-4">
+<img class="object-cover h-14 w-14 rounded-full" data-alt="Male doctor avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHfy_MaK25JviEQW3oBFeLR8rEi69T3fVvsErRjqSecYc9_IC-at5rVXlWGESUeHDRoOic6nO9IabNlEBPGW_3NhAJ4c56V4v8cyP3vhW52mZzqepXPpoXIeCkZWQSgtXlDw5hyR2BJkuYuyoCvmK6F1COwNLtvygWetGA0TokskSb-KpS6MeN5cnFZM-n36lgrLqUV6KQsJIHFyAtx7BDNXOFojvk1AWLJxY1CH1jxA24uEx0Skcusir-PQre5mB3TB-Ud6FlaFI"/>
+<div class="flex flex-col justify-center">
+<p class="text-text-primary-light text-base font-bold leading-normal">Trần Thị Bích</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">Mã BN: 789012</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">15/05/1992 - Nữ</p>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex h-7 w-7 items-center justify-center rounded-full bg-status-yellow">
+<span class="text-sm font-bold text-black">6</span>
+</div>
+<span class="material-symbols-outlined text-text-secondary-light">chevron_right</span>
+</div>
+</div>
+<!-- Patient Card 3 - Stable -->
+<div class="flex items-center gap-4 bg-white px-4 min-h-[88px] py-3 justify-between">
+<div class="flex items-center gap-4">
+<img class="object-cover h-14 w-14 rounded-full" data-alt="Another male doctor avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCyP8v7k8Czu7Hd0bc52H3D86QBxJApBg3IoWhMjtj-zNNOes55wtFxv6r3ldjijtM5bfwewnSnbqv00WSgvEUYNBEhzaVYlubJsEiWZd2s3wczrt-juZzy7E1Wg1GkcU8tDv6_3gSbLfTc_QjDBoyli9PZtv-njIUet95bHO-aC7lSLJXXEa951s8gS-6omoahF_eNRoAb1KlKhfw_biNaBeJYTr0ZRXoJXPax2_P9wqYv5DymZ1VxBdZ7m2T4o3YsYq4DlF7AOQ"/>
+<div class="flex flex-col justify-center">
+<p class="text-text-primary-light text-base font-bold leading-normal">Lê Hoàng Cường</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">Mã BN: 345678</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">20/11/1978 - Nam</p>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex h-7 w-7 items-center justify-center rounded-full bg-status-green">
+<span class="text-sm font-bold text-white">2</span>
+</div>
+<span class="material-symbols-outlined text-text-secondary-light">chevron_right</span>
+</div>
+</div>
+<!-- Patient Card 4 - Stable -->
+<div class="flex items-center gap-4 bg-white px-4 min-h-[88px] py-3 justify-between">
+<div class="flex items-center gap-4">
+<img class="object-cover h-14 w-14 rounded-full" data-alt="Another female nurse avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWFTQe3nrFYPOniRSLFLPzIY6IKM_79tWL_WUnU6hfuboUrf_XvA7qKgdrMKVEC2RDHKQe3wPwHL0Ow99os23JT1vEcJCPBnZv4toShvVbQtV2D1XmMc3sV9GkXSY92R_J7pldzyIaSkK3uegFUHtvTCISEMO3arGlPhwJEuWL_lNZW4kR25b3TlHIorXzhcRhl_L-929OjW28BxjUf_WhCBVuz7XfZaosEfYM-AbVWYN4KPEfLMdoHGoYAjAGCKiG4-SrCogHwxA"/>
+<div class="flex flex-col justify-center">
+<p class="text-text-primary-light text-base font-bold leading-normal">Phạm Thị Dung</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">Mã BN: 987654</p>
+<p class="text-text-secondary-light text-sm font-normal leading-normal">30/07/2001 - Nữ</p>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<div class="flex h-7 w-7 items-center justify-center rounded-full bg-status-green">
+<span class="text-sm font-bold text-white">1</span>
+</div>
+<span class="material-symbols-outlined text-text-secondary-light">chevron_right</span>
+</div>
+</div>
+<!-- Empty State -->
+<div class="flex flex-col items-center justify-center gap-4 py-20 text-center">
+<span class="material-symbols-outlined text-6xl text-gray-300">person_search</span>
+<p class="text-text-primary-light text-base font-medium">Không tìm thấy bệnh nhân</p>
+<p class="max-w-xs text-text-secondary-light text-sm">Hãy thử một từ khóa tìm kiếm khác hoặc kiểm tra lại bộ lọc của bạn.</p>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointment Request Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0d59f2",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-background-light p-4 dark:bg-background-dark">
+<button class="flex h-12 w-12 shrink-0 items-center justify-center text-slate-800 dark:text-white">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Appointment Details</h1>
+<button class="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-800 dark:text-white">
+<span class="material-symbols-outlined text-2xl">more_vert</span>
+</button>
+</div>
+<div class="flex-1 pb-32">
+<!-- Header with ID, Status, and Timestamp -->
+<div class="p-4">
+<h2 class="text-2xl font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Request #A4B2-98C1</h2>
+<div class="flex items-center gap-3 pt-3">
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-amber-500/20 px-4">
+<p class="text-sm font-medium leading-normal text-amber-400">Pending</p>
+</div>
+</div>
+<p class="pt-3 text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Submitted on 16 Aug, 2023, 10:45 AM</p>
+</div>
+<!-- Requester Details Section -->
+<div>
+<h3 class="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Requester Details</h3>
+<div class="px-4">
+<div class="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<div class="h-16 w-16 flex-shrink-0 rounded-full bg-center bg-no-repeat bg-cover" data-alt="Profile picture of Eleanor Vance" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA5sRwR3WKbvCau4pz1L7kAAkq60VrK-Zzf6BWiD4vC1gtRoE4-SThssQH_Ya9Twmk9TB4fhs1psPdeJ5aoWiBYtm6yXz9rTIb-Qkp9Q-dKF8OFsBieUCODXbyY3p9Z3FlqWZtCXPMHT9vyiT-md3RSEWSighxheCMj5NT1iaVpxmKhZbbwm4QkbbUrlIp62sEKgT5PiP5lwCOaEiPHvGzcV7wOgtY8cDrnshR0CynSNj6X-sTPWJHysPI31xr97E0w6hOHPZ9g_Gc');"></div>
+<div class="flex flex-col gap-1">
+<p class="text-base font-bold leading-tight text-slate-900 dark:text-white">Eleanor Vance</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">ID: 987-654-321</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">eleanor.v@example.com</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Appointment Details Section -->
+<div>
+<h3 class="px-4 pb-2 pt-6 text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Appointment Details</h3>
+<div class="flex flex-col gap-3 px-4">
+<div class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Appointment Type</p>
+<p class="text-base font-bold leading-tight text-slate-900 dark:text-white">Teleconsultation</p>
+</div>
+<div class="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Requested Date &amp; Time</p>
+<p class="text-base font-bold leading-tight text-slate-900 dark:text-white">August 20, 2023 - 2:00 PM</p>
+</div>
+</div>
+</div>
+<!-- User Report Section -->
+<div>
+<h3 class="px-4 pb-2 pt-6 text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">User's Report</h3>
+<div class="px-4">
+<div class="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<div class="flex flex-col gap-1">
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Subject</p>
+<p class="text-base font-bold leading-tight text-slate-900 dark:text-white">Follow-up on ankle injury</p>
+</div>
+<div class="flex flex-col gap-1">
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Description</p>
+<p class="text-base font-normal leading-relaxed text-slate-600 dark:text-slate-300">Experiencing persistent swelling and mild pain in my right ankle following the initial sprain two weeks ago. I would like to consult with a specialist to check on the healing progress and discuss further treatment options if necessary.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Attachments Section -->
+<div>
+<h3 class="px-4 pb-2 pt-6 text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Attached Files</h3>
+<div class="px-4">
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<div class="aspect-square w-full rounded-xl bg-slate-200 bg-cover bg-center dark:bg-slate-700" data-alt="Photo of a swollen ankle" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLpLWDeJecix-2hSuCUtPSfqkzBvxNV18sI750vp3zKx1HOgqLk0RHivwD35GzZDBnFdeAN7xJ0heBxNYIr2dxOpNZe7cPNgC8ld5Ev0dqiRniRLxlir6Pg7ZCi1_f9rAIhHe3cYXfyFjiU_Z5DCvY00wZbndKJiU1xRRgjRulNLHZ3j1Dmj_fdQAKfR4Fb3wPaetEUMRDnlj_DWPRbiy0btNFipOg9VRf3rCqfrrasHjoI6OnaLYbyhqpgMRBxu6ixpAHM_5KCGY');"></div>
+<p class="truncate text-sm font-medium text-slate-600 dark:text-slate-300">ankle_photo_1.jpg</p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex aspect-square w-full flex-col items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-700">
+<span class="material-symbols-outlined text-4xl text-slate-500 dark:text-slate-400">description</span>
+<p class="mt-2 text-xs text-slate-500 dark:text-slate-400">PDF</p>
+</div>
+<p class="truncate text-sm font-medium text-slate-600 dark:text-slate-300">previous_report.pdf</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="fixed bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-background-light p-4 dark:bg-background-dark">
+<div class="flex items-center gap-4">
+<button class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-red-600/10 text-base font-bold leading-normal text-red-500 dark:bg-red-500/20 dark:text-red-400">
+          Reject
+        </button>
+<button class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-primary text-base font-bold leading-normal text-white">
+          Approve
+        </button>
+</div>
+</div>
+</div>
+</body></html>

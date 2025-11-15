@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đăng ký - SEWS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-col items-center justify-center bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden p-4">
+<div class="w-full max-w-md mx-auto">
+<!-- Logo & App Name -->
+<div class="flex flex-col items-center justify-center pb-8 text-center">
+<div class="bg-primary/20 rounded-xl p-3 mb-4">
+<svg class="w-10 h-10 text-primary" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2L6 8V11C6 15.42 8.59 19.43 12 20.5C15.41 19.43 18 15.42 18 11V8L12 2ZM11 15L8 12L9.41 10.59L11 12.17L14.59 8.59L16 10L11 15Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-2xl font-bold text-slate-800 dark:text-white">SEWS</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400">Early Warning Software</p>
+</div>
+<!-- Header -->
+<div class="text-left">
+<h1 class="text-slate-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight">Tạo tài khoản mới</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal pt-1">Bắt đầu theo dõi và bảo vệ sức khỏe của bạn.</p>
+</div>
+<!-- Form Fields -->
+<div class="flex flex-col gap-4 pt-8">
+<!-- Họ và tên -->
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal pb-2">Họ và tên</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-primary/50 focus:ring-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-[15px] text-base font-normal leading-normal transition-shadow duration-200" placeholder="Nhập họ và tên của bạn" value=""/>
+</label>
+<!-- Email hoặc Số điện thoại -->
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal pb-2">Email hoặc Số điện thoại</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-primary/50 focus:ring-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-[15px] text-base font-normal leading-normal transition-shadow duration-200" placeholder="Nhập email hoặc số điện thoại" value=""/>
+</label>
+<!-- Mật khẩu -->
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal pb-2">Mật khẩu</p>
+<div class="relative flex w-full flex-1 items-center">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-primary/50 focus:ring-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-[15px] pr-12 text-base font-normal leading-normal transition-shadow duration-200" placeholder="Nhập mật khẩu" type="password" value=""/>
+<button class="absolute right-0 h-14 w-14 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</label>
+<!-- Xác nhận mật khẩu -->
+<label class="flex flex-col w-full">
+<p class="text-slate-800 dark:text-slate-200 text-base font-medium leading-normal pb-2">Xác nhận mật khẩu</p>
+<div class="relative flex w-full flex-1 items-center">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-primary/50 focus:ring-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-14 placeholder:text-slate-400 dark:placeholder:text-slate-500 p-[15px] pr-12 text-base font-normal leading-normal transition-shadow duration-200" placeholder="Nhập lại mật khẩu" type="password" value=""/>
+<button class="absolute right-0 h-14 w-14 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility_off</span>
+</button>
+</div>
+<!-- Example Error Message -->
+<!-- <p class="text-red-500 text-sm pt-1.5">Mật khẩu không khớp.</p> -->
+</label>
+</div>
+<!-- Terms & Conditions -->
+<div class="flex items-start gap-3 pt-6">
+<input class="form-checkbox h-5 w-5 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-primary focus:ring-primary/50 focus:ring-offset-background-light dark:focus:ring-offset-background-dark mt-0.5" id="terms-checkbox" type="checkbox"/>
+<label class="text-slate-600 dark:text-slate-400 text-sm" for="terms-checkbox">
+          Tôi đồng ý với
+          <a class="font-semibold text-primary hover:underline" href="#">Điều khoản Dịch vụ</a>
+          và
+          <a class="font-semibold text-primary hover:underline" href="#">Chính sách Bảo mật</a>.
+        </label>
+</div>
+<!-- Primary Button -->
+<div class="pt-8">
+<button class="flex h-14 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background-light dark:focus:ring-offset-background-dark disabled:opacity-50 disabled:cursor-not-allowed">Đăng ký</button>
+</div>
+<!-- Secondary Link -->
+<div class="pt-8 text-center">
+<p class="text-sm text-slate-600 dark:text-slate-400">
+          Đã có tài khoản?
+          <a class="font-semibold text-primary hover:underline" href="#">Đăng nhập ngay</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

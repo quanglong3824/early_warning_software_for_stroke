@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kế hoạch Sống khỏe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+              "content-light": "#ffffff",
+              "content-dark": "#1a2c20",
+              "text-primary-light": "#111813",
+              "text-primary-dark": "#e0e4e1",
+              "text-secondary-light": "#61896f",
+              "text-secondary-dark": "#8a9e90",
+              "border-light": "#dbe6df",
+              "border-dark": "#34453a",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.5rem",
+              "lg": "0.75rem",
+              "xl": "1rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-text-primary-light dark:text-text-primary-dark">arrow_back</span>
+</div>
+<h2 class="text-text-primary-light dark:text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Kế hoạch Sống khỏe</h2>
+<div class="flex size-10 shrink-0 items-center justify-center"></div>
+</div>
+<!-- Meta Text -->
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">Hôm nay, 24 Tháng 10</p>
+<!-- Progress Bar -->
+<div class="flex flex-col gap-4 p-4">
+<div class="bg-content-light dark:bg-content-dark p-4 rounded-xl shadow-sm">
+<div class="flex gap-6 justify-between items-center mb-3">
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-medium leading-normal">Tiến độ hôm nay</p>
+<p class="text-text-primary-light dark:text-text-primary-dark text-sm font-medium leading-normal">3/6</p>
+</div>
+<div class="rounded-full bg-border-light dark:bg-border-dark">
+<div class="h-2 rounded-full bg-primary" style="width: 50%;"></div>
+</div>
+</div>
+</div>
+<!-- Checklists -->
+<div class="px-4 flex flex-col gap-3" style="--checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(16,34,22)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');">
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">directions_walk</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Đi bộ nhanh 30 phút</p>
+<input checked="" class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">nutrition</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Ăn đủ 5 phần rau và trái cây</p>
+<input checked="" class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">water_drop</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Uống đủ 2 lít nước</p>
+<input class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">monitor_heart</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Đo huyết áp tại nhà</p>
+<input class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">pill</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Uống thuốc theo toa</p>
+<input checked="" class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+<label class="flex items-center gap-x-4 p-4 rounded-xl bg-content-light dark:bg-content-dark shadow-sm">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-2xl">self_improvement</span>
+<p class="text-text-primary-light dark:text-text-primary-dark text-base font-normal leading-normal flex-1">Thiền hoặc thư giãn 10 phút</p>
+<input class="h-6 w-6 rounded-md border-border-light dark:border-border-dark border-2 bg-transparent text-primary checked:bg-primary checked:border-primary checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:outline-none" type="checkbox"/>
+</label>
+</div>
+<!-- Body Text -->
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal leading-normal pb-3 pt-8 px-4 text-center">Bạn đang làm rất tốt! Hoàn thành kế hoạch để bảo vệ sức khỏe!</p>
+<div class="h-5"></div>
+</div>
+</body></html>

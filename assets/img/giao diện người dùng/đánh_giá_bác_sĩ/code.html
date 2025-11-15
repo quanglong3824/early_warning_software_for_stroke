@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đánh giá Bác sĩ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-gray-500/30 group/design-root" style='font-family: Inter, "Noto Sans", sans-serif;'>
+<!-- Bottom Sheet Modal -->
+<div class="absolute bottom-0 left-0 flex w-full flex-col justify-end">
+<div class="flex flex-col items-stretch rounded-t-xl bg-white dark:bg-[#101622]">
+<!-- BottomSheetHandle -->
+<div class="flex h-5 w-full items-center justify-center pt-2">
+<div class="h-1 w-9 rounded-full bg-[#dbdfe6] dark:bg-gray-700"></div>
+</div>
+<div class="flex justify-end px-4 pt-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+<!-- ProfileHeader -->
+<div class="flex p-4 @container">
+<div class="flex w-full flex-col items-center gap-4">
+<div class="flex flex-col items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-24 w-24" data-alt="Ảnh đại diện của Bác sĩ Nguyễn Văn An" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDKVA6xcF0oAVJJ7kROK-duDLRPo9mHSeZtuBuFevcWN7b_31mWTtXxIEg3Ux_SC6IXi12ID6XnwJx9WzSCBqhHeSqhh7P8QrK_1x1HMhIzNYGmsO6NQDeoaGRGrRKqldPiLQOX9ahnUOj7wywwBAKNH42VVFUIXpBoj2MwJ9Ya1eBF74QDGf7bNeE2607Z8xRFI-_xSLMiYAriC3s9pdeUCO8wx_O3gRaAZttp9FwroI4tGABXmwBVMi6cQGFi9F7ZvJjV-lMYVUQ");'></div>
+<div class="flex flex-col items-center justify-center">
+<p class="text-[#111318] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">BS. Nguyễn Văn An</p>
+<p class="text-[#616f89] dark:text-gray-400 text-base font-normal leading-normal text-center">Chuyên khoa Tim mạch</p>
+</div>
+</div>
+</div>
+</div>
+<!-- HeadlineText -->
+<h1 class="text-[#111318] dark:text-white tracking-tight text-2xl font-bold leading-tight px-4 text-center pb-1 pt-2">Chia sẻ trải nghiệm của bạn</h1>
+<!-- BodyText -->
+<p class="text-[#616f89] dark:text-gray-400 text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">Chạm vào sao để đánh giá</p>
+<!-- ReactionBar (Star Rating) -->
+<div class="flex flex-wrap gap-4 px-4 py-2 justify-center">
+<div class="flex cursor-pointer items-center justify-center gap-2 px-3 py-2">
+<span class="material-symbols-outlined text-[#FFD700]" style="font-size: 32px;">star</span>
+</div>
+<div class="flex cursor-pointer items-center justify-center gap-2 px-3 py-2">
+<span class="material-symbols-outlined text-[#FFD700]" style="font-size: 32px;">star</span>
+</div>
+<div class="flex cursor-pointer items-center justify-center gap-2 px-3 py-2">
+<span class="material-symbols-outlined text-[#FFD700]" style="font-size: 32px;">star</span>
+</div>
+<div class="flex cursor-pointer items-center justify-center gap-2 px-3 py-2">
+<span class="material-symbols-outlined text-[#FFD700]" style="font-size: 32px;">star</span>
+</div>
+<div class="flex cursor-pointer items-center justify-center gap-2 px-3 py-2">
+<span class="material-symbols-outlined text-[#E0E0E0] dark:text-gray-600" style="font-variation-settings: 'FILL' 0; font-size: 32px;">star</span>
+</div>
+</div>
+<!-- Comment Section -->
+<div class="flex flex-col gap-2 px-4 py-4">
+<label class="text-sm font-medium text-[#111318] dark:text-white" for="comment">Để lại bình luận (Không bắt buộc)</label>
+<textarea class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-3 text-base text-[#111318] dark:text-white placeholder:text-gray-400 focus:border-primary focus:ring-primary dark:focus:border-primary dark:focus:ring-primary" id="comment" name="comment" placeholder="Bác sĩ tư vấn có tận tình không? Bạn có góp ý gì thêm?..." rows="4"></textarea>
+</div>
+<!-- Anonymous Checkbox -->
+<div class="flex items-center gap-3 px-4 pb-4">
+<input class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary dark:bg-gray-800 dark:border-gray-600" id="anonymous" name="anonymous" type="checkbox"/>
+<label class="text-sm text-gray-700 dark:text-gray-300" for="anonymous">Gửi đánh giá ẩn danh</label>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-2 px-4 pb-6 pt-2">
+<button class="flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 text-base font-bold text-white">Gửi Đánh giá</button>
+<button class="flex h-12 w-full items-center justify-center rounded-lg bg-transparent px-6 text-base font-bold text-primary">Để sau</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

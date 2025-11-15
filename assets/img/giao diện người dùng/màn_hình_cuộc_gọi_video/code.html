@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Video Call - SEWS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2D6A8D",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+              "accent-red": "#D9534F"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-screen w-full flex-col bg-black group/design-root overflow-hidden mx-auto max-w-md">
+<!-- Main Video Display (Doctor's View) -->
+<div class="absolute inset-0 h-full w-full bg-center bg-no-repeat bg-cover" data-alt="Live video stream from the doctor, showing a friendly medical professional." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCC7InJy9elOn9jBfDYh76kUOD46xxM6HjdNK5PQDX_Ya_YVkNByLrWNFGPG76hAhOD0LnT4VkpeLA0TbvwAw53RNgXmPwJFA3Bhf5m3J6rArC4cowD1G5q3wkmtOXYjVU9r8Rvo0pF7ox5__3vSsDiHKpNAeZM49yFyac8sigRXvgXnm9PPYd0a4XTYGcf-SVvbRdspbErsc-c0xjcG0RXOW68vPdCosfYll7OnoaOLtTKvxkSG3agXyWH30QdTq-cBUHa02c1r9A");'></div>
+<!-- Gradient Overlay for Contrast -->
+<div class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/60 to-transparent"></div>
+<div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/70 to-transparent"></div>
+<div class="relative z-10 flex h-full w-full flex-col justify-between">
+<!-- Top App Bar / Call Information Header -->
+<div class="flex items-start bg-transparent p-4 pb-2 justify-between text-white">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base">wifi</span>
+<p class="text-white/90 text-sm font-medium leading-normal tracking-[-0.015em] shrink-0">10:25</p>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Dr. Minh Anh</h2>
+<p class="text-white/80 text-sm">Neurologist</p>
+</div>
+<div class="flex w-12 items-center justify-end">
+<p class="text-base font-bold leading-normal tracking-[0.015em] shrink-0 text-white/90">02:35</p>
+</div>
+</div>
+<!-- Picture-in-Picture (User's View) -->
+<div class="absolute top-28 right-4 w-28 h-40 shadow-lg">
+<div class="w-full h-full gap-1 overflow-hidden bg-white @[480px]:gap-2 rounded-lg flex">
+<div class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-lg flex-1" data-alt="Live video stream from the user's camera, showing a concerned person." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCi4LQ3aq8J8hPY3yfbTyreJGFp9UF8Id4Fd4p_Jp7JlFQsMfcaULQgQQKVaze8op7Kb3DlMoeFaQAph5s5vK1FimRWtMWsCkwBDAsXO6JvixA6Y1aN195phjULzUh-XEthKrow3hOmiAkKaCycv98jARa3GaVF2aJCvZPCKLu-G_Ta-CvUAQ1m5q1vrOeB8O-0iWV3_D2Rbc0sX8uEhZi1DSCAMZYGzpJVJGn2VPYPBrDKMLCTkFipwBpe4xCm6uTDWYdATyGhFrI");'></div>
+</div>
+</div>
+<!-- Toolbar / Call Control Bar -->
+<div class="flex justify-center gap-4 px-4 py-6">
+<div class="flex gap-4 items-center bg-black/30 backdrop-blur-sm p-3 rounded-full">
+<button class="flex items-center justify-center size-14 rounded-full bg-white/20 text-white">
+<span class="material-symbols-outlined text-3xl">mic_off</span>
+</button>
+<button class="flex items-center justify-center size-14 rounded-full bg-white/20 text-white">
+<span class="material-symbols-outlined text-3xl">videocam_off</span>
+</button>
+<button class="flex items-center justify-center size-16 rounded-full bg-accent-red text-white">
+<span class="material-symbols-outlined text-4xl">call_end</span>
+</button>
+<button class="flex items-center justify-center size-14 rounded-full bg-white/20 text-white">
+<span class="material-symbols-outlined text-3xl">flip_camera_android</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

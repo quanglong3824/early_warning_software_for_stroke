@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Người dùng</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 bg-background-light dark:bg-background-dark pt-4">
+<div class="flex items-center bg-background-light dark:bg-background-dark px-4 pb-2 justify-between">
+<div class="text-[#111418] dark:text-white flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined !text-2xl">arrow_back</span>
+</div>
+<h1 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Quản lý Người dùng</h1>
+<div class="flex size-12 shrink-0 items-center"></div>
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-3 bg-background-light dark:bg-background-dark">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#617589] dark:text-gray-400 flex border-none bg-white dark:bg-background-dark/50 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined !text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-background-dark/50 focus:border-none h-full placeholder:text-[#617589] dark:placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm theo tên, email..." value=""/>
+</div>
+</label>
+</div>
+<!-- User List -->
+<main class="flex-grow px-4 pb-24 space-y-3">
+<!-- User Card 1: Active -->
+<div class="flex flex-col gap-4 bg-white dark:bg-background-dark/50 p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Nguyễn Văn A" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCERsSv3hPO4Mq6FOopBG_JtqN5soJ-DlxHXTiXbRYw0i-5jVVunGn1R8S4iampz-hE4GHIv0O7opMps7LrK56nhbrKRqIb4zi9YMe7neWgNqys1pD0_ksAvEREqMFp9HvjvZANckMKj4gCYTdcW0Vwhd2To3Qob5jNGhEbiJGXhNnfFUWIIP0a_qyKBCSxNpLNLPT8CsVqdYhz9vLxlS1h_KiAs33IXgupNgRJ0xWnMbCW56UaEJ8dXSh5eL3eoEWFs48eBQkT0ZY");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-background-dark/50"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">Nguyễn Văn A</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Bác sĩ</p>
+</div>
+</div>
+<div class="shrink-0 text-[#617589] dark:text-gray-400">
+<span class="material-symbols-outlined !text-2xl">more_vert</span>
+</div>
+</div>
+</div>
+<!-- User Card 2: Active -->
+<div class="flex flex-col gap-4 bg-white dark:bg-background-dark/50 p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Trần Thị B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0W0wm6rA4Hu7G7S6HLdCgI53oRj-VcqDWWabb-9IPLTPdaTH0hCjqU4oKIzCNangz80d_jJ71ys7Y8PosqTdIpJFDvtSxyq9nj0gPmXELf1h8HiSyWyL15w1OXvdqpv7LQuCttO2Cz3vAPzqgCkjPGp0HvQRwoVbxwEfkbKNisK6TNibaRCzq-w-1I7qHmn07686OA5RCG6HPwqdo60on3PjTH-m4Lcm24ol5Wble4476jJhsNq8-ycOFNBsNZgO9kLZk5-PysvA");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-background-dark/50"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">Trần Thị B</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Y tá</p>
+</div>
+</div>
+<div class="shrink-0 text-[#617589] dark:text-gray-400">
+<span class="material-symbols-outlined !text-2xl">more_vert</span>
+</div>
+</div>
+</div>
+<!-- User Card 3: Blocked -->
+<div class="flex flex-col gap-4 bg-white dark:bg-background-dark/50 p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Lê Văn C" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAl6foEjK8cs8s3Cyc5O1LxCZms2YgYYSrv7NHPs-N7UdYK2VnQVjRP_V-5BKdlIK53Z9HdHyVlFrW8MObq3vnLHiwgAxYSTb9aZ_JpN68VjCifkA89JpQ17oVZvFcRrMCZYeyqRBUg3mEJ4tnj0aqomyT8r8Tm-pdCI0iajKFOW0SYdwVOBIBZQNZid7TMY45A92mMP8XHDtIeaPd3qEB0ZyHc_PzOTJLFrlJ0hdOxbSdCaanYUwOc2d1-TC5mRJeEFy2jbQjT3Lg");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-red-500 border-2 border-white dark:border-background-dark/50"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">Lê Văn C</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">admin@sews.com</p>
+</div>
+</div>
+<div class="shrink-0 text-[#617589] dark:text-gray-400">
+<span class="material-symbols-outlined !text-2xl">more_vert</span>
+</div>
+</div>
+</div>
+<!-- User Card 4: Active -->
+<div class="flex flex-col gap-4 bg-white dark:bg-background-dark/50 p-4 rounded-xl shadow-sm">
+<div class="flex items-center gap-4 justify-between">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Phạm Thị D" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY868UbV3M_fBa7j9tiMdGTkwTtH8-G1-SMsTNXKaHOaerndXCHgsjqUTsryVnZwlRIubfsmZsn-bQmrMk7r-1NL84G7UCTvvl7rIW2H0eI1U7L_aUm22rNdQGWFqJD6sLa8tKRTDfEwOK-hXS4AEGlnu-FhDhSQgg3Hk3AcNJpvE11eg5F4ANOA-Yo629CBvjO3zj-rL8IWVGUqbeZE7jl8RJSfJfZUtoGoqzPmkIr0muEJrFNFlQbyUgfWUqPiWDlXk4_p10X6U");'></div>
+<span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 border-2 border-white dark:border-background-dark/50"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal line-clamp-1">Phạm Thị D</p>
+<p class="text-[#617589] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Bệnh nhân</p>
+</div>
+</div>
+<div class="shrink-0 text-[#617589] dark:text-gray-400">
+<span class="material-symbols-outlined !text-2xl">more_vert</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-6 right-6">
+<button class="flex items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-lg">
+<span class="material-symbols-outlined !text-3xl">add</span>
+</button>
+</div>
+</div>
+</body></html>

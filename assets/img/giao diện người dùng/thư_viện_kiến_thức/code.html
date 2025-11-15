@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thư viện Kiến thức</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative mx-auto flex h-auto min-h-screen w-full max-w-md flex-col bg-white dark:bg-zinc-900 group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center bg-white dark:bg-zinc-900/80 backdrop-blur-sm p-4 pb-2 justify-between border-b border-gray-200 dark:border-zinc-800">
+<div class="flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined text-zinc-800 dark:text-zinc-200" style="font-size: 24px;">arrow_back</span>
+</div>
+<h2 class="text-zinc-900 dark:text-zinc-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Thư viện Kiến thức</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-zinc-800 dark:text-zinc-200 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-zinc-800 dark:text-zinc-200" style="font-size: 24px;">search</span>
+</button>
+</div>
+</div>
+<!-- Chips -->
+<div class="p-4 pb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<div class="flex gap-2">
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-primary pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Tất cả</p>
+</div>
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-background-light dark:bg-background-dark pl-4 pr-4">
+<p class="text-zinc-800 dark:text-zinc-200 text-sm font-medium leading-normal">Phòng ngừa Đột quỵ</p>
+</div>
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-background-light dark:bg-background-dark pl-4 pr-4">
+<p class="text-zinc-800 dark:text-zinc-200 text-sm font-medium leading-normal">Sức khỏe Tim mạch</p>
+</div>
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-background-light dark:bg-background-dark pl-4 pr-4">
+<p class="text-zinc-800 dark:text-zinc-200 text-sm font-medium leading-normal">Tiểu đường</p>
+</div>
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-background-light dark:bg-background-dark pl-4 pr-4">
+<p class="text-zinc-800 dark:text-zinc-200 text-sm font-medium leading-normal">Dinh dưỡng</p>
+</div>
+<div class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-background-light dark:bg-background-dark pl-4 pr-4">
+<p class="text-zinc-800 dark:text-zinc-200 text-sm font-medium leading-normal">Lối sống</p>
+</div>
+</div>
+</div>
+<!-- Content List -->
+<div class="flex flex-col px-4 pt-4 pb-24 space-y-4">
+<!-- Card 1 -->
+<div class="flex cursor-pointer items-stretch justify-between gap-4 rounded-lg">
+<div class="flex flex-col gap-1 flex-[2_2_0px]">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Bài viết • 5 phút đọc</p>
+<p class="text-zinc-900 dark:text-zinc-100 text-base font-bold leading-tight">5 thói quen hàng ngày giúp giảm nguy cơ đột quỵ</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Một vài thay đổi nhỏ trong lối sống có thể tạo ra sự khác biệt lớn.</p>
+</div>
+<div class="w-28 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-1" data-alt="Abstract image of healthy lifestyle elements like fruits and a running shoe." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCly4GCcQy51LNNYAzCHVdjfcQqWdQHSrxljzJ0IWOwMxKGgLLvQZ7DhjJqJbQgk7sevOhd_L1VM_mVZrwv8Dhv2ikXfk0VVVQUKaPnAhEurDK349F9IdmlIlmthjBqvCyBxDgtvK2CHsAAceFNb4Z6QwJAWENDbTRJNI_G_CepIejnLMyk5gT9Veg8qaPsVgsKl6hWqEmIY_xWuBZX96_kQeF3qA2ov_yrOZn4WknHR0vKTrCQ4FDIsxdJ5QH0Uxg0hsvoT2JpQQc");'></div>
+</div>
+<!-- Divider -->
+<hr class="border-gray-200 dark:border-zinc-800"/>
+<!-- Card 2 -->
+<div class="flex cursor-pointer items-stretch justify-between gap-4 rounded-lg">
+<div class="flex flex-col gap-1 flex-[2_2_0px]">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Video • 10:30</p>
+<p class="text-zinc-900 dark:text-zinc-100 text-base font-bold leading-tight">Video: Hướng dẫn các bài tập tốt cho tim</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Thực hiện các bài tập đơn giản tại nhà để cải thiện sức khỏe tim mạch.</p>
+</div>
+<div class="relative w-28 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-1" data-alt="A person doing yoga poses in a bright room." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCA97mO4_h5EnNh-xn2ED_J4KWUbsI13-RxiPAsoLjYpLjMtiSEvqHGLS7UktFVq7JgFXCemkPAcgVIorKf_OJ7JsbRdPlhVZskyfVgCmaC9UxwiOt8Wq5FmSOOPxvD6KMZeNCvoJQgvNobc76LXoidxk1_IaRW-bW8NsHj1VvbccjBltNMXMsEPEYdieyqfHDUMhBWDEPK3yik9CbA2MC1aFCfwHUur4zIEuGC4BQIZ-RUkbtip7TsObR4DRSOwrrMEdkPH5XVle0");'>
+<div class="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+<span class="material-symbols-outlined text-white" style="font-size: 36px;">play_circle</span>
+</div>
+</div>
+</div>
+<!-- Divider -->
+<hr class="border-gray-200 dark:border-zinc-800"/>
+<!-- Card 3 -->
+<div class="flex cursor-pointer items-stretch justify-between gap-4 rounded-lg">
+<div class="flex flex-col gap-1 flex-[2_2_0px]">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Bài viết • 8 phút đọc</p>
+<p class="text-zinc-900 dark:text-zinc-100 text-base font-bold leading-tight">Chế độ ăn DASH: Lựa chọn thông minh</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Tìm hiểu về chế độ ăn được thiết kế để chống lại bệnh cao huyết áp.</p>
+</div>
+<div class="w-28 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-1" data-alt="A colorful salad bowl with fresh vegetables." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChv7_P_N-HcDmmjZyX7pV83yAtoNkqd9_cPHpeqKga6gRT3u9HgePu6zkPboW_Rsb-RyRv61sHpcQxE_Z3sEaNpY1K95LvYsHCPG9JYLNb2FIOnh4wJiPaaJp3SVJHqGiNcq8uxYUedl1FM_Q83j3vU1xIzJ69TZoyu8Kn4GwiZnxwnMjQKlQQhxSbz0Lz2lmkPMUjt2v4TP2cWx0TDgjTzcE-DcvwVOoTnN6MiOkf7TTfj1JLBoLe1E3vjx4iIC3vTRJ7WAPeQis");'></div>
+</div>
+<!-- Divider -->
+<hr class="border-gray-200 dark:border-zinc-800"/>
+<!-- Card 4 -->
+<div class="flex cursor-pointer items-stretch justify-between gap-4 rounded-lg">
+<div class="flex flex-col gap-1 flex-[2_2_0px]">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Bài viết • 6 phút đọc</p>
+<p class="text-zinc-900 dark:text-zinc-100 text-base font-bold leading-tight">Hiểu về chỉ số đường huyết và cách kiểm soát</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">Những kiến thức cơ bản về tiểu đường và cách quản lý hiệu quả.</p>
+</div>
+<div class="w-28 bg-center bg-no-repeat aspect-square bg-cover rounded-lg flex-1" data-alt="A glucometer showing a blood sugar reading." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJsdkkiHuXwXMzxPyXzL_msHXatFHXTtZnQDmCf5TXOU6lZ2RMZWCpLIFy9RVmIAG4YsgDHH_oHQvHchkkzVjD7gNmMCpfLtJc3xcMYDlpNhaOd0zTqFfTiYo_ESwugubbz8aYr4RiThzcRsSHcMyUVlY98fNrEIlF331nhm_thGw6cd3RUhAVQO2coU8JNyWKL4t4Yo7fpFzGrnbAZ7cuQruHBehykw_1rCIpFqyAeqY2Cr0VZp-xgNQzaw5oazucu7yjR0Xh5dw");'></div>
+</div>
+</div>
+</div>
+<style>
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+</body></html>

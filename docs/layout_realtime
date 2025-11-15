@@ -1,0 +1,271 @@
+{
+  // Bảng 1: Người dùng (Quản lý User X)
+  "users": {
+    "user_X_123": {
+      "uid": "user_X_123",
+      "fullName": "Trần Văn X",
+      "email": "banX@gmail.com",
+      "phoneNumber": "0909123456",
+      "createdAt": "2025-11-10T10:00:00Z",
+      "fcmToken": "token_ABC...",
+      "currentLocation": {
+        "latitude": 10.7769,
+        "longitude": 106.7009
+      }
+    },
+    "user_Y_456": {
+      "uid": "user_Y_456",
+      "fullName": "Lê Thị Y",
+      "email": "chiY@gmail.com",
+      "phoneNumber": "0909789012",
+      "fcmToken": "token_DEF...",
+      "createdAt": "2025-11-11T11:00:00Z"
+    }
+  },
+
+  // Bảng 2: Bệnh nhân (Mẹ của X)
+  "patients": {
+    "patient_M_789": {
+      "fullName": "Nguyễn Thị M",
+      "dateOfBirth": "1965-03-15T00:00:00Z",
+      "gender": "Female",
+      "primaryUserId": "user_X_123", // <-- Liên kết với User X
+      "cccd": "001165000111",
+      "registeredHospitalId": "hospital_BVCR_001", // <-- Liên kết Bệnh viện Chợ Rẫy
+      // Dữ liệu tĩnh từ file CSV
+      "hypertension": true,
+      "heart_disease": false,
+      "everMarried": true,
+      "workType": "Private",
+      "residenceType": "Urban",
+      "smokingStatus": "formerly smoked"
+    }
+  },
+
+  // Bảng 3: Chia sẻ gia đình (X chia sẻ cho Y)
+  "familySharing": {
+    "share_001": {
+      "patientId": "patient_M_789", // <-- Hồ sơ của Mẹ
+      "ownerUserId": "user_X_123", // <-- X là chủ
+      "sharedWithUserId": "user_Y_456", // <-- Chia sẻ cho Y
+      "permission": "read_only",
+      "status": "accepted"
+    }
+  },
+
+  // Bảng 4: Bệnh viện (Tra cứu)
+  "hospitals": {
+    "hospital_BVCR_001": {
+      "name": "Bệnh viện Chợ Rẫy",
+      "address": "201B Nguyễn Chí Thanh, Phường 12, Quận 5, TP. HCM",
+      "location": {
+        "latitude": 10.7597,
+        "longitude": 106.6604
+      },
+      "emergencyPhone": "02838554137"
+    }
+  },
+
+  // Bảng 5: Bác sĩ (Tra cứu)
+  "doctors": {
+    "doc_An_001": {
+      "uid": "doc_An_001",
+      "fullName": "BS. Nguyễn Văn An",
+      "email": "bs.an@bvcr.vn",
+      "hospitalId": "hospital_BVCR_001", // <-- Làm việc ở Chợ Rẫy
+      "specialty": "Thần kinh",
+      "fcmToken": "token_GHI..."
+    }
+  },
+
+  // Bảng 6: Chỉ số Sức khỏe & Kết quả Dự đoán
+  "healthRecords": {
+    "record_001": {
+      "patientId": "patient_M_789",
+      "recordedByUserId": "user_X_123",
+      "createdAt": "2025-11-14T08:00:00Z",
+      // Dữ liệu động từ file CSV
+      "avgGlucoseLevel": 175.5, // <-- Chỉ số cao
+      "bmi": 30.2, // <-- Chỉ số cao
+      "notes": "Mẹ có triệu chứng hơi choáng váng."
+    }
+  },
+  
+  // Bảng 7: Kết quả dự đoán (Tách riêng hoặc lồng vào healthRecords)
+  // (Tôi tách riêng để làm rõ tính năng mở rộng)
+  "predictions": {
+    "pred_stroke_001": {
+       "healthRecordId": "record_001", // <-- Dựa trên chỉ số record_001
+       "modelType": "stroke",
+       "resultProbability": 0.65, // <-- 65%
+       "resultLabel": "Nguy cơ cao",
+       "predictedAt": "2025-11-14T08:01:00Z"
+    },
+    "pred_diabetes_001": {
+       "healthRecordId": "record_001",
+       "modelType": "diabetes",
+       "resultProbability": 0.72,
+       "resultLabel": "Nguy cơ cao - Cần khám ngay",
+       "predictedAt": "2025-11-14T08:01:05Z"
+    }
+  },
+
+  // Bảng 8: Yêu cầu SOS
+  "sosRequests": {
+    "sos_001": {
+      "patientId": "patient_M_789",
+      "requestingUserId": "user_X_123",
+      "userLocation": { // <-- Vị trí của X lúc bấm nút
+        "latitude": 10.7769,
+        "longitude": 106.7009
+      },
+      "assignedHospitalId": "hospital_BVCR_001", // <-- Cloud Function tìm ra BV này gần nhất
+      "status": "resolved", // "pending" -> "acknowledged" -> "dispatched" -> "resolved"
+      "createdAt": "2025-11-12T15:30:00Z",
+      "acknowledgedAt": "2025-11-12T15:31:00Z"
+    }
+  },
+
+  // Bảng 9: Lịch hẹn
+  "appointments": {
+    "appt_001": {
+      "patientId": "patient_M_789",
+      "userId": "user_X_123",
+      "doctorId": "doc_An_001", // <-- Hẹn Bác sĩ An
+      "hospitalId": "hospital_BVCR_001",
+      "type": "video_call", // <-- Tính năng mở rộng: Tư vấn video
+      "status": "confirmed", // "pending_approval" -> "confirmed"
+      "reason": "Xin tư vấn về kết quả dự đoán đột quỵ cao.",
+      "requestedAt": "2025-11-14T08:05:00Z",
+      "appointmentTime": "2025-11-15T14:00:00Z"
+    }
+  },
+
+  // Bảng 10: Phiên Chat
+  "chatSessions": {
+    "chat_userX_docAn": { // <-- ID kết hợp
+      "userId": "user_X_123",
+      "doctorId": "doc_An_001",
+      "patientId": "patient_M_789",
+      "lastMessageText": "Cảm ơn bác sĩ.",
+      "lastMessageAt": "2025-11-14T09:05:00Z",
+      "userUnreadCount": 0,
+      "doctorUnreadCount": 0,
+      
+      // SUB-COLLECTION: messages (Mô phỏng lồng vào)
+      "messages": {
+        "msg_001": {
+          "senderId": "user_X_123",
+          "text": "Chào bác sĩ, tôi vừa có kết quả dự đoán đột quỵ của mẹ tôi cao.",
+          "createdAt": "2025-11-14T09:00:00Z"
+        },
+        "msg_002": {
+          "senderId": "doc_An_001",
+          "text": "Chào bạn, bạn giữ bình tĩnh và đặt lịch hẹn video để tôi tư vấn kỹ hơn nhé.",
+          "createdAt": "2025-11-14T09:02:00Z"
+        },
+        "msg_003": {
+          "senderId": "user_X_123",
+          "text": "Dạ, tôi vừa đặt lịch hẹn. Cảm ơn bác sĩ.",
+          "createdAt": "2025-11-14T09:05:00Z"
+        }
+      }
+    }
+  },
+  
+  // ----- CÁC BẢNG MỞ RỘNG (TIỀN) -----
+  
+  // Bảng 11: Đơn thuốc (Sau khi gọi video)
+  "prescriptions": {
+    "presc_001": {
+      "appointmentId": "appt_001", // <-- Từ lịch hẹn appt_001
+      "patientId": "patient_M_789",
+      "doctorId": "doc_An_001",
+      "createdAt": "2025-11-15T14:30:00Z",
+      "notes": "Bệnh nhân cần theo dõi đường huyết và huyết áp sát.",
+      "drugList": [
+        { "name": "Metformin", "dose": "500mg", "quantity": 30 },
+        { "name": "Aspirin 81", "dose": "81mg", "quantity": 30 }
+      ]
+    }
+  },
+  
+  // Bảng 12: Danh mục Thuốc (Tra cứu)
+  "drugCatalog": {
+     "drug_001": { "name": "Metformin 500mg", "price": 60000, "unit": "hộp 30 viên" },
+     "drug_002": { "name": "Aspirin 81mg", "price": 25000, "unit": "hộp 30 viên" }
+  },
+  
+  // Bảng 13: Đơn hàng (User X mua thuốc)
+  "orders": {
+    "order_001": {
+      "userId": "user_X_123",
+      "prescriptionId": "presc_001", // <-- Mua theo đơn presc_001
+      "createdAt": "2025-11-15T15:00:00Z",
+      "items": [
+        { "drugId": "drug_001", "quantity": 1, "price": 60000 },
+        { "drugId": "drug_002", "quantity": 1, "price": 25000 }
+      ],
+      "totalPrice": 85000,
+      "status": "delivered", // "pending" -> "processing" -> "shipped" -> "delivered"
+      "shippingAddress": "123 Đường ABC, Quận 1, TP. HCM"
+    }
+  },
+
+  // Bảng 14: Thư viện Kiến thức
+  "knowledgeArticles": {
+    "article_001": {
+      "title": "5 Dấu hiệu sớm của Đột quỵ bạn cần biết",
+      "content": "Nội dung bài viết...",
+      "authorDoctorId": "doc_An_001",
+      "category": "stroke",
+      "createdAt": "2025-11-01T00:00:00Z"
+    }
+  },
+
+  // Bảng 15: Diễn đàn (Threads)
+  "forumThreads": {
+    "thread_001": {
+      "title": "Kinh nghiệm chăm sóc người nhà bị tiểu đường và huyết áp cao?",
+      "content": "Mẹ mình vừa có chỉ số cao, mình rất lo lắng. Mọi người có kinh nghiệm gì...",
+      "createdByUserId": "user_X_123", // <-- User X đăng
+      "createdAt": "2025-11-14T10:00:00Z"
+    }
+  },
+
+  // Bảng 16: Diễn đàn (Posts/Replies)
+  "forumPosts": {
+    "post_001": {
+      "threadId": "thread_001",
+      "content": "Chào bạn, mình cũng giống bạn. Quan trọng nhất là theo dõi chế độ ăn.",
+      "createdByUserId": "user_Y_456", // <-- User Y trả lời
+      "createdAt": "2025-11-14T11:00:00Z"
+    }
+  },
+
+  // Bảng 17: Đánh giá Bác sĩ
+  "reviews": {
+    "review_001": {
+      "doctorId": "doc_An_001",
+      "userId": "user_X_123",
+      "appointmentId": "appt_001", // <-- Đánh giá sau cuộc hẹn
+      "rating": 5,
+      "comment": "Bác sĩ An tư vấn rất nhiệt tình và chuyên nghiệp.",
+      "createdAt": "2025-11-15T14:40:00Z"
+    }
+  },
+  
+  // Bảng 18: Kế hoạch Sống khỏe (Lifestyle Plans)
+  "lifestylePlans": {
+     "plan_for_patient_M": {
+        "patientId": "patient_M_789",
+        "createdAt": "2025-11-15T14:35:00Z",
+        "createdByDoctorId": "doc_An_001", // Bác sĩ tạo
+        "tasks": [
+           { "taskName": "Đo đường huyết", "time": "07:00", "completed": false },
+           { "taskName": "Uống thuốc Metformin", "time": "07:30", "completed": false },
+           { "taskName": "Đi bộ 30 phút", "time": "17:00", "completed": false }
+        ]
+     }
+  }
+}

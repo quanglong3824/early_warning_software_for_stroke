@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEWS Video Consultation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#005A9C",
+                        "background-light": "#FFFFFF",
+                        "background-dark": "#101828",
+                        "destructive": "#D92D20",
+                        "light-gray": "#F2F4F7",
+                        "mid-gray": "#667085",
+                        "dark-gray": "#101828",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-hidden">
+<!-- Main Video Feed (Patient's View) -->
+<div class="absolute inset-0 h-full w-full bg-cover bg-center" data-alt="A smiling elderly woman sitting on a couch during a video call." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFqYfXlTyn5IA1GHDcVW6YBQkdphNqi1DpoI9Z6dtTjNpydNT5BvaVr030ZXdDgiW9FXjLQogL7Vt4C_tiwhVjN1km9tzwGd4WQmu1xo0YUWTfwhd43-XB5XehOUnDe79P6emhcvJjER0MnPNmCt5kNmTnIbVFqJgl75ZJV5JRh2hm5fBUCoGRHxOJE_DANpKka6TRYS_nfIRR7wxPehQq9AhlHv2fKlhr90-m5DYXwKv0MWlbEyhNgr11AAk2d9dgTXIeoUdI278');"></div>
+<div class="absolute inset-0 bg-black/10"></div> <!-- Subtle overlay for text contrast -->
+<!-- Top Information Bar -->
+<div class="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/50 to-transparent p-4 text-white">
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">wifi</span>
+<p class="text-sm font-semibold tracking-wide">15:32</p>
+</div>
+<div class="text-center">
+<h2 class="text-lg font-bold leading-tight">Eleanor Pena</h2>
+<p class="text-xs text-white/80">ID: 12345</p>
+</div>
+<div class="w-16"></div> <!-- Spacer to balance the layout -->
+</div>
+</div>
+<!-- UI Overlays: Self-view and Patient Record Button -->
+<div class="relative z-10 flex h-full flex-col justify-between p-4 pt-20 pb-6">
+<!-- Top Right Aligned items -->
+<div class="flex items-start justify-between">
+<!-- View Patient Record Button -->
+<button class="flex h-12 max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full bg-dark-gray/60 px-4 text-sm font-semibold text-white backdrop-blur-sm hover:bg-dark-gray/80">
+<span class="material-symbols-outlined" style="font-size: 20px;">person</span>
+<span class="truncate">Patient Record</span>
+</button>
+<!-- Self-View Window -->
+<div class="h-40 w-28 shrink-0 overflow-hidden rounded-lg border-2 border-white/50 bg-cover bg-center shadow-lg" data-alt="A male doctor in scrubs looking at the camera." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfhqYzmlCp9_CeYKJZUDnyom19wu4YWZzTg5XxMyknSRMMe7T9bJ1C7QkmIh9QLuENCEaNSwdf07uVS4K-z0bCi-wexOrJ9EPoeSthf2boCi4Uuvbx92fYh8Kv1mLee4x4WEFzRaU4TJ2P8PTd7vyycbhz7CDOYQ6cgZxqlbdhJlSwRWyST1Ir4pamb4Ox2C4sMrWuyo9Zkm5UjPo63QihxlBWYsA5u1osUkPNQBj9zY0WySs7TEKYQkmTlgI2EmrwkFgZ_EpwzUE');">
+</div>
+</div>
+<!-- Bottom Control Bar -->
+<div class="flex w-full items-center justify-center">
+<div class="flex items-center justify-center gap-4 rounded-full bg-dark-gray/60 p-3 backdrop-blur-sm">
+<button class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30">
+<span class="material-symbols-outlined">mic_off</span>
+</button>
+<button class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30">
+<span class="material-symbols-outlined">videocam_off</span>
+</button>
+<button class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30">
+<span class="material-symbols-outlined">flip_camera_android</span>
+</button>
+<button class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-destructive text-white hover:bg-destructive/90">
+<span class="material-symbols-outlined">call_end</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

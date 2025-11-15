@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEWS - Bảng điều khiển tổng quan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="flex flex-col flex-1">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-gray-200/80 dark:border-gray-700/80 bg-background-light/80 dark:bg-background-dark/80 px-4 backdrop-blur-sm">
+<h1 class="text-xl font-bold text-gray-900 dark:text-white">Tổng quan</h1>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full">
+<img class="h-full w-full object-cover" data-alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC76q2HVcqOecbguVlrLzvICvR_FIEg6UtS7VzmOWo9ADtnjQWvjdhinkIHGO07uL9k5G7jIBAo2d1gAnh2X5r_AlUsfZZuDOsso-bcKIYQoXig4tHWurq7soOGp0AnKt6mwUkJOcj_kP_JFpPZ6Cw5XW8_YGL4uhWISfQ3i-5FR9NBrkkQWe_c72h8gqVms0BJh2YTBTOn1adhlaM4wQEKvydgZgwtz3JMcQ6983JMJD782Ve05ZkYhV1nBLT0R1CD_NV3xbm2vHI"/>
+</button>
+</div>
+</div>
+<main class="flex-1 pb-24">
+<!-- Chips Filter -->
+<div class="flex gap-3 p-4 overflow-x-auto whitespace-nowrap">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary pl-4 pr-3 text-white">
+<p class="text-sm font-medium leading-normal">Hôm nay</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 dark:text-gray-300 pl-4 pr-3 text-gray-800 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal">Tuần này</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 dark:text-gray-300 pl-4 pr-3 text-gray-800 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal">Tháng này</p>
+</button>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-4 px-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal text-gray-600 dark:text-gray-400">Tổng bệnh nhân</p>
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">1,204</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal text-gray-600 dark:text-gray-400">Nhập viện mới</p>
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">86</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal text-gray-600 dark:text-gray-400">Ca cấp cứu</p>
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">15</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl bg-white dark:bg-slate-800 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-sm font-medium leading-normal text-gray-600 dark:text-gray-400">Giường bệnh</p>
+<p class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">78%</p>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="flex flex-col gap-4 px-4 py-6">
+<div class="flex w-full flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-slate-800">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-normal">Bệnh nhân mới</p>
+<div class="flex items-baseline gap-2">
+<p class="text-gray-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight truncate">352</p>
+<div class="flex gap-1 items-center">
+<p class="text-green-600 dark:text-green-400 text-sm font-medium leading-normal">+15%</p>
+<span class="material-symbols-outlined text-base text-green-600 dark:text-green-400">trending_up</span>
+</div>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">7 ngày qua</p>
+<div class="flex min-h-[140px] flex-1 flex-col gap-4 pt-4">
+<svg fill="none" height="100%" preserveaspectratio="none" viewbox="0 0 475 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.2692 109 18.2692 21 36.5385 21C54.8077 21 54.8077 41 73.0769 41C91.3462 41 91.3462 93 109.615 93C127.885 93 127.885 33 146.154 33C164.423 33 164.423 101 182.692 101C200.962 101 200.962 61 219.231 61C237.5 61 237.5 45 255.769 45C274.038 45 274.038 121 292.308 121C310.577 121 310.577 149 328.846 149C347.115 149 347.115 1 365.385 1C383.654 1 383.654 81 401.923 81C420.192 81 420.192 129 438.462 129C456.731 129 456.731 25 475 25V150H0V109Z" fill="url(#paint0_linear_chart)"></path>
+<path d="M0 109C18.2692 109 18.2692 21 36.5385 21C54.8077 21 54.8077 41 73.0769 41C91.3462 41 91.3462 93 109.615 93C127.885 93 127.885 33 146.154 33C164.423 33 164.423 101 182.692 101C200.962 101 200.962 61 219.231 61C237.5 61 237.5 45 255.769 45C274.038 45 274.038 121 292.308 121C310.577 121 310.577 149 328.846 149C347.115 149 347.115 1 365.385 1C383.654 1 383.654 81 401.923 81C420.192 81 420.192 129 438.462 129C456.731 129 456.731 25 475 25" stroke="#137fec" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="paint0_linear_chart" x1="237.5" x2="237.5" y1="1" y2="150">
+<stop stop-color="#137fec" stop-opacity="0.2"></stop>
+<stop offset="1" stop-color="#137fec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between">
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T2</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T3</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T4</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T5</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T6</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">T7</p>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal tracking-wide">CN</p>
+</div>
+</div>
+<div class="flex w-full flex-col gap-2 rounded-xl border border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-slate-800">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-normal">Phân bổ theo khoa</p>
+<div class="flex items-center justify-center min-h-[180px] py-4">
+<div class="relative w-40 h-40">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="dark:stroke-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e6e6e6" stroke-width="3.8"></path>
+<path class="stroke-yellow-400" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#FFC107" stroke-dasharray="80, 100" stroke-width="3.8"></path>
+<path class="stroke-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#137fec" stroke-dasharray="50, 100" stroke-width="3.8"></path>
+<path class="stroke-red-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#DC3545" stroke-dasharray="30, 100" stroke-width="3.8"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-sm text-gray-500 dark:text-gray-400">Tổng</span>
+<span class="text-2xl font-bold text-gray-900 dark:text-white">1204</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+<span class="text-gray-600 dark:text-gray-300">Tim mạch</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-red-500"></div>
+<span class="text-gray-600 dark:text-gray-300">Nhi</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-yellow-400"></div>
+<span class="text-gray-600 dark:text-gray-300">Nội tiết</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+<span class="text-gray-600 dark:text-gray-300">Khác</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section Header -->
+<h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-2">Thông báo &amp; Cảnh báo</h2>
+<!-- Notifications List -->
+<div class="flex flex-col gap-3 px-4">
+<div class="flex items-start gap-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-yellow-400/20 text-yellow-600 dark:bg-yellow-400/30 dark:text-yellow-300">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="flex flex-col">
+<p class="font-semibold text-gray-800 dark:text-gray-100">Cảnh báo hệ thống</p>
+<p class="text-sm text-gray-600 dark:text-gray-300">Ghi nhận số ca cúm A tăng đột biến tại khu vực quận 1.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 rounded-xl border border-red-500/30 bg-red-500/10 p-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-400/20 text-red-600 dark:bg-red-400/30 dark:text-red-300">
+<span class="material-symbols-outlined">dangerous</span>
+</div>
+<div class="flex flex-col">
+<p class="font-semibold text-gray-800 dark:text-gray-100">Khẩn cấp: Thiếu vật tư</p>
+<p class="text-sm text-gray-600 dark:text-gray-300">Khoa cấp cứu sắp hết dung dịch sát khuẩn. Yêu cầu bổ sung ngay.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 rounded-xl border border-blue-500/30 bg-blue-500/10 p-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-400/20 text-blue-600 dark:bg-blue-400/30 dark:text-blue-300">
+<span class="material-symbols-outlined">info</span>
+</div>
+<div class="flex flex-col">
+<p class="font-semibold text-gray-800 dark:text-gray-100">Thông tin cập nhật</p>
+<p class="text-sm text-gray-600 dark:text-gray-300">Khoa Nhi vừa cập nhật quy trình khám sàng lọc mới.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 p-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined">event</span>
+</div>
+<div class="flex flex-col">
+<p class="font-semibold text-gray-800 dark:text-gray-100">Nhắc nhở cuộc họp</p>
+<p class="text-sm text-gray-600 dark:text-gray-300">Cuộc họp giao ban toàn hệ thống vào lúc 9:00 sáng mai.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-10 flex h-20 items-center justify-around border-t border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-700 dark:bg-slate-900/80">
+<a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<p class="text-xs font-semibold">Tổng quan</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-2xl">group</span>
+<p class="text-xs font-medium">Bệnh nhân</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-2xl">calendar_month</span>
+<p class="text-xs font-medium">Lịch trực</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-500 dark:text-gray-400" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<p class="text-xs font-medium">Cài đặt</p>
+</a>
+</nav>
+</div>
+</div>
+</body></html>

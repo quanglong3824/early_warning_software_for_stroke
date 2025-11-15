@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SEWS Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-800">
+<div class="flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined text-[#111318] dark:text-white text-3xl">menu</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">SEWS</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="relative flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-[#111318] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-3xl">notifications</span>
+<div class="absolute top-2 right-2 flex size-3 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white"></div>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4 p-4">
+<!-- Headline Text -->
+<h1 class="text-[#111318] dark:text-white tracking-light text-[32px] font-bold leading-tight px-0 text-left pt-2 pb-0">Tổng quan</h1>
+<!-- Featured Alert Card -->
+<div class="flex flex-col items-stretch justify-start rounded-xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 shadow-[0_0_8px_rgba(239,68,68,0.1)] p-4 gap-3">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/50">
+<span class="material-symbols-outlined text-red-600 dark:text-red-300">warning</span>
+</div>
+<div class="flex-1">
+<p class="text-red-700 dark:text-red-200 text-sm font-medium leading-normal">Cảnh báo Nguy cơ Cao</p>
+<p class="text-red-900 dark:text-red-100 text-lg font-bold leading-tight tracking-[-0.015em]">Bệnh nhân Nguyễn Văn A</p>
+</div>
+</div>
+<p class="text-red-800 dark:text-red-200 text-base font-normal leading-normal">Cần chú ý ngay lập tức. Các chỉ số quan trọng đã vượt ngưỡng an toàn.</p>
+<div class="flex items-center gap-3 justify-end">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-red-600 text-white text-sm font-medium leading-normal shadow-sm">
+<span class="truncate">Xem Chi Tiết</span>
+</button>
+</div>
+</div>
+<!-- Summary Stats -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+<p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">Đang theo dõi</p>
+<p class="text-[#111318] dark:text-white tracking-light text-3xl font-bold leading-tight">42</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+<p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">Cảnh báo (24h)</p>
+<p class="text-[#111318] dark:text-white tracking-light text-3xl font-bold leading-tight">8</p>
+</div>
+<div class="flex col-span-2 flex-col gap-2 rounded-xl p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+<p class="text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">Bệnh nhân ổn định</p>
+<p class="text-green-600 dark:text-green-400 tracking-light text-3xl font-bold leading-tight">34</p>
+</div>
+</div>
+<!-- Patient List Section -->
+<div class="flex flex-col gap-3">
+<!-- Tabs -->
+<div class="border-b border-zinc-200 dark:border-zinc-800 flex justify-between">
+<a class="flex flex-1 flex-col items-center justify-center border-b-[3px] border-b-primary pb-[13px] pt-4" href="#">
+<p class="text-primary text-sm font-bold leading-normal tracking-[0.015em]">Tất cả</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center border-b-[3px] border-b-transparent text-zinc-500 dark:text-zinc-400 pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Nguy cơ cao</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center border-b-[3px] border-b-transparent text-zinc-500 dark:text-zinc-400 pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Cảnh báo</p>
+</a>
+</div>
+<!-- Patient List Items -->
+<div class="flex flex-col gap-3">
+<!-- High Risk Item -->
+<div class="flex items-center gap-4 rounded-xl bg-white dark:bg-zinc-900 p-3 border border-zinc-200 dark:border-zinc-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/40">
+<span class="material-symbols-outlined text-red-600 dark:text-red-300">person</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-[#111318] dark:text-white">Nguyễn Văn A</p>
+<p class="text-red-600 dark:text-red-400 text-sm font-medium">Nguy cơ cao</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-[#111318] dark:text-white">145/95</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm">mmHg</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</div>
+<!-- Warning Item -->
+<div class="flex items-center gap-4 rounded-xl bg-white dark:bg-zinc-900 p-3 border border-zinc-200 dark:border-zinc-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/40">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-300">person</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-[#111318] dark:text-white">Trần Thị B</p>
+<p class="text-orange-600 dark:text-orange-400 text-sm font-medium">Cảnh báo</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-[#111318] dark:text-white">98</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm">BPM</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</div>
+<!-- Stable Item -->
+<div class="flex items-center gap-4 rounded-xl bg-white dark:bg-zinc-900 p-3 border border-zinc-200 dark:border-zinc-800">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40">
+<span class="material-symbols-outlined text-green-600 dark:text-green-300">person</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-[#111318] dark:text-white">Lê Văn C</p>
+<p class="text-green-600 dark:text-green-400 text-sm font-medium">Ổn định</p>
+</div>
+<div class="text-right">
+<p class="font-bold text-[#111318] dark:text-white">120/80</p>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm">mmHg</p>
+</div>
+<span class="material-symbols-outlined text-zinc-400 dark:text-zinc-500">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="sticky bottom-0 mt-auto flex justify-around border-t border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-2">
+<a class="flex flex-col items-center gap-1 p-2 rounded-lg text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-xs font-bold">Trang chủ</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 rounded-lg text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-xs font-medium">Bệnh nhân</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 rounded-lg text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-xs font-medium">Báo cáo</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 rounded-lg text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-xs font-medium">Cài đặt</span>
+</a>
+</div>
+</div>
+</body></html>

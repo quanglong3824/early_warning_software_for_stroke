@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Feedback</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-background-light p-4 pb-2 dark:bg-background-dark">
+<div class="flex size-10 shrink-0 cursor-pointer items-center justify-center text-slate-800 dark:text-white">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="flex-1 text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Patient Feedback</h2>
+<div class="size-10 shrink-0"></div> <!-- Spacer -->
+</div>
+<main class="flex flex-col">
+<!-- Rating Summary -->
+<div class="flex flex-wrap gap-x-8 gap-y-6 border-b border-white/10 p-4">
+<div class="flex flex-col gap-2">
+<p class="text-4xl font-black leading-tight tracking-[-0.033em] text-slate-900 dark:text-white">4.5</p>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-lg text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-lg text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-lg text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-lg text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-lg text-primary">star_half</span>
+</div>
+<p class="text-base font-normal leading-normal text-slate-600 dark:text-slate-400">125 reviews</p>
+</div>
+<div class="grid min-w-[200px] max-w-[400px] flex-1 grid-cols-[20px_1fr_40px] items-center gap-y-3">
+<p class="text-sm font-normal leading-normal text-slate-800 dark:text-white">5</p>
+<div class="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-primary" style="width: 75%;"></div></div>
+<p class="text-right text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">75%</p>
+<p class="text-sm font-normal leading-normal text-slate-800 dark:text-white">4</p>
+<div class="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-primary" style="width: 15%;"></div></div>
+<p class="text-right text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">15%</p>
+<p class="text-sm font-normal leading-normal text-slate-800 dark:text-white">3</p>
+<div class="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-primary" style="width: 5%;"></div></div>
+<p class="text-right text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">5%</p>
+<p class="text-sm font-normal leading-normal text-slate-800 dark:text-white">2</p>
+<div class="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-primary" style="width: 3%;"></div></div>
+<p class="text-right text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">3%</p>
+<p class="text-sm font-normal leading-normal text-slate-800 dark:text-white">1</p>
+<div class="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-primary" style="width: 2%;"></div></div>
+<p class="text-right text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">2%</p>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex h-12 min-w-40 w-full flex-col">
+<div class="flex h-full w-full flex-1 items-stretch rounded-lg">
+<div class="flex items-center justify-center rounded-l-lg border-r-0 bg-slate-200 pl-4 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input h-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg rounded-l-none border-none bg-slate-200 px-4 pl-2 text-base font-normal leading-normal text-slate-900 placeholder:text-slate-500 focus:outline-0 focus:ring-0 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400" placeholder="Search by keyword, patient ID..." value=""/>
+</div>
+</label>
+</div>
+<!-- Chips / Filters -->
+<div class="flex gap-3 overflow-x-auto p-3 pt-0">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 pl-4 pr-2 text-primary dark:bg-primary/30">
+<p class="text-sm font-medium leading-normal">Most Recent</p>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 pl-4 pr-2 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+<p class="text-sm font-medium leading-normal">Date Range</p>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 pl-4 pr-2 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+<p class="text-sm font-medium leading-normal">Service Type</p>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+</div>
+<!-- Reviews List -->
+<div class="flex flex-col gap-4 p-4">
+<!-- Review Card 1 -->
+<div class="relative flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<div class="absolute left-0 top-4 h-5 w-1 rounded-r-full bg-green-500"></div> <!-- New Feedback Indicator -->
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Abstract profile avatar 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWXGKi1T8DU_zHOwX-wqj9L8VmNliTvLnZY4nqKeX0z51IbrMcKa86wbCLv-gpnniFz89948Vco_IUnVhDWjwozACMdWNpxf_3RtJx7kpnhnuGLIoNF2IJsypiYjEJtn6kCQxvtxYNKX8cFWOtlPJIf1jV9NAsFFRxB361liJG5GOGXJ6-d7jFOTYetILOTBZUVoxe7l37TmpKX1yGdERNbDyHS0vieimP2Gycxwof3UAByFXwHW6NSX0G21YbEfjrbMOmwZhD9dM");'></div>
+<div class="flex-1">
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">Patient ID: 8C2A1</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Oct 22, 2023</p>
+</div>
+<div class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:bg-green-500/20 dark:text-green-400">Emergency Call</div>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-base font-normal leading-normal text-slate-800 dark:text-slate-300">
+                        The response time for the emergency call was exceptional. The team was professional and reassuring throughout the entire process. I felt very well taken care of.
+                    </p>
+</div>
+<!-- Review Card 2 -->
+<div class="flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Abstract profile avatar 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQNvWKcTdqW9_mMX1P_JbNVyyyIx9VvNtx3vLi63h-rXwXPOPg7dHPvcZpjaJsSHA70VgaZbs3xYmAHSHvxhG9gF3151lfg6B7m22QMxiNS_5MoOocXrKaK0xUfiTxxJIVXU-xCh6yNNcTrBxTFRYtVMDxvGL-zcoKHsI3MZO_uEwKHXx-M6CL12IRdl4FMXsnzXBmqUFpT8Vfakjgjoj529vSCVG-Sjkl01Rdhn6Hpmbq9mQPs71Ijk0vDdEWEZ6sC9Ua29BAnJM");'></div>
+<div class="flex-1">
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">Patient ID: 9B4F2</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Oct 21, 2023</p>
+</div>
+<div class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">Follow-up</div>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-slate-400 dark:text-slate-600">star</span>
+</div>
+<p class="text-base font-normal leading-normal text-slate-800 dark:text-slate-300">
+                        The follow-up appointment was thorough, and the doctor took the time to answer all of my questions. The only minor issue was the initial wait time.
+                    </p>
+</div>
+<!-- Review Card 3 -->
+<div class="flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800/50">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Abstract profile avatar 3" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA1_xqk0bFrcK8_gbRuRMZM-QFpxShXUF2uzL47ROnCgZ8IISdOWPf_9D0Cmpy6tKq4S9Cy8c6r3IBWN1WmnHQitp_Dv5ryqZ5JsuL7zWF9i65vyAC0IHAeLIVmrJcvjpVpOJ3rcx01b1FrsLR5dwXY8XH-lbI7df9b7cN-cfL5CECtJQ94IyPLAPJXUFqu-43DRbF7xeN5xgBPRHKM6A0hqpbQ3mEc6fsweufkdkP1rwKuk0G0xXQlEqJMvcG9oCcEg8EBlYV1bwA");'></div>
+<div class="flex-1">
+<p class="text-base font-medium leading-normal text-slate-900 dark:text-white">Patient ID: 7D3E5</p>
+<p class="text-sm font-normal leading-normal text-slate-500 dark:text-slate-400">Oct 20, 2023</p>
+</div>
+<div class="rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-600 dark:bg-red-500/20 dark:text-red-400">Information Call</div>
+</div>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xl text-slate-400 dark:text-slate-600">star</span>
+<span class="material-symbols-outlined text-xl text-slate-400 dark:text-slate-600">star</span>
+<span class="material-symbols-outlined text-xl text-slate-400 dark:text-slate-600">star</span>
+</div>
+<p class="text-base font-normal leading-normal text-slate-800 dark:text-slate-300">
+                        I had a difficult time getting clear information during my call. The operator seemed rushed and I had to repeat my situation several times. Improvement is needed.
+                    </p>
+</div>
+</div>
+</main>
+</div>
+</body></html>

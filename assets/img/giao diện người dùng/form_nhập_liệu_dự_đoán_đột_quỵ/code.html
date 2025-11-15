@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nhập Dữ Liệu Phân Tích Đột Quỵ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-200 dark:border-gray-800">
+<button class="text-gray-800 dark:text-gray-200 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-gray-900 dark:text-gray-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Nhập Chỉ Số</h2>
+<div class="size-10"></div> <!-- Spacer -->
+</div>
+<main class="flex-1 pb-28">
+<!-- Headline Text -->
+<h1 class="text-gray-900 dark:text-gray-100 tracking-tight text-[32px] font-bold leading-tight px-4 text-left pb-3 pt-6">Nhập Dữ Liệu Phân Tích Đột Quỵ</h1>
+<div class="flex flex-col gap-6">
+<!-- Section 1: Basic Information -->
+<section class="flex flex-col gap-2">
+<h3 class="text-gray-900 dark:text-gray-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Thông tin cơ bản</h3>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Giới tính</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal appearance-none bg-no-repeat bg-right" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO5x-ZAKEN1OFMEOhjqGQFBDVVuZ6YgNaXz60l7Uo6wuyldZ1bO8FgzPIC7UwcVi6tSj9V_9UpgZ02CLkhlLUTTjdltJtvRnhWeEuOXQc4JsMBHRjbWhwiNefw1AKVNdNKk-v_blH8cmpEsXRLsLQxfWkkz5LwrB0nadBKwvJGdemJYg871Bh1TVyc682DMcTdmVWX4QYQYKrl07KLwrdjv5XDmMBLBy-QTcbKDs4QdJ4QC985_yGDWC_gPrY0u6_6ZFx7yRzd7VY'); background-position: right 0.75rem center; background-size: 1.5em 1.5em;">
+<option>Chọn giới tính</option>
+<option value="male">Nam</option>
+<option value="female">Nữ</option>
+<option value="other">Khác</option>
+</select>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Tuổi</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" inputmode="numeric" placeholder="Nhập tuổi của bạn" type="number"/>
+</label>
+</div>
+</section>
+<!-- Section 2: Vital Signs -->
+<section class="flex flex-col gap-2">
+<h3 class="text-gray-900 dark:text-gray-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Chỉ số sinh tồn</h3>
+<div class="grid grid-cols-2 gap-4 px-4 py-3">
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Huyết áp SYS</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" inputmode="numeric" placeholder="mmHg" type="number"/>
+</label>
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Huyết áp DIA</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" inputmode="numeric" placeholder="mmHg" type="number"/>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Nhịp tim</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" inputmode="numeric" placeholder="Nhịp/phút" type="number"/>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Nồng độ Glucose trong máu</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal" inputmode="numeric" placeholder="mg/dL" type="number"/>
+</label>
+</div>
+</section>
+<!-- Section 3: Medical History -->
+<section class="flex flex-col gap-4">
+<h3 class="text-gray-900 dark:text-gray-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Tiền sử bệnh lý</h3>
+<div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg mx-4 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium">Bị tăng huyết áp?</p>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/50 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg mx-4 p-4 border border-gray-200 dark:border-gray-700">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium">Có tiền sử bệnh tim?</p>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/50 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Tình trạng hôn nhân</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal appearance-none bg-no-repeat bg-right" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO5x-ZAKEN1OFMEOhjqGQFBDVVuZ6YgNaXz60l7Uo6wuyldZ1bO8FgzPIC7UwcVi6tSj9V_9UpgZ02CLkhlLUTTjdltJtvRnhWeEuOXQc4JsMBHRjbWhwiNefw1AKVNdNKk-v_blH8cmpEsXRLsLQxfWkkz5LwrB0nadBKwvJGdemJYg871Bh1TVyc682DMcTdmVWX4QYQYKrl07KLwrdjv5XDmMBLBy-QTcbKDs4QdJ4QC985_yGDWC_gPrY0u6_6ZFx7yRzd7VY'); background-position: right 0.75rem center; background-size: 1.5em 1.5em;">
+<option>Chọn tình trạng</option>
+<option value="married">Đã kết hôn</option>
+<option value="single">Chưa kết hôn</option>
+</select>
+</label>
+</div>
+</section>
+<!-- Section 4: Lifestyle -->
+<section class="flex flex-col gap-2">
+<h3 class="text-gray-900 dark:text-gray-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Lối sống</h3>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Tình trạng hút thuốc</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal appearance-none bg-no-repeat bg-right" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO5x-ZAKEN1OFMEOhjqGQFBDVVuZ6YgNaXz60l7Uo6wuyldZ1bO8FgzPIC7UwcVi6tSj9V_9UpgZ02CLkhlLUTTjdltJtvRnhWeEuOXQc4JsMBHRjbWhwiNefw1AKVNdNKk-v_blH8cmpEsXRLsLQxfWkkz5LwrB0nadBKwvJGdemJYg871Bh1TVyc682DMcTdmVWX4QYQYKrl07KLwrdjv5XDmMBLBy-QTcbKDs4QdJ4QC985_yGDWC_gPrY0u6_6ZFx7yRzd7VY'); background-position: right 0.75rem center; background-size: 1.5em 1.5em;">
+<option>Chọn tình trạng</option>
+<option value="never">Chưa bao giờ hút</option>
+<option value="former">Từng hút</option>
+<option value="current">Đang hút</option>
+</select>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Khu vực sinh sống</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal appearance-none bg-no-repeat bg-right" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO5x-ZAKEN1OFMEOhjqGQFBDVVuZ6YgNaXz60l7Uo6wuyldZ1bO8FgzPIC7UwcVi6tSj9V_9UpgZ02CLkhlLUTTjdltJtvRnhWeEuOXQc4JsMBHRjbWhwiNefw1AKVNdNKk-v_blH8cmpEsXRLsLQxfWkkz5LwrB0nadBKwvJGdemJYg871Bh1TVyc682DMcTdmVWX4QYQYKrl07KLwrdjv5XDmMBLBy-QTcbKDs4QdJ4QC985_yGDWC_gPrY0u6_6ZFx7yRzd7VY'); background-position: right 0.75rem center; background-size: 1.5em 1.5em;">
+<option>Chọn khu vực</option>
+<option value="urban">Thành thị</option>
+<option value="rural">Nông thôn</option>
+</select>
+</label>
+</div>
+<div class="px-4 py-3">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Loại hình công việc</p>
+<select class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 placeholder:text-gray-500 dark:placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal appearance-none bg-no-repeat bg-right" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO5x-ZAKEN1OFMEOhjqGQFBDVVuZ6YgNaXz60l7Uo6wuyldZ1bO8FgzPIC7UwcVi6tSj9V_9UpgZ02CLkhlLUTTjdltJtvRnhWeEuOXQc4JsMBHRjbWhwiNefw1AKVNdNKk-v_blH8cmpEsXRLsLQxfWkkz5LwrB0nadBKwvJGdemJYg871Bh1TVyc682DMcTdmVWX4QYQYKrl07KLwrdjv5XDmMBLBy-QTcbKDs4QdJ4QC985_yGDWC_gPrY0u6_6ZFx7yRzd7VY'); background-position: right 0.75rem center; background-size: 1.5em 1.5em;">
+<option>Chọn loại công việc</option>
+<option value="private">Tư nhân</option>
+<option value="self_employed">Tự kinh doanh</option>
+<option value="government">Nhà nước</option>
+<option value="child">Trẻ em</option>
+<option value="never_worked">Chưa từng làm việc</option>
+</select>
+</label>
+</div>
+</section>
+</div>
+</main>
+<!-- CTA Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-700">
+<button class="w-full bg-primary text-white font-bold py-4 px-6 rounded-xl h-14 flex items-center justify-center text-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 transition-colors">
+                Dự Đoán Nguy Cơ
+            </button>
+</div>
+</div>
+</body></html>

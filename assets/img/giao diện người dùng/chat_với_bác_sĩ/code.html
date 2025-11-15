@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chat với Bác sĩ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+            "calm-blue": "#4A90E2",
+            "trustworthy-green": "#2E8B57",
+            "light-gray": "#F8F9FA",
+            "dark-gray": "#333333",
+            "medium-gray": "#777777",
+            "accent-red": "#FF6B6B",
+            "user-bubble": "#E9ECEF",
+            "doctor-bubble": "#D9E9FF",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<!-- Screen 1: Chat List View -->
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800">
+<div class="flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined text-[#111318] dark:text-white">arrow_back</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Trò chuyện</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-[#111318] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Conversation List -->
+<div class="flex flex-col flex-1 bg-white dark:bg-background-dark">
+<!-- List Item 1: Unread -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-3 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Dr. Tran Thi B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCq1UWssOPNhUUbEfPbCDeoESDBU3c94oNp9FpfaQ-gBssE2yX4PXjtGJEq4BCCmrn5n_9pzeyfOTnfH-J9T8nvenCFwY9bVdmpiXOyJIIkc5P4lO4c6y_vg15GUuaTE4fI5O8LDBuhfpmX7PVpdjQx_UkJaOcJYORTFrm9GeH3H3BODXdYK2jRxVE0k2Mdkwm9DCbdP5nUwC3V0RRHzCQEslDirmGx-ktEktXHA6NlKhyWRZo5ATqTRCE8BhngdM9JcmgwmYJ3jH4");'></div>
+<span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-trustworthy-green ring-2 ring-white dark:ring-background-dark"></span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-dark-gray dark:text-gray-200 text-base font-semibold leading-normal line-clamp-1">BS. Trần Thị B</p>
+<p class="text-dark-gray dark:text-gray-200 text-sm font-bold leading-normal line-clamp-1">Bạn thấy sao rồi?</p>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1">
+<p class="text-medium-gray text-xs font-normal leading-normal">10:30</p>
+<div class="flex size-6 items-center justify-center rounded-full bg-accent-red text-white text-xs font-bold"><span>2</span></div>
+</div>
+</div>
+<!-- List Item 2: Read -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-3 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" data-alt="Avatar for Dr. Nguyen Van A" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCHL4zeqxZDRCA4tBnAVI5snFLwszKHiBeUR5zzs2ywstMtQL76-shgEkZqK0unpvmYJSHJbqDXXXAYCiyo3bA7fr003A6FmYDcO-AXD6m6ZKB8sHKTLfTMY0RORUNLUtmpHy9jEktoO9Uw3NliS1ITppzkYVQnCxxDOWUT0jcASWbqk3XiiiPX5g810M4Uxn9itKKHQDSY6J3RnxCXox82qcUhqbxMTDxBdf9K1shwX6YCkRp_edM6lbU6rt40O6FLvflhUn3bjsw");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-dark-gray dark:text-gray-200 text-base font-semibold leading-normal line-clamp-1">BS. Nguyễn Văn A</p>
+<p class="text-medium-gray text-sm font-normal leading-normal line-clamp-1">Dòng cuối cùng của cuộc trò chuyện...</p>
+</div>
+</div>
+<div class="shrink-0"><p class="text-medium-gray text-xs font-normal leading-normal">9:45</p></div>
+</div>
+<!-- List Item 3: System Support -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-3 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-4">
+<div class="bg-blue-100 flex items-center justify-center aspect-square rounded-full h-14 w-14" data-alt="SEWS Support icon">
+<span class="material-symbols-outlined text-calm-blue">support_agent</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-dark-gray dark:text-gray-200 text-base font-semibold leading-normal line-clamp-1">Hỗ trợ SEWS</p>
+<p class="text-medium-gray text-sm font-normal leading-normal line-clamp-1">Chào mừng bạn đến với SEWS!</p>
+</div>
+</div>
+<div class="shrink-0"><p class="text-medium-gray text-xs font-normal leading-normal">Hôm qua</p></div>
+</div>
+<!-- Empty State Example (commented out for demonstration) -->
+<!-- 
+      <div class="flex flex-col px-4 py-16 flex-1 justify-center items-center">
+        <div class="flex flex-col items-center gap-6">
+          <div class="text-calm-blue/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div class="flex max-w-[480px] flex-col items-center gap-2">
+            <p class="text-dark-gray dark:text-gray-200 text-lg font-bold leading-tight tracking-[-0.015em] max-w-[480px] text-center">Chưa có cuộc trò chuyện nào</p>
+            <p class="text-medium-gray text-sm font-normal leading-normal max-w-[480px] text-center">Bắt đầu cuộc trò chuyện mới để nhận tư vấn từ bác sĩ.</p>
+          </div>
+          <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-calm-blue text-white text-sm font-bold leading-normal tracking-[0.015em]">
+            <span class="truncate">Bắt đầu trò chuyện</span>
+          </button>
+        </div>
+      </div>
+      -->
+</div>
+</div>
+<!-- Spacer between screens -->
+<div class="h-10 bg-gray-300 dark:bg-gray-900"></div>
+<!-- Screen 2: Chat Detail View -->
+<div class="relative flex h-screen w-full flex-col bg-light-gray dark:bg-background-dark group/design-root overflow-hidden">
+<!-- Chat Header -->
+<div class="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 shadow-sm sticky top-0 z-10">
+<button class="flex items-center justify-center h-10 w-10 text-dark-gray dark:text-white">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10" data-alt="Avatar for Dr. Tran Thi B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpGqyW82MlGwN03GEL4gPknizDETKaZFNtriLqQ_dMsauXRwKw8VS8IhBzb6Cuk7mD5aP3_KC-klkCaEfDOoN8hYvj1_F9n0jXAuOK4DinMNhuFJVNZzZQasPUUnQqSQBCwOriGneCZ10nXy0jivVxkfWqU1hByFXtG76r1cFPe6Q41JIU6Z6w_PVTFf82gT6DY6VjIN4e_B4LSs5eZ33rHvFifbZipnYILyc4JBbIeKPqXoPcaj1uJ0Sz4X-EybxyfkcoCK7nQNU");'></div>
+<div class="flex-1">
+<p class="text-dark-gray dark:text-white text-base font-bold leading-tight">BS. Trần Thị B</p>
+<div class="flex items-center gap-1.5">
+<span class="block h-2 w-2 rounded-full bg-trustworthy-green"></span>
+<p class="text-trustworthy-green text-xs font-medium leading-tight">Đang hoạt động</p>
+</div>
+</div>
+<button class="flex items-center justify-center h-10 w-10 text-dark-gray dark:text-white">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="flex items-center justify-center h-10 w-10 text-dark-gray dark:text-white">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Message Area -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- System Message -->
+<div class="text-center my-2">
+<span class="text-medium-gray text-xs bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full px-3 py-1">Hôm nay</span>
+</div>
+<!-- Doctor's Message -->
+<div class="flex items-end gap-2 max-w-[80%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-7 w-7 self-end" data-alt="Avatar for Dr. Tran Thi B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDKuJR7oR-lQ5eoxSRxyvpN9-5MzZEkf4JctTvNPKKPNPLDCHcCfQ_kTQAy-xrEBH7654-8NqHCtVHyQ_KInNIz9z-WVm8xHMaYth3aLO7T5HNH9d26c64Go9XUN_rwpr33705ldn-hU2qt63n257-bvyipp6G9cmJF1F2c6eB6Y2Hu0aBvF-av3IoOyqzqpBzZEMnZmWkbLHsdaLNmnrlqrCoDz9IRZXABQSU8vjfKHY2tdMXB2mQDn5O4T0aQa8qx0bTQwdZy6E0");'></div>
+<div class="flex flex-col gap-1">
+<div class="bg-white dark:bg-gray-800 rounded-lg rounded-bl-none p-3 shadow-sm">
+<p class="text-dark-gray dark:text-gray-200 text-sm">Chào bạn, tôi có thể giúp gì cho bạn hôm nay?</p>
+</div>
+<span class="text-medium-gray text-xs px-1">10:28</span>
+</div>
+</div>
+<!-- User's Message -->
+<div class="flex items-end gap-2 max-w-[80%] ml-auto justify-end">
+<div class="flex flex-col gap-1 items-end">
+<div class="bg-calm-blue text-white rounded-lg rounded-br-none p-3 shadow-sm">
+<p class="text-sm">Chào bác sĩ, tôi cảm thấy hơi choáng váng và mệt mỏi mấy ngày nay.</p>
+</div>
+<span class="text-medium-gray text-xs px-1">10:29</span>
+</div>
+</div>
+<!-- Doctor's Message -->
+<div class="flex items-end gap-2 max-w-[80%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-7 w-7 self-end" data-alt="Avatar for Dr. Tran Thi B" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCfAWDLWXX7QbTjGhOdrm_zduQTARKSdYwAXKuwkW6fcsjOP-iWcv0jB6ZuCGj3YVzXEYqsjSK58z-HXKig7m4pXG_ftbj_CzHJGNXQv73nbfxK8TpCxk9ZgH7-91xrWPqRHM0y6lbl-_tObKPLFBkNFOWk-gTOw3Pq5osDCcnhexOenMXHS0iz3IX6bLV8W9xJNGcBGDpwO1-mIaLhzZkwfnwpVKtE6TjySZW0q1d43_RL0U5pCngSZgGljdZoI6swrQDwad9Hj1k");'></div>
+<div class="flex flex-col gap-1">
+<div class="bg-white dark:bg-gray-800 rounded-lg rounded-bl-none p-3 shadow-sm">
+<p class="text-dark-gray dark:text-gray-200 text-sm">Bạn thấy sao rồi?</p>
+</div>
+<span class="text-medium-gray text-xs px-1">10:30</span>
+</div>
+</div>
+</div>
+<!-- Security Message -->
+<div class="px-4 py-2 text-center">
+<p class="text-medium-gray text-xs flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm">lock</span>
+            Cuộc trò chuyện này được mã hóa để bảo mật.
+        </p>
+</div>
+<!-- Input Field -->
+<div class="flex items-center gap-2 bg-white dark:bg-gray-900 p-3 border-t border-gray-200 dark:border-gray-800">
+<button class="flex items-center justify-center h-10 w-10 shrink-0 text-dark-gray dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<input class="flex-1 bg-gray-100 dark:bg-gray-800 dark:text-white border-none rounded-full h-10 px-4 text-sm focus:ring-2 focus:ring-calm-blue transition" placeholder="Nhập tin nhắn của bạn..." type="text"/>
+<button class="flex items-center justify-center h-10 w-10 shrink-0 bg-calm-blue text-white rounded-full">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</body></html>

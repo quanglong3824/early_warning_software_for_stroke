@@ -36,6 +36,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   firebase_core: ^4.2.1
+  firebase_database: ^12.0.4
+  firebase_auth: ^6.1.2
+  google_sign_in: ^6.2.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +66,7 @@ flutter:
 
   assets:
     - assets/img/SEWS_2D.png
+    - assets/data/app_data.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

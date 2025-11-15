@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Báo cáo &amp; Đặt hẹn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-gray-800 dark:text-gray-200">arrow_back</span>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-gray-900 dark:text-gray-100">Báo cáo &amp; Đặt hẹn</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-gray-800 dark:text-gray-200 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0 hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">call</span>
+</button>
+</div>
+</div>
+<!-- Segmented Buttons -->
+<div class="px-4 py-3 bg-background-light dark:bg-background-dark">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-gray-200/80 dark:bg-gray-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-900 has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-gray-900 dark:has-[:checked]:text-white text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal transition-all duration-200">
+<span class="truncate">Báo cáo Sức khỏe</span>
+<input checked="" class="invisible w-0" name="screen_selector" type="radio" value="Báo cáo Sức khỏe"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-900 has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-gray-900 dark:has-[:checked]:text-white text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal transition-all duration-200">
+<span class="truncate">Đặt lịch hẹn</span>
+<input class="invisible w-0" name="screen_selector" type="radio" value="Đặt lịch hẹn"/>
+</label>
+</div>
+</div>
+<div class="flex-1 pb-24">
+<!-- Health Report Content -->
+<div>
+<!-- Headline -->
+<h2 class="text-gray-900 dark:text-gray-100 tracking-tight text-[28px] font-bold leading-tight px-4 text-left pb-3 pt-5">Gửi Báo cáo Sức khỏe Hàng ngày</h2>
+<!-- Text Fields for Vitals -->
+<div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Huyết áp tâm thu</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-[15px] text-base font-normal leading-normal" placeholder="mmHg" value=""/>
+</label>
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Huyết áp tâm trương</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-[15px] text-base font-normal leading-normal" placeholder="mmHg" value=""/>
+</label>
+</div>
+<div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Nhịp tim</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-[15px] text-base font-normal leading-normal" placeholder="bpm" value=""/>
+</label>
+</div>
+<!-- Symptoms Checkboxes -->
+<div class="px-4 py-3">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-3">Các triệu chứng thường gặp</p>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-4 rounded-lg bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-checkbox h-5 w-5 rounded text-primary focus:ring-primary/50 border-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:checked:bg-primary" type="checkbox"/>
+<span class="text-gray-800 dark:text-gray-200 text-base font-normal select-none">Đau đầu, chóng mặt</span>
+</label>
+<label class="flex items-center gap-3 p-4 rounded-lg bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-checkbox h-5 w-5 rounded text-primary focus:ring-primary/50 border-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:checked:bg-primary" type="checkbox"/>
+<span class="text-gray-800 dark:text-gray-200 text-base font-normal select-none">Yếu hoặc tê liệt tay/chân</span>
+</label>
+<label class="flex items-center gap-3 p-4 rounded-lg bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-checkbox h-5 w-5 rounded text-primary focus:ring-primary/50 border-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:checked:bg-primary" type="checkbox"/>
+<span class="text-gray-800 dark:text-gray-200 text-base font-normal select-none">Khó nói, nói ngọng</span>
+</label>
+</div>
+</div>
+<!-- Notes Text Area -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal pb-2">Ghi chú khác</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800/50 focus:border-primary h-28 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-[15px] text-base font-normal leading-normal" placeholder="Mô tả chi tiết các triệu chứng khác của bạn..."></textarea>
+</label>
+</div>
+<!-- File Upload -->
+<div class="px-4 py-3">
+<button class="flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-lg h-14 border-2 border-dashed border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">upload_file</span>
+<span class="text-base font-medium leading-normal">Đính kèm tệp</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent">
+<button class="flex w-full max-w-[480px] mx-auto cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl h-14 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] shadow-lg hover:bg-primary/90 focus:ring-4 focus:ring-primary/30">Gửi Báo cáo</button>
+</div>
+</div>
+</body></html>

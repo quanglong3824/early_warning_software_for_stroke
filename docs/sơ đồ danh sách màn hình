@@ -1,0 +1,108 @@
+Navigation: Xác thực ; slide left
+  - Màn hình Chào (Splash)
+  - Onboarding (Giới thiệu App)
+  - Đăng nhập
+  - Đăng ký
+  - Quên mật khẩu
+
+Navigation: Cốt lõi ; slide left
+  - Trang chủ (Dashboard)
+  - Quản lý Hồ sơ Bệnh nhân (List/Add/Detail)
+  - Thông tin cá nhân (của User X)
+
+Navigation: Dự đoán (Đột quỵ) ;gom tab thứ 3
+  - Form Nhập liệu Dự đoán Đột quỵ
+  - Kết quả Dự đoán Đột quỵ
+  - Lịch sử Sức khỏe & Biểu đồ
+
+Navigation: Khẩn cấp (SOS) ;nút lệnh SOS
+  - Kích hoạt SOS (Yêu cầu xác nhận)
+  - Trạng thái SOS (Đang chờ/Xe đang đến)
+
+Navigation: Tương tác BV ;gom tab thứ 2
+  - Gửi Báo cáo / Xin lịch hẹn
+  - Danh sách Lịch hẹn (Đã xác nhận/Chờ)
+  - Chat với Bác sĩ (List & Detail)
+
+Navigation: Quản lý ;tab thứ 5
+  - Quản lý Gia đình (Chia sẻ dữ liệu)
+  - Cài đặt (Settings)
+
+Navigation: Dự đoán (Tiểu đường) ;tab thứ 3
+  - Form Nhập liệu Dự đoán Tiểu đường
+  - Kết quả Dự đoán Tiểu đường
+
+Navigation: Dịch vụ (Telemed) ;slide left
+  - Màn hình Cuộc gọi Video
+
+Navigation: Dịch vụ (Thuốc) ;slide left
+  - Màn hình "Đơn thuốc của tôi" (List/Detail)
+  - Màn hình "Nhà thuốc Online" (Tìm kiếm/List)
+  - Màn hình Giỏ hàng & Thanh toán Thuốc
+
+Navigation: Ngăn ngừa ; tab thứ 4
+  - Màn hình "Thư viện Kiến thức" (List bài viết/video)
+  - Màn hình "Chi tiết Bài viết / Video"
+  - Màn hình "Kế hoạch Sống khỏe" (Checklist hàng ngày)
+  - Màn hình "Quản lý Nhắc nhở" (Uống thuốc / Đo chỉ số)
+
+Navigation: Cộng đồng ;side left
+  - Màn hình "Diễn đàn" (List chủ đề)
+  - Màn hình "Chi tiết Chủ đề" (Đọc & Bình luận)
+  - Màn hình / Popup "Đánh giá Bác sĩ"
+
+
+Navigation: Xác thực (Bác sĩ)
+  - Đăng nhập (Bác sĩ)
+
+Navigation: Trực ca & SOS
+  - Dashboard (Trực ca - Hiển thị SOS mới, Lịch hẹn mới)
+  - Danh sách Hàng đợi SOS (Real-time)
+  - Chi tiết Ca SOS (Vị trí GPS, Thông tin bệnh nhân)
+    Navigation: Dashboard → Danh sách hàng đợi SOS → Chi tiết ca
+
+Navigation: Lịch hẹn
+  - Quản lý Lịch hẹn (Duyệt/Xếp lịch)
+  - Chi tiết Yêu cầu Lịch hẹn (Xem báo cáo do User gửi)
+    Navigation: Quản lý lịch hẹn → Chi tiết yêu cầu
+
+Navigation: Bệnh nhân
+  - Danh sách Bệnh nhân (Quản lý)
+  - Hồ sơ Bệnh nhân (Xem lịch sử đầy đủ)
+    Navigation: Danh sách bệnh nhân → Hồ sơ bệnh nhân
+
+Navigation: Tương tác
+  - Màn hình Chat (Danh sách & Chi tiết trả lời)
+    Navigation: Danh sách chat → Chi tiết chat
+  - Màn hình Cuộc gọi Video (Nhận cuộc gọi & Tư vấn)
+
+Navigation: Chuyên môn
+  - Màn hình "Tạo Đơn thuốc" (e-Prescription)
+  - Màn hình "Xem Đánh giá" (Đọc phản hồi từ bệnh nhân)
+
+Navigation: Cài đặt
+  - Cài đặt (Thông tin Bác sĩ, Lịch làm việc)
+
+
+
+; giao diện dành cho admin ( tổng hợp mọi thứ)
+Navigation: Admin – Xác thực
+  - Splash
+  - Đăng nhập Admin
+  - Quên mật khẩu Admin
+
+Navigation: Admin – Tổng quan
+  - Dashboard Admin (thống kê toàn hệ thống)
+  - Quản lý Users (List/Add/Block/Detail)
+  - Quản lý Bác sĩ (List/Add/Block/Detail)
+  - Quản lý Bệnh nhân (List/Detail/Xuất dữ liệu)
+  - Tổng hợp dữ liệu SOS (Bản đồ & Thống kê)
+  - Tổng hợp dữ liệu Dự đoán (Đột quỵ & Tiểu đường)
+  - Tổng hợp dữ liệu Tương tác BV (Lịch hẹn & Chat)
+  - Tổng hợp dữ liệu Thuốc (Đơn thuốc & Nhà thuốc)
+  - Tổng hợp dữ liệu Ngăn ngừa (Kiến thức & Nhắc nhở)
+  - Tổng hợp dữ liệu Cộng đồng (Diễn đàn & Đánh giá)
+
+Navigation: Admin – Dự đoán & AI
+  - Dự đoán Đột quỵ (Form / Kết quả / Lịch sử)
+  - Dự đoán Tiểu đường (Form / Kết quả / Lịch sử)

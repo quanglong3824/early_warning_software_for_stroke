@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Profile - SEWS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007AFF",
+                        "background-light": "#F2F2F7",
+                        "background-dark": "#101622",
+                        "text-light-primary": "#1C1C1E",
+                        "text-light-secondary": "#8E8E93",
+                        "text-dark-primary": "#FFFFFF",
+                        "text-dark-secondary": "#8E8E93",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1C1C1E",
+                        "card-border-light": "#E5E5EA",
+                        "card-border-dark": "#38383A",
+                        "caution-amber": "#FF9500",
+                        "critical-red": "#FF3B30"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-card-border-light dark:border-card-border-dark">
+<div class="flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-text-light-primary dark:text-text-dark-primary">arrow_back</span>
+</div>
+<h2 class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Patient Profile</h2>
+<div class="flex w-10 items-center justify-center">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-transparent text-text-light-secondary dark:text-text-dark-secondary gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">lock</span>
+</button>
+</div>
+</div>
+<!-- Profile Header -->
+<div class="p-4 @container">
+<div class="flex w-full flex-col gap-4 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
+<div class="flex gap-4 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-24 w-24 shrink-0" data-alt="Portrait of Jane Doe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjdjeHPAUDLzkf331f2oU87Afvg5MT-9gpQf_MXjvwnrCIRGoFTpYQS2Q_chpaoRDdv_Vpn2cL6ZCm2NE4Rs9kkydYGVi2jpk0eRD1KiyvQhu3fKody39uvfofRmxwPu2GHteWnOvCIY-xn_DXPGcDsehrAu2VGzpbb5stRl-FK1zdHKq4zWdPdP_ghY7K9ZaCAfqB27mdDHoueYMxbIyxJtpy0H7a2lMhfqyB-1dtjo1BXywQDDK15GUkIcNKIf-ZzbdzCfrDXBE");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-text-light-primary dark:text-text-dark-primary text-[22px] font-bold leading-tight tracking-[-0.015em]">Jane Doe</p>
+<p class="text-text-light-secondary dark:text-text-dark-secondary text-base font-normal leading-normal">42 years old, O+</p>
+</div>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto gap-2">
+<span class="material-symbols-outlined">sos</span>
+<span class="truncate">New SOS Call</span>
+</button>
+</div>
+</div>
+<!-- Key Info Cards -->
+<div class="flex flex-col gap-4 px-4">
+<!-- Critical Alert Card -->
+<div class="flex flex-col items-stretch justify-start rounded-lg bg-card-light dark:bg-card-dark p-4 border border-card-border-light dark:border-card-border-dark">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-critical-red/20 text-critical-red">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="flex flex-col">
+<p class="text-critical-red text-sm font-medium">CRITICAL ALERT</p>
+<p class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-tight tracking-[-0.015em]">Severe Peanut Allergy</p>
+</div>
+</div>
+</div>
+<!-- Chronic Condition Card -->
+<div class="flex flex-col items-stretch justify-start rounded-lg bg-card-light dark:bg-card-dark p-4 border border-card-border-light dark:border-card-border-dark">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-caution-amber/20 text-caution-amber">
+<span class="material-symbols-outlined">chronic</span>
+</div>
+<div class="flex flex-col">
+<p class="text-caution-amber text-sm font-medium">CHRONIC CONDITION</p>
+<p class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-tight tracking-[-0.015em]">Type 1 Diabetes</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Segmented Control / Tabs -->
+<div class="sticky top-[72px] z-10 bg-background-light dark:bg-background-dark pt-3">
+<div class="flex px-4 py-3">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-black/10 dark:bg-white/10 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-card-light dark:has-[:checked]:bg-card-dark has-[:checked]:shadow-sm text-text-light-secondary dark:text-text-dark-secondary has-[:checked]:text-text-light-primary dark:has-[:checked]:text-text-dark-primary text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Medical History</span>
+<input checked="" class="invisible w-0" name="profile-tabs" type="radio" value="Medical History"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-card-light dark:has-[:checked]:bg-card-dark has-[:checked]:shadow-sm text-text-light-secondary dark:text-text-dark-secondary has-[:checked]:text-text-light-primary dark:has-[:checked]:text-text-dark-primary text-sm font-medium leading-normal transition-colors">
+<span class="truncate">SOS Calls</span>
+<input class="invisible w-0" name="profile-tabs" type="radio" value="SOS Calls"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-card-light dark:has-[:checked]:bg-card-dark has-[:checked]:shadow-sm text-text-light-secondary dark:text-text-dark-secondary has-[:checked]:text-text-light-primary dark:has-[:checked]:text-text-dark-primary text-sm font-medium leading-normal transition-colors">
+<span class="truncate">Appointments</span>
+<input class="invisible w-0" name="profile-tabs" type="radio" value="Appointments"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-text-light-secondary dark:text-text-dark-secondary flex border-none bg-black/10 dark:bg-white/10 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-text-light-primary dark:text-text-dark-primary focus:outline-0 focus:ring-0 border-none bg-black/10 dark:bg-white/10 focus:border-none h-full placeholder:text-text-light-secondary dark:placeholder:text-text-dark-secondary px-4 pl-2 text-base font-normal leading-normal" placeholder="Search medical history..."/>
+</div>
+</label>
+</div>
+<!-- Content Section: Accordions -->
+<div class="flex flex-col gap-4 px-4 pb-24">
+<!-- Accordion Item: Medications -->
+<details class="group rounded-lg bg-card-light dark:bg-card-dark border border-card-border-light dark:border-card-border-dark overflow-hidden">
+<summary class="flex cursor-pointer list-none items-center justify-between p-4">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">medication</span>
+</div>
+<span class="text-base font-medium text-text-light-primary dark:text-text-dark-primary">Current Medications</span>
+</div>
+<span class="text-text-light-secondary dark:text-text-dark-secondary transition-transform group-open:rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="border-t border-card-border-light dark:border-card-border-dark p-4 text-text-light-secondary dark:text-text-dark-secondary">
+<ul class="space-y-2">
+<li>Metformin - 500mg, twice daily</li>
+<li>Lisinopril - 10mg, once daily</li>
+<li>Atorvastatin - 20mg, once daily</li>
+</ul>
+</div>
+</details>
+<!-- Accordion Item: Lab Results -->
+<details class="group rounded-lg bg-card-light dark:bg-card-dark border border-card-border-light dark:border-card-border-dark overflow-hidden">
+<summary class="flex cursor-pointer list-none items-center justify-between p-4">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">science</span>
+</div>
+<span class="text-base font-medium text-text-light-primary dark:text-text-dark-primary">Lab Results</span>
+</div>
+<span class="text-text-light-secondary dark:text-text-dark-secondary transition-transform group-open:rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="border-t border-card-border-light dark:border-card-border-dark p-4 text-text-light-secondary dark:text-text-dark-secondary">
+<p>No recent lab results to display.</p>
+</div>
+</details>
+<!-- Accordion Item: Emergency Contacts -->
+<details class="group rounded-lg bg-card-light dark:bg-card-dark border border-card-border-light dark:border-card-border-dark overflow-hidden" open="">
+<summary class="flex cursor-pointer list-none items-center justify-between p-4">
+<div class="flex items-center gap-3">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">contacts</span>
+</div>
+<span class="text-base font-medium text-text-light-primary dark:text-text-dark-primary">Emergency Contacts</span>
+</div>
+<span class="text-text-light-secondary dark:text-text-dark-secondary transition-transform group-open:rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="border-t border-card-border-light dark:border-card-border-dark p-4 text-text-light-secondary dark:text-text-dark-secondary">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-text-light-primary dark:text-text-dark-primary font-medium">John Doe (Husband)</p>
+<p>+1 (555) 123-4567</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary"><span class="material-symbols-outlined">call</span></button>
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary"><span class="material-symbols-outlined">message</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-text-light-primary dark:text-text-dark-primary font-medium">Dr. Emily Carter (PCP)</p>
+<p>+1 (555) 765-4321</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary"><span class="material-symbols-outlined">call</span></button>
+</div>
+</div>
+</div>
+</div>
+</details>
+</div>
+</div>
+</body></html>
