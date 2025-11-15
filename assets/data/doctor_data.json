@@ -1,0 +1,248 @@
+{
+  "currentDoctor": {
+    "id": "doctor_001",
+    "name": "BS. Trần Văn Minh",
+    "email": "bs.minh@sews.vn",
+    "phone": "0987 654 321",
+    "avatarUrl": "https://ui-avatars.com/api/?name=Dr.Minh&background=135BEC&color=fff&size=200",
+    "specialty": "Tim mạch",
+    "experience": "15 năm",
+    "rating": 4.8,
+    "totalReviews": 156,
+    "license": "BYT-12345",
+    "hospital": "Bệnh viện Đa khoa Trung ương",
+    "createdAt": "2020-01-01T00:00:00.000Z"
+  },
+  "doctorSchedule": {
+    "currentShift": {
+      "id": "shift_001",
+      "type": "morning",
+      "startTime": "07:00",
+      "endTime": "15:00",
+      "date": "2024-11-15"
+    },
+    "upcomingShifts": [
+      {
+        "id": "shift_002",
+        "type": "afternoon",
+        "startTime": "15:00",
+        "endTime": "23:00",
+        "date": "2024-11-16"
+      },
+      {
+        "id": "shift_003",
+        "type": "morning",
+        "startTime": "07:00",
+        "endTime": "15:00",
+        "date": "2024-11-17"
+      }
+    ]
+  },
+  "doctorStats": {
+    "today": {
+      "appointments": 8,
+      "consultations": 12,
+      "prescriptions": 15,
+      "sosHandled": 2
+    },
+    "thisWeek": {
+      "appointments": 45,
+      "consultations": 67,
+      "prescriptions": 89,
+      "sosHandled": 8
+    },
+    "thisMonth": {
+      "appointments": 180,
+      "consultations": 245,
+      "prescriptions": 320,
+      "sosHandled": 25
+    }
+  },
+  "assignedPatients": [
+    "patient_001",
+    "patient_002",
+    "patient_003",
+    "patient_004",
+    "patient_005",
+    "patient_006"
+  ],
+  "todayAppointments": [
+    {
+      "id": "appt_001",
+      "patientId": "patient_001",
+      "patientName": "Nguyễn Văn A",
+      "time": "09:00",
+      "duration": 30,
+      "type": "Khám tổng quát",
+      "status": "confirmed",
+      "notes": "Tái khám định kỳ"
+    },
+    {
+      "id": "appt_002",
+      "patientId": "patient_002",
+      "patientName": "Trần Thị B",
+      "time": "10:00",
+      "duration": 30,
+      "type": "Tư vấn",
+      "status": "confirmed",
+      "notes": "Tư vấn kết quả xét nghiệm"
+    },
+    {
+      "id": "appt_003",
+      "patientId": "patient_003",
+      "patientName": "Lê Văn C",
+      "time": "11:00",
+      "duration": 45,
+      "type": "Khám chuyên sâu",
+      "status": "pending",
+      "notes": "Kiểm tra tim mạch"
+    }
+  ],
+  "appointmentRequests": [
+    {
+      "id": "req_001",
+      "patientId": "patient_004",
+      "patientName": "Phạm Thị D",
+      "requestedDate": "2024-11-16",
+      "requestedTime": "09:00",
+      "reason": "Khám bệnh",
+      "symptoms": "Đau đầu, chóng mặt",
+      "priority": "normal",
+      "createdAt": "2024-11-15T08:00:00.000Z"
+    },
+    {
+      "id": "req_002",
+      "patientId": "patient_005",
+      "patientName": "Hoàng Văn E",
+      "requestedDate": "2024-11-16",
+      "requestedTime": "14:00",
+      "reason": "Tái khám",
+      "symptoms": "Theo dõi huyết áp",
+      "priority": "high",
+      "createdAt": "2024-11-15T09:30:00.000Z"
+    }
+  ],
+  "activeSOS": [
+    {
+      "id": "sos_001",
+      "patientId": "patient_001",
+      "patientName": "Nguyễn Văn A",
+      "location": {
+        "address": "123 Đường ABC, Quận 1, TP.HCM",
+        "latitude": 10.7769,
+        "longitude": 106.7009
+      },
+      "symptoms": "Đau đầu dữ dội, méo miệng, yếu nửa người",
+      "severity": "critical",
+      "status": "active",
+      "createdAt": "2024-11-15T10:25:00.000Z",
+      "familyContacts": [
+        {
+          "name": "Nguyễn Thị X",
+          "relationship": "Vợ",
+          "phone": "0912 111 222"
+        }
+      ]
+    },
+    {
+      "id": "sos_002",
+      "patientId": "patient_002",
+      "patientName": "Trần Thị B",
+      "location": {
+        "address": "456 Đường XYZ, Quận 3, TP.HCM",
+        "latitude": 10.7829,
+        "longitude": 106.6933
+      },
+      "symptoms": "Đau ngực, khó thở",
+      "severity": "high",
+      "status": "active",
+      "createdAt": "2024-11-15T10:30:00.000Z",
+      "familyContacts": [
+        {
+          "name": "Trần Văn Y",
+          "relationship": "Con trai",
+          "phone": "0913 222 333"
+        }
+      ]
+    }
+  ],
+  "recentPrescriptions": [
+    {
+      "id": "pres_001",
+      "patientId": "patient_001",
+      "patientName": "Nguyễn Văn A",
+      "date": "2024-11-14",
+      "medications": [
+        {
+          "name": "Aspirin 100mg",
+          "dosage": "1 viên/ngày",
+          "duration": "30 ngày",
+          "instructions": "Uống sau ăn"
+        },
+        {
+          "name": "Atorvastatin 20mg",
+          "dosage": "1 viên/ngày",
+          "duration": "30 ngày",
+          "instructions": "Uống trước khi ngủ"
+        }
+      ],
+      "diagnosis": "Tăng huyết áp, mỡ máu cao",
+      "notes": "Tái khám sau 1 tháng"
+    }
+  ],
+  "doctorReviews": [
+    {
+      "id": "review_001",
+      "patientId": "patient_003",
+      "patientName": "Lê Văn C",
+      "rating": 5,
+      "comment": "Bác sĩ tận tâm, nhiệt tình. Giải thích rất kỹ về bệnh tình.",
+      "createdAt": "2024-11-10T14:00:00.000Z"
+    },
+    {
+      "id": "review_002",
+      "patientId": "patient_004",
+      "patientName": "Phạm Thị D",
+      "rating": 5,
+      "comment": "Khám rất kỹ càng, tư vấn chi tiết. Rất hài lòng!",
+      "createdAt": "2024-11-08T10:30:00.000Z"
+    },
+    {
+      "id": "review_003",
+      "patientId": "patient_005",
+      "patientName": "Hoàng Văn E",
+      "rating": 4,
+      "comment": "Bác sĩ giỏi, nhưng thời gian chờ hơi lâu.",
+      "createdAt": "2024-11-05T16:00:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_001",
+      "type": "sos",
+      "title": "Cảnh báo SOS mới",
+      "message": "Bệnh nhân Nguyễn Văn A đã kích hoạt SOS",
+      "priority": "critical",
+      "isRead": false,
+      "createdAt": "2024-11-15T10:25:00.000Z"
+    },
+    {
+      "id": "notif_002",
+      "type": "appointment",
+      "title": "Yêu cầu lịch hẹn mới",
+      "message": "Hoàng Văn E yêu cầu đặt lịch khám",
+      "priority": "high",
+      "isRead": false,
+      "createdAt": "2024-11-15T09:30:00.000Z"
+    },
+    {
+      "id": "notif_003",
+      "type": "review",
+      "title": "Đánh giá mới",
+      "message": "Lê Văn C đã đánh giá 5 sao",
+      "priority": "normal",
+      "isRead": true,
+      "createdAt": "2024-11-10T14:00:00.000Z"
+    }
+  ]
+}

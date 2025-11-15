@@ -36,6 +36,20 @@ import 'features/user/reminders/screen_reminders.dart';
 import 'features/user/hospital/screen_report_appointment.dart';
 import 'features/user/prevention/screen_healthy_plan.dart';
 
+// ===== DOCTOR FEATURES =====
+import 'features/doctor/dashboard/screen_doctor_dashboard.dart';
+import 'features/doctor/patients/screen_patient_list.dart';
+import 'features/doctor/patients/screen_patient_profile.dart';
+import 'features/doctor/appointments/screen_appointment_management.dart';
+import 'features/doctor/appointments/screen_appointment_request_detail.dart';
+import 'features/doctor/emergency/screen_sos_queue.dart';
+import 'features/doctor/emergency/screen_sos_case_detail.dart';
+import 'features/doctor/communication/screen_doctor_chat.dart';
+import 'features/doctor/communication/screen_doctor_video_call.dart';
+import 'features/doctor/prescriptions/screen_create_prescription.dart';
+import 'features/doctor/reviews/screen_doctor_reviews.dart';
+import 'features/doctor/settings/screen_doctor_settings.dart';
+
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -109,6 +123,20 @@ class App extends StatelessWidget {
         // ===== SETTINGS & OTHERS =====
         '/settings': (_) => const ScreenSettings(),
         '/healthy-plan': (_) => const ScreenHealthyPlan(),
+
+        // ===== DOCTOR FEATURES =====
+        '/doctor/dashboard': (_) => const ScreenDoctorDashboard(),
+        '/doctor/patients': (_) => const ScreenPatientList(),
+        '/doctor/patient-profile': (_) => const ScreenPatientProfile(),
+        '/doctor/appointments': (_) => const ScreenAppointmentManagement(),
+        '/doctor/appointment-request': (_) => const ScreenAppointmentRequestDetail(),
+        '/doctor/sos-queue': (_) => const ScreenSOSQueue(),
+        '/doctor/sos-case': (_) => const ScreenSOSCaseDetail(),
+        '/doctor/chat': (_) => const ScreenDoctorChat(),
+        '/doctor/video-call': (_) => const ScreenDoctorVideoCall(),
+        '/doctor/create-prescription': (_) => const ScreenCreatePrescription(),
+        '/doctor/reviews': (_) => const ScreenDoctorReviews(),
+        '/doctor/settings': (_) => const ScreenDoctorSettings(),
       },
     );
   }

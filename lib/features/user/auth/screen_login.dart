@@ -132,10 +132,16 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () {
-                      final user = _accountController.text.trim();
-                      final pass = _passwordController.text;
-                      if (user == 'admin' && pass == 'admin') {
+                      final username = _accountController.text.trim();
+                      final password = _passwordController.text;
+                      
+                      // Check credentials and role
+                      if (username == 'user' && password == '123456') {
+                        // User role - navigate to user dashboard
                         Navigator.of(context).pushReplacementNamed('/dashboard');
+                      } else if (username == 'doctor' && password == '123456') {
+                        // Doctor role - navigate to doctor dashboard
+                        Navigator.of(context).pushReplacementNamed('/doctor/dashboard');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Sai tài khoản hoặc mật khẩu')),
