@@ -4,9 +4,45 @@ import '../../../widgets/app_drawer.dart';
 import '../../../widgets/app_bottom_nav.dart';
 import '../../../widgets/sos_floating_button.dart';
 import '../../../data/providers/app_data_provider.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/family_service.dart';
 
-class ScreenDashboard extends StatelessWidget {
+class ScreenDashboard extends StatefulWidget {
   const ScreenDashboard({super.key});
+
+  @override
+  State<ScreenDashboard> createState() => _ScreenDashboardState();
+}
+
+class _ScreenDashboardState extends State<ScreenDashboard> {
+  final _authService = AuthService();
+  final _familyService = FamilyService();
+  String _userName = 'User';
+  int _notificationCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+    _loadNotificationCount();
+  }
+
+  Future<void> _loadUserName() async {
+    final name = await _authService.getUserName();
+    setState(() {
+      _userName = name;
+    });
+  }
+
+  Future<void> _loadNotificationCount() async {
+    final userId = await _authService.getUserId();
+    if (userId == null) return;
+
+    final count = await _familyService.getUnreadNotificationCount(userId);
+    setState(() {
+      _notificationCount = count;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +59,7 @@ class ScreenDashboard extends StatelessWidget {
     final unreadCount = appData.unreadAlertsCount;
 
     return Scaffold(
-      drawer: AppDrawer(userName: currentUser?.name ?? 'Admin'),
+      drawer: AppDrawer(userName: _userName),
       backgroundColor: bgLight,
       extendBody: true,
       appBar: AppBar(
@@ -39,19 +75,39 @@ class ScreenDashboard extends StatelessWidget {
         title: const Text('SEWS', style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold)),
         actions: [
           Stack(
+            clipBehavior: Clip.none,
             children: [
               IconButton(
                 icon: const Icon(Icons.notifications, color: textPrimary, size: 28),
-                onPressed: () {},
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed('/notifications');
+                  _loadNotificationCount();
+                },
               ),
-              if (unreadCount > 0)
+              if (_notificationCount > 0)
                 Positioned(
-                  right: 12,
-                  top: 12,
+                  right: 8,
+                  top: 8,
                   child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 20,
+                      minHeight: 20,
+                    ),
+                    child: Text(
+                      _notificationCount > 9 ? '9+' : '$_notificationCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
             ],
@@ -64,8 +120,18 @@ class ScreenDashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            const Text('Tổng quan',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: textPrimary)),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: textPrimary),
+                children: [
+                  const TextSpan(text: 'Xin chào, '),
+                  TextSpan(
+                    text: _userName,
+                    style: const TextStyle(color: primary),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 12),
             if (alerts.isNotEmpty)
               Container(

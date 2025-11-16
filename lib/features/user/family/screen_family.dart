@@ -5,6 +5,24 @@ class ScreenFamily extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Redirect to family management
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacementNamed('/family-management');
+    });
+    
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class _OldScreenFamily extends StatelessWidget {
+  const _OldScreenFamily({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
     const textPrimary = Color(0xFF111318);
     const textMuted = Color(0xFF6B7280);

@@ -5,10 +5,7 @@ class SOSFloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 16,
-      bottom: 100, // Đặt phía trên bottom nav
-      child: GestureDetector(
+    return GestureDetector(
         onLongPress: () {
           // Giữ 3 giây để kích hoạt SOS
           _showSOSConfirmation(context);
@@ -41,7 +38,6 @@ class SOSFloatingButton extends StatelessWidget {
             size: 32,
           ),
         ),
-      ),
     );
   }
 

@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
 
-class ScreenReminders extends StatefulWidget {
+class ScreenReminders extends StatelessWidget {
   const ScreenReminders({super.key});
 
   @override
-  State<ScreenReminders> createState() => _ScreenRemindersState();
+  Widget build(BuildContext context) {
+    // Redirect to reminders list
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.of(context).pushReplacementNamed('/reminders-list');
+    });
+    
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 }
 
-class _ScreenRemindersState extends State<ScreenReminders> {
+class _OldScreenReminders extends StatefulWidget {
+  const _OldScreenReminders({super.key});
+
+  @override
+  State<_OldScreenReminders> createState() => _ScreenRemindersState();
+}
+
+class _ScreenRemindersState extends State<_OldScreenReminders> {
   final List<ReminderItem> _reminders = [
     ReminderItem('Uống thuốc Metformin', '08:00 - Hàng ngày', Icons.medication, true),
     ReminderItem('Đo huyết áp', '09:00 - Thứ 2, Thứ 6', Icons.monitor_heart, true),

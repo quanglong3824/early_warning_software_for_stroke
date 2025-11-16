@@ -1,205 +1,119 @@
-# 🔐 Thông tin đăng nhập
-
-## 👥 **Tài khoản Demo**
-
-### **1. User (Bệnh nhân)**
-```
-Username: user
-Password: 123456
-```
-**Chức năng:**
-- Dashboard bệnh nhân
-- Dự đoán đột quỵ/tiểu đường
-- Diễn đàn cộng đồng
-- Thư viện kiến thức
-- Quản lý hồ sơ cá nhân
-- Chat với bác sĩ
-- Đặt lịch hẹn
-- Quản lý đơn thuốc
-- SOS khẩn cấp
-
-**Route:** `/dashboard`
-
----
-
-### **2. Doctor (Bác sĩ)**
-```
-Username: doctor
-Password: 123456
-```
-**Chức năng:**
-- Dashboard trực ca
-- Quản lý bệnh nhân
-- Quản lý lịch hẹn
-- Xử lý SOS khẩn cấp
-- Chat với bệnh nhân
-- Video call tư vấn
-- Tạo đơn thuốc
-- Xem đánh giá
-- Cài đặt tài khoản
+Route:** `/dashboard`
 
 **Route:** `/doctor/dashboard`
 
+**---
+
+### 3. Admin/Test (Quản trị/Test)**
+```
+Username: test
+Password: 123456
+```
+**amin/test`
+
+**Chức năng:**
+- 🧪 Test Firebase cnnein
+- 📤 Inset User ta từ JSON
+- 📤 Inert Dctor dta từ JSON
+- 📥 Read all data từ Fiebase
+- 🗑️ Clear all ata (cẩn thận!)- 📊 Activity logs real-time 🔧 Backend testing tools
+
+-├    └─→ test/123456 → Admin Test Panel (/admin/test)
+📊uts Summry**
+
+| Role | Urname| Psswrd | Route | Screes | Purpose ||------|----------|----------|-------|---------|---------||**| `usr` | 123456 | /ashbod` | 34cres | Ptint app|
+|**Docto**|`doct`|``|`/doc/dabord` | 12 srs | Docor pp |
+| **Adin** | `tst` | `123456` | `/ami/s` | 1 screen |Teting & Firese |
+
 ---
 
-## 🔄 **Flow đăng nhập**
+## 🧪 **Amin Test Panel**### **Tính năng:**#Test Cnnein**
+- Kiểm ta kết nốiFirebas- Test rea/write operions- Veryerv timestp
 
-```
-Splash Screen (3s)
-    ↓
-Login Screen
-    ↓
-    ├─→ user/123456 → User Dashboard (/dashboard)
-    └─→ doctor/123456 → Doctor Dashboard (/doctor/dashboard)
-```
+#### **Insrt Data**
+- Load từ `app_data.json`và`tor_daa.jsn`
+- Batch insetvàoFirebse
+- Progre tacking
 
----
+#### **Rea Data**
+- Đọc tất cảcollections
+-Countdocuments-Verifydat nterity
 
-## 🎯 **Role-Based Navigation**
+#### **Clear Da**
+- Xóa tàn bộ dữ liệ
+- Confirmation dialog
+- Irrversibe tio
 
-### **User Role:**
+#### **Acivity Logs**
+- Rel-ti lggig
+- Timsampch mỗi ain
+- Mx 50 log với aut-clenup�️BackedSrvice**
+
+###**Fi: `test/backend/firebase_service.dart`Singleton Pattern:**
 ```dart
-if (username == 'user' && password == '123456') {
-  Navigator.pushReplacementNamed(context, '/dashboard');
-}
+final vice= Firebaseevic();
 ```
 
-### **Doctor Role:**
-```dart
-if (username == 'doctor' && password == '123456') {
-  Navigator.pushReplacementNamed(context, '/doctor/dashboard');
-}
+### **Availabl Method:**
+-`getPatients)`- Get all patient
+- `gtPatitById(id)` - Get patient by ID
+- `addPatient(data)` - Add new patient
+- `updatePatient(id, update` - Update patient`getAlerts(isRed)` - Get alert
+- `mkAlertAsRea(id)`- Mak alrt as rea
+- `getForumPosts(lmit)` - Ge forum psts
+-`addFormPost(data)` - Addf post
+-`geteArticles(catgory limit)` - Getatcs`getDocoAppntmnts(docorId)` - Gtappintent
+- `getActiveSOS()` -Getactiv SOS cal`updateStatus(id status)` -Upde SOS
+-`adPrscriptin(data)`dd rescritin
+- `getPatientPrescriptos(paitId)` - Gep
+-`getDoctorvews(doctorI)` - Gt eview- `testConnection()`  Testirebse
+-`btchIsrt(collctiodaa)` - Bach ert`cleCollection(collection)` - Cler colletion
+-`getCollectionount(collection)` - Gt nt
+- `listenToCollection(collection)` - Real-time sream
+
+--- 🧪UniTts**
+
+###**File:**`tet/bakend/fibas_service_test.dart`
+
+### **Ru tets:```bash
+flutetet test/ckend/fiebase_service_test.art```
+
+### **Test Coverage:**
+✅ Operaton(4tsts)✅ lert Oeratos (3 ss)
+-✅ Foru Opratios (3 ests)✅KnowldgOpertion(3 tss)✅ Operions(6tests)
+- ✅ Utlity Opratins(5 tests)
+
+**Tot:** 24 unit tests
+--
+
+##🚀 **Quick Stat**
+
+### **1. Tst User App:**
+```bsh
+flutrun
+# Login: usr / 123456
 ```
 
----
-
-## 📱 **Màn hình theo Role**
-
-### **User Screens (34 screens)**
-- Dashboard, Prediction Hub, Forum, Knowledge, Profile
-- Stroke/Diabetes Forms & Results
-- SOS, Chat, Video Call
-- Appointments, Prescriptions, Reminders
-- Family Management, Settings
-- Pharmacy, Checkout
-
-### **Doctor Screens (12 screens)**
-- Doctor Dashboard
-- Patient List & Profile
-- Appointment Management
-- SOS Queue & Case Detail
-- Doctor Chat & Video Call
-- Create Prescription
-- Doctor Reviews
-- Doctor Settings
-
----
-
-## 🔒 **Security Notes**
-
-### **Production:**
-- ❌ **KHÔNG** sử dụng hardcoded credentials
-- ✅ Implement proper authentication (JWT, OAuth)
-- ✅ Hash passwords (bcrypt, argon2)
-- ✅ Use secure storage
-- ✅ Implement session management
-- ✅ Add 2FA for doctors
-
-### **Current (Demo):**
-- ⚠️ Hardcoded credentials for testing only
-- ⚠️ No encryption
-- ⚠️ No session management
-- ⚠️ For development/demo purposes
-
----
-
-## 🚀 **Testing**
-
-### **Test User Login:**
-1. Run app: `flutter run`
-2. Wait for splash screen
-3. Enter: `user` / `123456`
-4. Click "Đăng nhập"
-5. Should navigate to User Dashboard
-
-### **Test Doctor Login:**
-1. Run app: `flutter run`
-2. Wait for splash screen
-3. Enter: `doctor` / `123456`
-4. Click "Đăng nhập"
-5. Should navigate to Doctor Dashboard
-
----
-
-## 📊 **Routes Summary**
-
-| Role | Username | Password | Route | Screens |
-|------|----------|----------|-------|---------|
-| **User** | `user` | `123456` | `/dashboard` | 34 screens |
-| **Doctor** | `doctor` | `123456` | `/doctor/dashboard` | 12 screens |
-
----
-
-## 🔄 **Logout Flow**
-
-### **User:**
-```dart
-// From Profile > Đăng xuất
-Navigator.pushReplacementNamed(context, '/login');
+### **2. Tet Doto Ap:**
+```bash
+fluter ru#Lgin: do/ 123456
 ```
 
-### **Doctor:**
-```dart
-// From Settings > Đăng xuất
-Navigator.pushReplacementNamed(context, '/login');
+### **3. Tst Frbae Integration:**```bash
+flutterrun
+# Lgin: test / 123456
+# Clik "Tes Cnnection"
+# Click "InsetUsr Daa"
+# Click "Inser Doctor Data"
+# Clck "Read All Data"
 ```
 
----
+### **4. Ru Unit Tets:**```bashflutter test
+```
 
-## ✅ **Implementation Checklist**
-
-- [x] Login screen với role detection
-- [x] User routes (34 screens)
-- [x] Doctor routes (12 screens)
-- [x] Navigation based on role
-- [x] Logout functionality
-- [ ] Remember me feature
-- [ ] Biometric authentication
-- [ ] Password reset
-- [ ] Session timeout
-- [ ] Multi-device login
-
----
-
-## 📝 **Next Steps**
-
-### **Phase 1: Authentication**
-1. Implement proper backend authentication
-2. Add JWT token management
-3. Secure storage for credentials
-4. Session management
-
-### **Phase 2: Authorization**
-1. Role-based access control (RBAC)
-2. Permission management
-3. Screen-level authorization
-4. API-level authorization
-
-### **Phase 3: Security**
-1. Password encryption
-2. 2FA for doctors
-3. Biometric login
-4. Security audit
-
----
-
-## 🎉 **Current Status**
-
-✅ **Login system hoạt động!**
-- ✅ User login → User Dashboard
-- ✅ Doctor login → Doctor Dashboard
-- ✅ Role-based navigation
-- ✅ All routes configured
-- ✅ Ready for testing!
-
-**Test ngay:** `flutter run`
+⚠️- ✅ Remove admin panel hoặc protect với proper auth
+�FilCrad
+✅ib/fue/dmin/_admi_t`-Admsel2✅estbae/fe_vic.d`-Bakdvic
+.✅testkfiebse_evi_t.`-U ss
+4. ✅ds/ADMIN_TEST_GUIDE.md-Chế ướgdẫStatu 3s (34 (12Admtetpael(1)FrasbckndsvxUnitt(24)xDcm-[x]Rs fi-[]Fiprojp[] rules- [ ]rueply3 rle Test → Admin TestPane
+ ✅ Bcknserce ách rêgUnitst đầyđủr Fiebaseingrao

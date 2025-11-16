@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/auth_service.dart';
 
 class ScreenLogin extends StatefulWidget {
   const ScreenLogin({super.key});
@@ -11,6 +12,162 @@ class _ScreenLoginState extends State<ScreenLogin> {
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscure = true;
+  bool _isLoading = false;
+
+  // Error messages
+  String? _accountError;
+  String? _passwordError;
+
+  final _authService = AuthService();
+
+  @override
+  void dispose() {
+    _accountController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  // Validation methods
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool _isValidPhone(String phone) {
+    return RegExp(r'^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$').hasMatch(phone);
+  }
+
+  String? _validateAccount(String value) {
+    if (value.trim().isEmpty) {
+      return 'Vui lòng nhập email hoặc số điện thoại';
+    }
+    if (!_isValidEmail(value) && !_isValidPhone(value)) {
+      return 'Email hoặc số điện thoại không hợp lệ';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Vui lòng nhập mật khẩu';
+    }
+    if (value.length < 6) {
+      return 'Mật khẩu phải có ít nhất 6 ký tự';
+    }
+    return null;
+  }
+
+  bool _validateForm() {
+    setState(() {
+      _accountError = _validateAccount(_accountController.text);
+      _passwordError = _validatePassword(_passwordController.text);
+    });
+
+    return _accountError == null && _passwordError == null;
+  }
+
+  Future<void> _login() async {
+    if (!_validateForm()) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await _authService.login(
+      account: _accountController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await _authService.loginWithGoogle();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  Future<void> _loginAsGuest() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await _authService.loginAsGuest();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +225,14 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 _InputBox(
                   child: TextField(
                     controller: _accountController,
+                    onChanged: (value) {
+                      if (_accountError != null) {
+                        setState(() {
+                          _accountError = _validateAccount(value);
+                        });
+                      }
+                    },
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'Nhập email hoặc số điện thoại của bạn',
                       border: InputBorder.none,
@@ -76,8 +241,16 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     ),
                     style: const TextStyle(color: textPrimary, fontSize: 16),
                   ),
-                  borderColor: borderColor,
+                  borderColor: _accountError != null ? Colors.red : borderColor,
                 ),
+                if (_accountError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _accountError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,13 +271,20 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 ),
                 const SizedBox(height: 8),
                 _InputBox(
-                  borderColor: borderColor,
+                  borderColor: _passwordError != null ? Colors.red : borderColor,
                   child: Row(
                     children: [
                       Expanded(
                         child: TextField(
                           controller: _passwordController,
                           obscureText: _obscure,
+                          onChanged: (value) {
+                            if (_passwordError != null) {
+                              setState(() {
+                                _passwordError = _validatePassword(value);
+                              });
+                            }
+                          },
                           decoration: const InputDecoration(
                             hintText: 'Nhập mật khẩu của bạn',
                             border: InputBorder.none,
@@ -121,6 +301,14 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     ],
                   ),
                 ),
+                if (_passwordError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _passwordError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 24),
                 SizedBox(
                   height: 56,
@@ -131,24 +319,17 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    onPressed: () {
-                      final username = _accountController.text.trim();
-                      final password = _passwordController.text;
-                      
-                      // Check credentials and role
-                      if (username == 'user' && password == '123456') {
-                        // User role - navigate to user dashboard
-                        Navigator.of(context).pushReplacementNamed('/dashboard');
-                      } else if (username == 'doctor' && password == '123456') {
-                        // Doctor role - navigate to doctor dashboard
-                        Navigator.of(context).pushReplacementNamed('/doctor/dashboard');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Sai tài khoản hoặc mật khẩu')),
-                        );
-                      }
-                    },
-                    child: const Text('Đăng nhập', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    onPressed: !_isLoading ? _login : null,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Đăng nhập', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -165,26 +346,35 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _SocialCircle(
-                      borderColor: borderColor,
-                      child: Image.network(
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuC6u7oCYsrFhjJFqJObXRoblIA9x_pTOb7zImQlKQrlIEJnM2W-6DWtrqMvj43tm8cSqn9R8hunQKEWyp6vRiYVAPULyzD8fG5JrChbHrfLca3qozHuVapBHKB12WRe4ehDBwCe7ECzQURMRa2rYlz04TkX8f43gXqSKmkUOBKeT6OU6K4SQabY1YXOtPvncqqdswaAl1qoaG5OX8NC-hrjiMxnr8RTSdnFUTBKn471IWHbZ9JwfYyemn6Fuzf4QKIGCkkM9VsRZfs',
-                        height: 24,
-                        width: 24,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    _SocialCircle(
-                      borderColor: borderColor,
-                      child: Image.network(
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuCFqbbbeG-Zqytz67ktK7y4aH9Z5BcjIMEUIgfXIJMaJPs5pP4puC_z_yp-VtA_Of6dgl5rpduQTUZ40IkQYKAF4AKw0tR5HaLHOCdZULBZH3v3gsOMNtjHZMZEYN36Y2kV2OUOWLjZrcVo9whKzSDGm35Dk257-h3EnAQGuNIRBk0qzsI-lo4VSQK_e5u57fKUPTSLQMMGnhiWDwgN4iqWgFdE2gI7YJhprwjatMgHYFnSuLnXY1hZwOwGPWBwZ30efaNmIf400ho',
-                        height: 24,
-                        width: 24,
-                        fit: BoxFit.contain,
+                    InkWell(
+                      onTap: _isLoading ? null : _loginWithGoogle,
+                      borderRadius: BorderRadius.circular(24),
+                      child: _SocialCircle(
+                        borderColor: borderColor,
+                        child: Image.network(
+                          'https://lh3.googleusercontent.com/aida-public/AB6AXuC6u7oCYsrFhjJFqJObXRoblIA9x_pTOb7zImQlKQrlIEJnM2W-6DWtrqMvj43tm8cSqn9R8hunQKEWyp6vRiYVAPULyzD8fG5JrChbHrfLca3qozHuVapBHKB12WRe4ehDBwCe7ECzQURMRa2rYlz04TkX8f43gXqSKmkUOBKeT6OU6K4SQabY1YXOtPvncqqdswaAl1qoaG5OX8NC-hrjiMxnr8RTSdnFUTBKn471IWHbZ9JwfYyemn6Fuzf4QKIGCkkM9VsRZfs',
+                          height: 24,
+                          width: 24,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 48,
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: borderColor),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: _isLoading ? null : _loginAsGuest,
+                    icon: const Icon(Icons.person_outline, color: textSecondary),
+                    label: const Text('Tiếp tục với tư cách Khách',
+                        style: TextStyle(color: textPrimary, fontSize: 14, fontWeight: FontWeight.w500)),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -204,6 +394,16 @@ class _ScreenLoginState extends State<ScreenLogin> {
                               fontWeight: FontWeight.w600)),
                     ),
                   ],
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/admin/login');
+                  },
+                  child: const Text(
+                    'Đăng nhập Admin/Test',
+                    style: TextStyle(color: textSecondary, fontSize: 12),
+                  ),
                 ),
               ],
             ),

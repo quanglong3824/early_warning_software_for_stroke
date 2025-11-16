@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../dashboard/screen_dashboard.dart';
+import '../../../services/auth_service.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});
@@ -9,13 +9,32 @@ class ScreenSplash extends StatefulWidget {
 }
 
 class _ScreenSplashState extends State<ScreenSplash> {
+  final _authService = AuthService();
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
+    _checkSession();
+  }
+
+  Future<void> _checkSession() async {
+    // Wait for splash animation
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (!mounted) return;
+
+    // Check if user is logged in
+    final isLoggedIn = await _authService.isLoggedIn();
+
+    if (!mounted) return;
+
+    if (isLoggedIn) {
+      // User has session, go to dashboard
       Navigator.of(context).pushReplacementNamed('/dashboard');
-    });
+    } else {
+      // No session, go to login
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   @override

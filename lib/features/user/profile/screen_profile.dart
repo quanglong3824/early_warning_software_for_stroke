@@ -1,10 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../../../data/providers/app_data_provider.dart';
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../services/auth_service.dart';
 
-class ScreenProfile extends StatelessWidget {
+class ScreenProfile extends StatefulWidget {
   const ScreenProfile({super.key});
+
+  @override
+  State<ScreenProfile> createState() => _ScreenProfileState();
+}
+
+class _ScreenProfileState extends State<ScreenProfile> {
+  final _authService = AuthService();
+  String _userName = 'User';
+  String? _userEmail;
+  String? _userPhone;
+  String? _userAddress;
+  String? _userGender;
+  String? _userDateOfBirth;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    try {
+      final userId = await _authService.getUserId();
+      if (userId == null) return;
+
+      final database = FirebaseDatabase.instance.ref();
+      final snapshot = await database.child('users').child(userId).get();
+
+      if (snapshot.exists) {
+        final userData = Map<String, dynamic>.from(snapshot.value as Map);
+        setState(() {
+          _userName = userData['name'] ?? 'User';
+          _userEmail = userData['email'];
+          _userPhone = userData['phone'];
+          _userAddress = userData['address'];
+          _userGender = userData['gender'];
+          
+          if (userData['dateOfBirth'] != null) {
+            final date = DateTime.fromMillisecondsSinceEpoch(userData['dateOfBirth'] as int);
+            _userDateOfBirth = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+          }
+        });
+      }
+    } catch (e) {
+      print('Error loading user info: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +91,32 @@ class ScreenProfile extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  currentUser?.name ?? 'Người dùng',
+                  _userName,
                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textPrimary),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  currentUser?.email ?? '',
+                  _userEmail ?? '',
                   style: const TextStyle(fontSize: 16, color: textMuted),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            _InfoRow(icon: Icons.person, label: 'Họ và tên', value: currentUser?.name ?? ''),
+            _InfoRow(icon: Icons.person, label: 'Họ và tên', value: _userName),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.mail, label: 'Email', value: currentUser?.email ?? ''),
+            _InfoRow(icon: Icons.mail, label: 'Email', value: _userEmail ?? 'Chưa cập nhật'),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.phone, label: 'Số điện thoại', value: currentUser?.phone ?? ''),
+            _InfoRow(icon: Icons.phone, label: 'Số điện thoại', value: _userPhone ?? 'Chưa cập nhật'),
+            const SizedBox(height: 8),
+            _InfoRow(icon: Icons.location_on, label: 'Địa chỉ', value: _userAddress ?? 'Chưa cập nhật'),
+            const SizedBox(height: 8),
+            _InfoRow(icon: Icons.cake, label: 'Ngày sinh', value: _userDateOfBirth ?? 'Chưa cập nhật'),
+            const SizedBox(height: 8),
+            _InfoRow(
+              icon: Icons.wc,
+              label: 'Giới tính',
+              value: _userGender == 'male' ? 'Nam' : _userGender == 'female' ? 'Nữ' : _userGender == 'other' ? 'Khác' : 'Chưa cập nhật',
+            ),
             const SizedBox(height: 24),
             SizedBox(
               height: 48,
@@ -68,22 +127,13 @@ class ScreenProfile extends StatelessWidget {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  final result = await Navigator.of(context).pushNamed('/edit-profile');
+                  if (result == true) {
+                    _loadUserInfo();
+                  }
+                },
                 child: const Text('Chỉnh sửa thông tin', style: TextStyle(fontWeight: FontWeight.w700)),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 48,
-              width: double.infinity,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFFE5E7EB)),
-                  foregroundColor: textPrimary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                onPressed: () {},
-                child: const Text('Thay đổi mật khẩu', style: TextStyle(fontWeight: FontWeight.w700)),
               ),
             ),
             const SizedBox(height: 24),

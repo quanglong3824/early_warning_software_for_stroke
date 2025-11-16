@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/auth_service.dart';
 
 class ScreenSettings extends StatefulWidget {
   const ScreenSettings({super.key});
@@ -9,6 +10,48 @@ class ScreenSettings extends StatefulWidget {
 
 class _ScreenSettingsState extends State<ScreenSettings> {
   bool darkMode = false;
+  final _authService = AuthService();
+  String _userName = 'User';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final name = await _authService.getUserName();
+    setState(() {
+      _userName = name;
+    });
+  }
+
+  Future<void> _logout() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Đăng xuất'),
+        content: const Text('Bạn có chắc chắn muốn đăng xuất?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Hủy'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Đăng xuất'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await _authService.logout();
+      if (!mounted) return;
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
@@ -26,11 +69,73 @@ class _ScreenSettingsState extends State<ScreenSettings> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF135BEC).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Color(0xFF135BEC),
+                      size: 32,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _userName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF111318),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          'Người dùng',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF616F89),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             _sectionTitle('Tài khoản & Bảo mật'),
             _card([
-              _tile(icon: Icons.person, label: 'Thông tin cá nhân'),
+              ListTile(
+                leading: _iconBox(Icons.person),
+                title: const Text('Thông tin cá nhân'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/edit-profile');
+                },
+              ),
               _divider(),
-              _tile(icon: Icons.lock, label: 'Thay đổi mật khẩu'),
+              ListTile(
+                leading: _iconBox(Icons.lock),
+                title: const Text('Thay đổi mật khẩu'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/change-password');
+                },
+              ),
               _divider(),
               _tile(icon: shield_person, label: 'Cài đặt quyền riêng tư'),
               _divider(),
@@ -41,7 +146,14 @@ class _ScreenSettingsState extends State<ScreenSettings> {
             _card([
               _tile(icon: Icons.notifications_active, label: 'Cảnh báo sớm'),
               _divider(),
-              _tile(icon: Icons.medication, label: 'Nhắc nhở'),
+              ListTile(
+                leading: _iconBox(Icons.medication),
+                title: const Text('Nhắc nhở uống thuốc'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/reminders-list');
+                },
+              ),
               _divider(),
               _tile(icon: Icons.vibration, label: 'Âm thanh và rung'),
             ]),
@@ -89,11 +201,32 @@ class _ScreenSettingsState extends State<ScreenSettings> {
 
             _sectionTitle('Hỗ trợ & Pháp lý'),
             _card([
-              _tile(icon: Icons.help, label: 'Trợ giúp & Phản hồi'),
+              ListTile(
+                leading: _iconBox(Icons.help),
+                title: const Text('Trợ giúp & Hỗ trợ'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/help-support');
+                },
+              ),
               _divider(),
-              _tile(icon: Icons.info, label: 'Giới thiệu về SEWS'),
+              ListTile(
+                leading: _iconBox(Icons.privacy_tip),
+                title: const Text('Chính sách bảo mật'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/privacy-policy');
+                },
+              ),
               _divider(),
-              _tile(icon: Icons.gavel, label: 'Điều khoản & Chính sách'),
+              ListTile(
+                leading: _iconBox(Icons.gavel),
+                title: const Text('Điều khoản sử dụng'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/terms-of-service');
+                },
+              ),
             ]),
 
             const SizedBox(height: 16),
@@ -107,7 +240,7 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                   child: const Icon(Icons.logout, color: Colors.red),
                 ),
                 title: const Text('Đăng xuất', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600)),
-                onTap: () {},
+                onTap: _logout,
               ),
             ]),
 

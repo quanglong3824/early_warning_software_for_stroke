@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/auth_service.dart';
 
 class ScreenRegister extends StatefulWidget {
   const ScreenRegister({super.key});
@@ -15,6 +16,126 @@ class _ScreenRegisterState extends State<ScreenRegister> {
   bool _obscure1 = true;
   bool _obscure2 = true;
   bool _agree = false;
+  bool _isLoading = false;
+
+  // Error messages
+  String? _nameError;
+  String? _accountError;
+  String? _passwordError;
+  String? _confirmError;
+
+  final _authService = AuthService();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _accountController.dispose();
+    _passwordController.dispose();
+    _confirmController.dispose();
+    super.dispose();
+  }
+
+  // Validation methods
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool _isValidPhone(String phone) {
+    return RegExp(r'^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$').hasMatch(phone);
+  }
+
+  String? _validateName(String value) {
+    if (value.trim().isEmpty) {
+      return 'Vui lòng nhập họ và tên';
+    }
+    if (value.trim().length < 2) {
+      return 'Họ và tên phải có ít nhất 2 ký tự';
+    }
+    return null;
+  }
+
+  String? _validateAccount(String value) {
+    if (value.trim().isEmpty) {
+      return 'Vui lòng nhập email hoặc số điện thoại';
+    }
+    if (!_isValidEmail(value) && !_isValidPhone(value)) {
+      return 'Email hoặc số điện thoại không hợp lệ';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Vui lòng nhập mật khẩu';
+    }
+    if (value.length < 6) {
+      return 'Mật khẩu phải có ít nhất 6 ký tự';
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String value, String password) {
+    if (value.isEmpty) {
+      return 'Vui lòng xác nhận mật khẩu';
+    }
+    if (value != password) {
+      return 'Mật khẩu xác nhận không khớp';
+    }
+    return null;
+  }
+
+  bool _validateForm() {
+    setState(() {
+      _nameError = _validateName(_nameController.text);
+      _accountError = _validateAccount(_accountController.text);
+      _passwordError = _validatePassword(_passwordController.text);
+      _confirmError = _validateConfirmPassword(_confirmController.text, _passwordController.text);
+    });
+
+    return _nameError == null &&
+        _accountError == null &&
+        _passwordError == null &&
+        _confirmError == null;
+  }
+
+  Future<void> _register() async {
+    if (!_validateForm()) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await _authService.register(
+      name: _nameController.text.trim(),
+      account: _accountController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushReplacementNamed('/dashboard');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message']),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +185,16 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary)),
                 const SizedBox(height: 8),
                 _InputBox(
-                  borderColor: borderColor,
+                  borderColor: _nameError != null ? Colors.red : borderColor,
                   child: TextField(
                     controller: _nameController,
+                    onChanged: (value) {
+                      if (_nameError != null) {
+                        setState(() {
+                          _nameError = _validateName(value);
+                        });
+                      }
+                    },
                     decoration: const InputDecoration(
                       hintText: 'Nhập họ và tên của bạn',
                       border: InputBorder.none,
@@ -76,14 +204,30 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     style: const TextStyle(color: textPrimary, fontSize: 16),
                   ),
                 ),
+                if (_nameError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _nameError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 const Text('Email hoặc Số điện thoại',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary)),
                 const SizedBox(height: 8),
                 _InputBox(
-                  borderColor: borderColor,
+                  borderColor: _accountError != null ? Colors.red : borderColor,
                   child: TextField(
                     controller: _accountController,
+                    onChanged: (value) {
+                      if (_accountError != null) {
+                        setState(() {
+                          _accountError = _validateAccount(value);
+                        });
+                      }
+                    },
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'Nhập email hoặc số điện thoại',
                       border: InputBorder.none,
@@ -93,17 +237,32 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     style: const TextStyle(color: textPrimary, fontSize: 16),
                   ),
                 ),
+                if (_accountError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _accountError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 const Text('Mật khẩu',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary)),
                 const SizedBox(height: 8),
                 _InputBox(
-                  borderColor: borderColor,
+                  borderColor: _passwordError != null ? Colors.red : borderColor,
                   child: Row(children: [
                     Expanded(
                       child: TextField(
                         controller: _passwordController,
                         obscureText: _obscure1,
+                        onChanged: (value) {
+                          if (_passwordError != null) {
+                            setState(() {
+                              _passwordError = _validatePassword(value);
+                            });
+                          }
+                        },
                         decoration: const InputDecoration(
                           hintText: 'Nhập mật khẩu',
                           border: InputBorder.none,
@@ -119,17 +278,32 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     )
                   ]),
                 ),
+                if (_passwordError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _passwordError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 const Text('Xác nhận mật khẩu',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: textPrimary)),
                 const SizedBox(height: 8),
                 _InputBox(
-                  borderColor: borderColor,
+                  borderColor: _confirmError != null ? Colors.red : borderColor,
                   child: Row(children: [
                     Expanded(
                       child: TextField(
                         controller: _confirmController,
                         obscureText: _obscure2,
+                        onChanged: (value) {
+                          if (_confirmError != null) {
+                            setState(() {
+                              _confirmError = _validateConfirmPassword(value, _passwordController.text);
+                            });
+                          }
+                        },
                         decoration: const InputDecoration(
                           hintText: 'Nhập lại mật khẩu',
                           border: InputBorder.none,
@@ -145,6 +319,14 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                     )
                   ]),
                 ),
+                if (_confirmError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 4),
+                    child: Text(
+                      _confirmError!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,8 +364,17 @@ class _ScreenRegisterState extends State<ScreenRegister> {
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    onPressed: _agree ? () {} : null,
-                    child: const Text('Đăng ký', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    onPressed: (_agree && !_isLoading) ? _register : null,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Đăng ký', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 24),
