@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
 
 class FamilyService {
   static final FamilyService _instance = FamilyService._internal();
@@ -6,43 +7,49 @@ class FamilyService {
   FamilyService._internal();
 
   final _database = FirebaseDatabase.instance.ref();
+  
+  // Cache for better performance
+  final Map<String, List<Map<String, dynamic>>> _familyMembersCache = {};
+  final Map<String, List<Map<String, dynamic>>> _familyGroupsCache = {};
 
   // Tìm user bằng email hoặc phone
   Future<Map<String, dynamic>?> findUserByEmailOrPhone(String query) async {
     try {
-      // Tìm theo email
-      final emailSnapshot = await _database
-          .child('users')
-          .orderByChild('email')
-          .equalTo(query)
-          .get();
-
-      if (emailSnapshot.exists) {
-        final data = Map<String, dynamic>.from(emailSnapshot.value as Map);
-        final userId = data.keys.first;
-        final userData = Map<String, dynamic>.from(data[userId] as Map);
-        userData['id'] = userId;
-        return userData;
+      print('🔍 Searching for user: $query');
+      
+      final normalizedQuery = query.trim().toLowerCase();
+      final normalizedPhone = query.trim().replaceAll(RegExp(r'[\s\-\(\)]'), '');
+      
+      // Search all users (most reliable method)
+      final allUsersSnapshot = await _database.child('users').get();
+      
+      if (!allUsersSnapshot.exists) {
+        print('❌ No users in database');
+        return null;
       }
 
-      // Tìm theo phone
-      final phoneSnapshot = await _database
-          .child('users')
-          .orderByChild('phone')
-          .equalTo(query)
-          .get();
-
-      if (phoneSnapshot.exists) {
-        final data = Map<String, dynamic>.from(phoneSnapshot.value as Map);
-        final userId = data.keys.first;
-        final userData = Map<String, dynamic>.from(data[userId] as Map);
-        userData['id'] = userId;
-        return userData;
+      final allUsers = Map<String, dynamic>.from(allUsersSnapshot.value as Map);
+      
+      for (var entry in allUsers.entries) {
+        final userData = Map<String, dynamic>.from(entry.value as Map);
+        final email = (userData['email'] as String?)?.toLowerCase().trim() ?? '';
+        final phone = (userData['phone'] as String?)?.trim().replaceAll(RegExp(r'[\s\-\(\)]'), '') ?? '';
+        
+        // Match by email or phone
+        if (email == normalizedQuery || 
+            phone == normalizedPhone ||
+            email.contains(normalizedQuery) ||
+            phone.contains(normalizedPhone)) {
+          print('✅ Found user: ${userData['name']} ($email)');
+          userData['id'] = entry.key;
+          return userData;
+        }
       }
 
+      print('❌ User not found');
       return null;
     } catch (e) {
-      print('Error finding user: $e');
+      print('❌ Error finding user: $e');
       return null;
     }
   }

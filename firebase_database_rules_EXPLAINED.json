@@ -1,0 +1,198 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["email", "phone", "name", "role", "specialty", "isBlocked", "isDeleted"],
+      "$uid": {
+        ".write": "auth.uid == $uid || root.child('users').child(auth.uid).child('role').val() == 'admin'"
+      }
+    },
+    "patients": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["primaryUserId", "status"],
+      "$patientId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "health_records": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["recordedByUserId", "createdAt"],
+      "$patientId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "sos_requests": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId", "status", "createdAt", "assignedHospitalId"]
+    },
+    "hospitals": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "hospital_notifications": {
+     
+      ".write": "auth != null",
+      "$hospitalId": {
+        ".indexOn": ["createdAt", "type"]
+      }
+    },
+    "chat_sessions": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$sessionId": {
+        "messages": {
+          ".indexOn": ["createdAt", "senderId"]
+        }
+      }
+    },
+    "appointments": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId", "doctorId", "status", "appointmentTime"]
+    },
+    "prescriptions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["patientId", "doctorId", "createdAt"]
+    },
+    "reminders": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        ".indexOn": ["time", "isActive", "createdAt"]
+      }
+    },
+    "family_requests": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["fromUserId", "toUserId", "status", "createdAt"]
+    },
+    "family_members": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        ".indexOn": ["memberId", "addedAt"]
+      }
+    },
+    "family_groups": {
+  
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["creatorId", "createdAt", "memberCount"],
+      "$groupId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "family_group_members": {
+  
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$groupId": {
+        ".indexOn": ["role", "joinedAt"]
+      }
+    },
+    "user_family_groups": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$userId": {
+        ".indexOn": ["role", "joinedAt"]
+      }
+    },
+    "family_group_invitations": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["toUserId", "fromUserId", "groupId", "status", "createdAt"]
+    },
+    "notifications": {
+   
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$uid": {
+        ".indexOn": ["isRead", "createdAt", "type"]
+      }
+    },
+    "knowledge_articles": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["category", "publishedAt", "authorDoctorId"]
+    },
+    "forum_threads": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["createdByUserId", "createdAt", "category"]
+    },
+    "forum_posts": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["threadId", "createdByUserId", "createdAt"]
+    },
+    "pharmacies": {
+      
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "drugs": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["category", "name"]
+    },
+    "orders": {
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId", "status", "createdAt"]
+    },
+    "doctors": {
+    
+     
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["hospitalId", "specialty", "rating"]
+    },
+    "doctor_stats": {
+    
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$doctorId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "reviews": {
+  
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["doctorId", "userId", "createdAt", "rating"]
+    },
+    "predictions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId", "type", "createdAt", "riskLevel"],
+      "$predictionId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}
