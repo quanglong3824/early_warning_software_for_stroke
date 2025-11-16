@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/stroke_prediction_service.dart';
 
 class ScreenStrokeResult extends StatelessWidget {
   const ScreenStrokeResult({super.key});
@@ -9,6 +10,37 @@ class ScreenStrokeResult extends StatelessWidget {
     const primary = Color(0xFF135BEC);
     const textPrimary = Color(0xFF111318);
     const textMuted = Color(0xFF6B7280);
+
+    // Nhận kết quả từ arguments
+    final result = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    
+    if (result == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Lỗi')),
+        body: const Center(child: Text('Không tìm thấy kết quả dự đoán')),
+      );
+    }
+
+    final riskScore = result['riskScore'] as int;
+    final riskLevel = result['riskLevel'] as String;
+    final riskLevelVi = result['riskLevelVi'] as String;
+    final bmi = result['bmi'] as String;
+    final bmiCategory = result['bmiCategory'] as String;
+    final bpCategory = result['bpCategory'] as String;
+    final cholesterolCategory = result['cholesterolCategory'] as String;
+
+    // Xác định màu sắc dựa trên mức độ nguy cơ
+    Color riskColor;
+    if (riskLevel == 'high') {
+      riskColor = Colors.red;
+    } else if (riskLevel == 'medium') {
+      riskColor = Colors.orange;
+    } else {
+      riskColor = Colors.green;
+    }
+
+    final predictionService = StrokePredictionService();
+    final recommendations = predictionService.getRecommendations(riskLevel);
 
     return Scaffold(
       backgroundColor: bgLight,
@@ -21,15 +53,9 @@ class ScreenStrokeResult extends StatelessWidget {
         ),
         centerTitle: true,
         title: const Text(
-          'Kết quả Đánh giá',
+          'Kết Quả Nguy Cơ Đột Quỵ',
           style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share, color: textPrimary),
-          ),
-        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -55,24 +81,24 @@ class ScreenStrokeResult extends StatelessWidget {
                         width: 192,
                         height: 192,
                         child: CircularProgressIndicator(
-                          value: 0.85,
+                          value: riskScore / 100,
                           strokeWidth: 10,
-                          backgroundColor: Colors.red[100],
-                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                          backgroundColor: riskColor.withOpacity(0.2),
+                          valueColor: AlwaysStoppedAnimation<Color>(riskColor),
                         ),
                       ),
-                      const Column(
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '85%',
+                            '$riskScore%',
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w900,
-                              color: Colors.red,
+                              color: riskColor,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Nguy cơ',
                             style: TextStyle(fontSize: 14, color: textMuted),
                           ),
@@ -82,34 +108,85 @@ class ScreenStrokeResult extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Nguy cơ cao',
+                Text(
+                  riskLevelVi,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: textPrimary,
+                    color: riskColor,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Kết quả dựa trên dữ liệu bạn đã cung cấp ngày 26/07/2024.',
-                  style: TextStyle(color: textMuted),
+                Text(
+                  riskLevel == 'high'
+                      ? 'Bạn có nguy cơ cao bị đột quỵ. Cần gặp bác sĩ ngay.'
+                      : riskLevel == 'medium'
+                          ? 'Bạn có nguy cơ trung bình. Cần theo dõi và cải thiện lối sống.'
+                          : 'Bạn có nguy cơ thấp. Hãy duy trì lối sống lành mạnh.',
+                  style: const TextStyle(color: textMuted),
                   textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                // Health Indicators
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _HealthChip(
+                      icon: Icons.monitor_weight,
+                      label: 'BMI: $bmi',
+                      sublabel: bmiCategory,
+                      color: Colors.blue,
+                    ),
+                    _HealthChip(
+                      icon: Icons.favorite,
+                      label: 'Huyết áp',
+                      sublabel: bpCategory,
+                      color: Colors.red,
+                    ),
+                    _HealthChip(
+                      icon: Icons.water_drop,
+                      label: 'Cholesterol',
+                      sublabel: cholesterolCategory,
+                      color: Colors.orange,
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
           // CTA Buttons
+          if (riskLevel == 'high') ...[
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              onPressed: () {
+                // TODO: Implement emergency call
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Chức năng gọi cấp cứu đang được phát triển')),
+                );
+              },
+              icon: const Icon(Icons.call),
+              label: const Text('Gọi cấp cứu (115)', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 12),
+          ],
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: primary,
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            onPressed: () {},
-            icon: const Icon(Icons.call),
-            label: const Text('Gọi cấp cứu (115)', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/doctors');
+            },
+            icon: const Icon(Icons.medical_services),
+            label: const Text('Tìm Bác Sĩ Tư Vấn', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
@@ -117,47 +194,49 @@ class ScreenStrokeResult extends StatelessWidget {
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            onPressed: () {},
-            icon: const Icon(Icons.map),
+            onPressed: () {
+              Navigator.pushNamed(context, '/hospitals');
+            },
+            icon: const Icon(Icons.local_hospital),
             label: const Text('Tìm cơ sở y tế gần nhất', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 32),
           // Recommendations
           const Text(
-            'Các bước tiếp theo được đề xuất',
+            'Khuyến nghị cho bạn',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textPrimary),
           ),
           const SizedBox(height: 16),
-          _RecommendationCard(
-            icon: Icons.health_and_safety,
-            title: 'Liên hệ bác sĩ ngay',
-            subtitle: 'Thảo luận về kết quả này và các bước chẩn đoán tiếp theo.',
+          _RecommendationSection(
+            icon: Icons.self_improvement,
+            iconColor: Colors.purple,
+            title: 'Lối sống',
+            items: recommendations['lifestyle']!,
           ),
-          const SizedBox(height: 12),
-          _RecommendationCard(
+          const SizedBox(height: 16),
+          _RecommendationSection(
+            icon: Icons.restaurant,
+            iconColor: Colors.green,
+            title: 'Chế độ ăn',
+            items: recommendations['diet']!,
+          ),
+          const SizedBox(height: 16),
+          _RecommendationSection(
+            icon: Icons.directions_run,
+            iconColor: Colors.blue,
+            title: 'Vận động',
+            items: recommendations['exercise']!,
+          ),
+          const SizedBox(height: 16),
+          _RecommendationSection(
             icon: Icons.monitor_heart,
-            title: 'Theo dõi huyết áp hàng ngày',
-            subtitle: 'Ghi lại chỉ số huyết áp của bạn 2 lần mỗi ngày.',
-          ),
-          const SizedBox(height: 12),
-          _RecommendationCard(
-            icon: Icons.restaurant_menu,
-            title: 'Cải thiện chế độ ăn uống',
-            subtitle: 'Giảm muối, đường và chất béo bão hòa.',
-          ),
-          const SizedBox(height: 24),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 56),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            onPressed: () {},
-            icon: const Icon(Icons.edit_document),
-            label: const Text('Xem lại Dữ liệu đã nhập', style: TextStyle(fontWeight: FontWeight.bold, color: primary)),
+            iconColor: Colors.red,
+            title: 'Theo dõi sức khỏe',
+            items: recommendations['monitoring']!,
           ),
           const SizedBox(height: 24),
           const Text(
-            'Tuyên bố miễn trừ trách nhiệm: Ứng dụng này là công cụ hỗ trợ sàng lọc và không thay thế cho chẩn đoán y tế chuyên nghiệp. Vui lòng tham khảo ý kiến bác sĩ để có lời khuyên y tế chính xác.',
+            'Lưu ý: Kết quả dự đoán chỉ mang tính chất tham khảo và không thay thế cho chẩn đoán y tế từ chuyên gia. Vui lòng tham khảo ý kiến bác sĩ để có lời khuyên y tế chính xác.',
             style: TextStyle(fontSize: 12, color: textMuted),
             textAlign: TextAlign.center,
           ),
@@ -167,20 +246,74 @@ class ScreenStrokeResult extends StatelessWidget {
   }
 }
 
-class _RecommendationCard extends StatelessWidget {
+class _HealthChip extends StatelessWidget {
   final IconData icon;
-  final String title;
-  final String subtitle;
+  final String label;
+  final String sublabel;
+  final Color color;
 
-  const _RecommendationCard({
+  const _HealthChip({
     required this.icon,
-    required this.title,
-    required this.subtitle,
+    required this.label,
+    required this.sublabel,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    const primary = Color(0xFF135BEC);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 16),
+          const SizedBox(width: 6),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+              Text(
+                sublabel,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: color.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RecommendationSection extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final List<String> items;
+
+  const _RecommendationSection({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     const textPrimary = Color(0xFF111318);
     const textMuted = Color(0xFF6B7280);
 
@@ -188,38 +321,52 @@ class _RecommendationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: const [BoxShadow(color: Color(0x0A000000), blurRadius: 4)],
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       padding: const EdgeInsets.all(16),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: primary),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: iconColor, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: textPrimary),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: textPrimary,
+                  ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(fontSize: 13, color: textMuted),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const Icon(Icons.chevron_right, color: textMuted),
+          const SizedBox(height: 16),
+          ...items.map((item) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• ', style: TextStyle(color: textMuted)),
+                    Expanded(
+                      child: Text(
+                        item,
+                        style: const TextStyle(fontSize: 14, color: textMuted),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
         ],
       ),
     );

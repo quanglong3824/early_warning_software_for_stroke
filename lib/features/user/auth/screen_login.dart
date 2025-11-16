@@ -169,6 +169,37 @@ class _ScreenLoginState extends State<ScreenLogin> {
     }
   }
 
+  Future<void> _clearCache() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Xóa Cache'),
+        content: const Text('Bạn có chắc muốn xóa toàn bộ cache và đăng xuất?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Xóa', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await _authService.logout();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đã xóa cache thành công'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
@@ -396,14 +427,37 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/admin/login');
-                  },
-                  child: const Text(
-                    'Đăng nhập Admin/Test',
-                    style: TextStyle(color: textSecondary, fontSize: 12),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/doctor/login');
+                      },
+                      child: const Text(
+                        'Bác sĩ',
+                        style: TextStyle(color: textSecondary, fontSize: 12),
+                      ),
+                    ),
+                    const Text(' | ', style: TextStyle(color: textSecondary, fontSize: 12)),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/admin/login');
+                      },
+                      child: const Text(
+                        'Admin',
+                        style: TextStyle(color: textSecondary, fontSize: 12),
+                      ),
+                    ),
+                    const Text(' | ', style: TextStyle(color: textSecondary, fontSize: 12)),
+                    TextButton(
+                      onPressed: _clearCache,
+                      child: const Text(
+                        'Xóa Cache',
+                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

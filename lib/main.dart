@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'data/providers/app_data_provider.dart';
 import 'services/notification_service.dart';
+import 'services/auth_service.dart';
 // ===== USER FEATURES =====
 import 'features/user/splash/screen_splash.dart';
 import 'features/user/auth/screen_login.dart';
@@ -39,22 +41,38 @@ import 'features/user/prediction/screen_diabetes_result.dart';
 import 'features/user/emergency/screen_sos.dart';
 import 'features/user/emergency/screen_sos_status.dart';
 import 'features/user/patients/screen_patient_management.dart';
-import 'features/user/health/screen_health_history.dart';
+import 'features/user/prediction/screen_health_history.dart';
 import 'features/user/telemedicine/screen_video_call.dart';
 import 'features/user/reminders/screen_reminders.dart';
 import 'features/user/reminders/screen_reminders_list.dart';
 import 'features/user/reminders/screen_add_reminder.dart';
 import 'features/user/reminders/screen_edit_reminder.dart';
 import 'features/user/family/screen_family_management.dart';
+import 'features/user/family/screen_family_groups.dart';
+import 'features/user/family/screen_group_detail.dart';
+import 'features/user/family/screen_invite_members.dart';
 import 'features/user/notifications/screen_notifications.dart';
 import 'features/user/hospital/screen_report_appointment.dart';
 import 'features/user/prevention/screen_healthy_plan.dart';
 
-// ===== ADMIN/TEST FEATURES =====
-import 'features/admin/screen_admin_login.dart';
-import 'features/admin/screen_admin_test.dart';
+// ===== ADMIN FEATURES =====
+import 'features/admin/auth/screen_admin_splash.dart';
+import 'features/admin/auth/screen_admin_login.dart';
+import 'features/admin/auth/screen_admin_forgot_password.dart';
+import 'features/admin/dashboard/screen_admin_dashboard.dart';
+import 'features/admin/users/screen_admin_users.dart';
+import 'features/admin/users/screen_test_firebase.dart';
+import 'features/admin/doctors/screen_admin_doctors.dart';
+import 'features/admin/patients/screen_admin_patients.dart';
+import 'features/admin/sos/screen_admin_sos.dart';
+import 'features/admin/predictions/screen_admin_predictions.dart';
+import 'features/admin/appointments/screen_admin_appointments.dart';
+import 'features/admin/pharmacy/screen_admin_pharmacy.dart';
+import 'features/admin/knowledge/screen_admin_knowledge.dart';
+import 'features/admin/community/screen_admin_community.dart';
 
 // ===== DOCTOR FEATURES =====
+import 'features/doctor/auth/screen_doctor_login.dart';
 import 'features/doctor/dashboard/screen_doctor_dashboard.dart';
 import 'features/doctor/patients/screen_patient_list.dart';
 import 'features/doctor/patients/screen_patient_profile.dart';
@@ -76,6 +94,12 @@ void main() async {
   
   // Initialize notification service
   await NotificationService().initialize();
+  
+  // Clear session on web refresh (for web platform)
+  // This ensures users must login again after refresh
+  if (kIsWeb) {
+    await AuthService().logout();
+  }
   
   runApp(
     ChangeNotifierProvider(
@@ -147,6 +171,9 @@ class App extends StatelessWidget {
         '/patient-management': (_) => const ScreenPatientManagement(),
         '/family': (_) => const ScreenFamily(),
         '/family-management': (_) => const ScreenFamilyManagement(),
+        '/family-groups': (_) => const ScreenFamilyGroups(),
+        '/group-detail': (_) => const ScreenGroupDetail(),
+        '/invite-members': (_) => const ScreenInviteMembers(),
         '/notifications': (_) => const ScreenNotifications(),
         '/prescriptions': (_) => const ScreenPrescriptions(),
 
@@ -167,11 +194,24 @@ class App extends StatelessWidget {
         '/privacy-policy': (_) => const ScreenPrivacyPolicy(),
         '/help-support': (_) => const ScreenHelpSupport(),
 
-        // ===== ADMIN/TEST FEATURES =====
+        // ===== ADMIN FEATURES =====
+        '/admin': (_) => const ScreenAdminSplash(),
         '/admin/login': (_) => const ScreenAdminLogin(),
-        '/admin/test': (_) => const ScreenAdminTest(),
+        '/admin/forgot-password': (_) => const ScreenAdminForgotPassword(),
+        '/admin/dashboard': (_) => const ScreenAdminDashboard(),
+        '/admin/users': (_) => const ScreenAdminUsers(),
+        '/admin/test-firebase': (_) => const ScreenTestFirebase(),
+        '/admin/doctors': (_) => const ScreenAdminDoctors(),
+        '/admin/patients': (_) => const ScreenAdminPatients(),
+        '/admin/sos': (_) => const ScreenAdminSOS(),
+        '/admin/predictions': (_) => const ScreenAdminPredictions(),
+        '/admin/appointments': (_) => const ScreenAdminAppointments(),
+        '/admin/pharmacy': (_) => const ScreenAdminPharmacy(),
+        '/admin/knowledge': (_) => const ScreenAdminKnowledge(),
+        '/admin/community': (_) => const ScreenAdminCommunity(),
 
         // ===== DOCTOR FEATURES =====
+        '/doctor/login': (_) => const ScreenDoctorLogin(),
         '/doctor/dashboard': (_) => const ScreenDoctorDashboard(),
         '/doctor/patients': (_) => const ScreenPatientList(),
         '/doctor/patient-profile': (_) => const ScreenPatientProfile(),

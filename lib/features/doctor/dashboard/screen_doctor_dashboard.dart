@@ -3,10 +3,18 @@ import 'package:provider/provider.dart';
 import '../../../data/providers/app_data_provider.dart';
 import '../../../widgets/doctor_drawer.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
+import '../../../mixins/account_status_check_mixin.dart';
 
-class ScreenDoctorDashboard extends StatelessWidget {
+class ScreenDoctorDashboard extends StatefulWidget {
   const ScreenDoctorDashboard({super.key});
 
+  @override
+  State<ScreenDoctorDashboard> createState() => _ScreenDoctorDashboardState();
+}
+
+class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard> 
+    with AccountStatusCheckMixin {
+  
   @override
   Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
@@ -140,8 +148,10 @@ class ScreenDoctorDashboard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildInfoChip(String label, IconData icon) {
+// Helper widgets
+Widget _buildInfoChip(String label, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -157,9 +167,9 @@ class ScreenDoctorDashboard extends StatelessWidget {
         ],
       ),
     );
-  }
+}
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+Widget _buildStatCard(String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -191,9 +201,9 @@ class ScreenDoctorDashboard extends StatelessWidget {
         ],
       ),
     );
-  }
+}
 
-  Widget _buildPatientCard(
+Widget _buildPatientCard(
     BuildContext context,
     String name,
     String status,
@@ -254,5 +264,5 @@ class ScreenDoctorDashboard extends StatelessWidget {
         ],
       ),
     );
-  }
 }
+

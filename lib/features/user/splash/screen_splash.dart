@@ -29,12 +29,55 @@ class _ScreenSplashState extends State<ScreenSplash> {
     if (!mounted) return;
 
     if (isLoggedIn) {
-      // User has session, go to dashboard
+      // Kiểm tra trạng thái tài khoản
+      final userId = await _authService.getUserId();
+      if (userId != null && !userId.startsWith('guest_')) {
+        final userData = await _authService.getUserData(userId);
+        
+        if (userData != null) {
+          // Kiểm tra tài khoản bị xóa hoặc chặn
+          if (userData['isDeleted'] == true) {
+            await _authService.logout();
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tài khoản đã bị xóa. Vui lòng liên hệ quản trị viên.'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 4),
+              ),
+            );
+            Navigator.of(context).pushReplacementNamed('/login');
+            return;
+          }
+          
+          if (userData['isBlocked'] == true) {
+            await _authService.logout();
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tài khoản đã bị chặn. Vui lòng liên hệ quản trị viên.'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 4),
+              ),
+            );
+            Navigator.of(context).pushReplacementNamed('/login');
+            return;
+          }
+        }
+      }
+      
+      // User has session and account is active, go to dashboard
       Navigator.of(context).pushReplacementNamed('/dashboard');
     } else {
       // No session, go to login
       Navigator.of(context).pushReplacementNamed('/login');
     }
+  }
+
+  Future<void> _clearCacheAndRestart() async {
+    await _authService.logout();
+    if (!mounted) return;
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   @override
@@ -90,14 +133,28 @@ class _ScreenSplashState extends State<ScreenSplash> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(32),
-              child: SizedBox(
-                width: 32,
-                height: 32,
-                child: CircularProgressIndicator(
-                  strokeWidth: 4,
-                  valueColor: AlwaysStoppedAnimation<Color>(primary),
-                  backgroundColor: const Color(0xFFE5E7EB),
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 4,
+                      valueColor: AlwaysStoppedAnimation<Color>(primary),
+                      backgroundColor: const Color(0xFFE5E7EB),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton.icon(
+                    onPressed: _clearCacheAndRestart,
+                    icon: const Icon(Icons.delete_sweep, size: 16),
+                    label: const Text('Xóa cache & khởi động lại', style: TextStyle(fontSize: 12)),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

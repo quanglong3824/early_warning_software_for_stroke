@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../services/diabetes_prediction_service.dart';
 
 class ScreenDiabetesResult extends StatelessWidget {
   const ScreenDiabetesResult({super.key});
@@ -9,6 +10,35 @@ class ScreenDiabetesResult extends StatelessWidget {
     const primary = Color(0xFF135BEC);
     const textPrimary = Color(0xFF111318);
     const textMuted = Color(0xFF6B7280);
+
+    // Nhận kết quả từ arguments
+    final result = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    
+    if (result == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Lỗi')),
+        body: const Center(child: Text('Không tìm thấy kết quả dự đoán')),
+      );
+    }
+
+    final riskScore = result['riskScore'] as int;
+    final riskLevel = result['riskLevel'] as String;
+    final riskLevelVi = result['riskLevelVi'] as String;
+    final bmi = result['bmi'] as String;
+    final bmiCategory = result['bmiCategory'] as String;
+
+    // Xác định màu sắc dựa trên mức độ nguy cơ
+    Color riskColor;
+    if (riskLevel == 'high') {
+      riskColor = Colors.red;
+    } else if (riskLevel == 'medium') {
+      riskColor = Colors.orange;
+    } else {
+      riskColor = Colors.green;
+    }
+
+    final predictionService = DiabetesPredictionService();
+    final recommendations = predictionService.getRecommendations(riskLevel);
 
     return Scaffold(
       backgroundColor: bgLight,
@@ -38,38 +68,70 @@ class ScreenDiabetesResult extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const Text(
-                  'Nguy Cơ Cao',
+                Text(
+                  riskLevelVi,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: riskColor,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Bạn có nguy cơ cao mắc bệnh tiểu đường loại 2.',
-                  style: TextStyle(color: textMuted),
+                Text(
+                  riskLevel == 'high'
+                      ? 'Bạn có nguy cơ cao mắc bệnh tiểu đường loại 2.'
+                      : riskLevel == 'medium'
+                          ? 'Bạn có nguy cơ trung bình mắc bệnh tiểu đường loại 2.'
+                          : 'Bạn có nguy cơ thấp mắc bệnh tiểu đường loại 2.',
+                  style: const TextStyle(color: textMuted),
                   textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.monitor_weight, color: Colors.blue, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        'BMI: $bmi ($bmiCategory)',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('Điểm số nguy cơ', style: TextStyle(fontWeight: FontWeight.w500)),
-                        Text('75/100', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                      children: [
+                        const Text('Điểm số nguy cơ', style: TextStyle(fontWeight: FontWeight.w500)),
+                        Text(
+                          '$riskScore/100',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: riskColor,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: LinearProgressIndicator(
-                        value: 0.75,
+                        value: riskScore / 100,
                         minHeight: 10,
                         backgroundColor: Colors.grey[300],
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                        valueColor: AlwaysStoppedAnimation<Color>(riskColor),
                       ),
                     ),
                   ],
@@ -87,52 +149,46 @@ class ScreenDiabetesResult extends StatelessWidget {
             icon: Icons.restaurant,
             iconColor: Colors.green,
             title: 'Dinh dưỡng',
-            items: const [
-              'Cắt giảm đồ uống có đường và thực phẩm chế biến sẵn.',
-              'Tăng cường ăn rau xanh, trái cây và ngũ cốc nguyên hạt.',
-              'Uống đủ 2 lít nước mỗi ngày.',
-            ],
+            items: recommendations['nutrition']!,
           ),
           const SizedBox(height: 16),
           _RecommendationSection(
             icon: Icons.directions_run,
             iconColor: Colors.blue,
             title: 'Vận động',
-            items: const [
-              'Tập thể dục ít nhất 150 phút mỗi tuần với cường độ vừa phải.',
-              'Kết hợp các bài tập cardio (đi bộ, chạy) và sức mạnh.',
-              'Hạn chế ngồi một chỗ quá lâu, đứng dậy đi lại sau mỗi 30 phút.',
-            ],
+            items: recommendations['exercise']!,
           ),
           const SizedBox(height: 16),
           _RecommendationSection(
             icon: Icons.monitor_heart,
             iconColor: Colors.purple,
             title: 'Theo dõi sức khỏe',
-            items: const [
-              'Thường xuyên kiểm tra đường huyết theo chỉ dẫn của bác sĩ.',
-              'Thực hiện các xét nghiệm định kỳ để theo dõi tình trạng sức khỏe.',
-              'Tham khảo ý kiến bác sĩ chuyên khoa để được tư vấn cụ thể.',
-            ],
+            items: recommendations['monitoring']!,
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
+          ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: primary,
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            onPressed: () {},
-            child: const Text('Tìm Bác Sĩ Tư Vấn', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/doctors');
+            },
+            icon: const Icon(Icons.medical_services),
+            label: const Text('Tìm Bác Sĩ Tư Vấn', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 12),
-          OutlinedButton(
+          OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            onPressed: () {},
-            child: const Text('Xem Chi Tiết Dữ Liệu', style: TextStyle(fontWeight: FontWeight.bold, color: primary)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/hospitals');
+            },
+            icon: const Icon(Icons.local_hospital),
+            label: const Text('Tìm cơ sở y tế', style: TextStyle(fontWeight: FontWeight.bold, color: primary)),
           ),
           const SizedBox(height: 24),
           const Text(

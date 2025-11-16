@@ -1,9 +1,92 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/app_drawer.dart';
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../services/diabetes_prediction_service.dart';
+import '../../../services/stroke_prediction_service.dart';
+import '../../../services/auth_service.dart';
+import 'package:intl/intl.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class ScreenPredictionHub extends StatelessWidget {
+class ScreenPredictionHub extends StatefulWidget {
   const ScreenPredictionHub({super.key});
+
+  @override
+  State<ScreenPredictionHub> createState() => _ScreenPredictionHubState();
+}
+
+class _ScreenPredictionHubState extends State<ScreenPredictionHub> {
+  final _diabetesService = DiabetesPredictionService();
+  final _strokeService = StrokePredictionService();
+  final _authService = AuthService();
+  final _database = FirebaseDatabase.instance.ref();
+
+  Map<String, dynamic>? _latestDiabetes;
+  Map<String, dynamic>? _latestStroke;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLatestPredictions();
+  }
+
+  Future<void> _loadLatestPredictions() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final userId = await _authService.getUserId();
+      if (userId != null && !userId.startsWith('guest_')) {
+        // Lấy tất cả predictions và filter
+        final allPredictions = <Map<String, dynamic>>[];
+        final predictionsSnapshot = await _database.child('predictions').get();
+        
+        if (predictionsSnapshot.exists) {
+          final data = Map<String, dynamic>.from(predictionsSnapshot.value as Map);
+          
+          data.forEach((key, value) {
+            final prediction = Map<String, dynamic>.from(value as Map);
+            if (prediction['userId'] == userId) {
+              allPredictions.add(prediction);
+            }
+          });
+          
+          // Tìm mới nhất cho mỗi loại
+          Map<String, dynamic>? latestDiabetes;
+          Map<String, dynamic>? latestStroke;
+          int latestDiabetesTime = 0;
+          int latestStrokeTime = 0;
+          
+          for (var pred in allPredictions) {
+            final type = pred['type'] as String?;
+            final createdAt = pred['createdAt'] as int? ?? 0;
+            
+            if (type == 'diabetes' && createdAt > latestDiabetesTime) {
+              latestDiabetesTime = createdAt;
+              latestDiabetes = pred;
+            }
+            
+            if (type == 'stroke' && createdAt > latestStrokeTime) {
+              latestStrokeTime = createdAt;
+              latestStroke = pred;
+            }
+          }
+          
+          setState(() {
+            _latestDiabetes = latestDiabetes;
+            _latestStroke = latestStroke;
+            _isLoading = false;
+          });
+        } else {
+          setState(() => _isLoading = false);
+        }
+      } else {
+        setState(() => _isLoading = false);
+      }
+    } catch (e) {
+      print('❌ Lỗi tải dự đoán: $e');
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,30 +143,97 @@ class ScreenPredictionHub extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textPrimary),
           ),
           const SizedBox(height: 16),
-          _HistoryCard(
-            title: 'Kết quả Đột quỵ',
-            subtitle: 'Xem kết quả dự đoán gần nhất',
-            icon: Icons.insights,
-            onTap: () => Navigator.pushNamed(context, '/stroke-result'),
-          ),
-          const SizedBox(height: 12),
-          _HistoryCard(
-            title: 'Kết quả Tiểu đường',
-            subtitle: 'Xem kết quả dự đoán gần nhất',
-            icon: Icons.query_stats,
-            onTap: () => Navigator.pushNamed(context, '/diabetes-result'),
-          ),
-          const SizedBox(height: 12),
-          _HistoryCard(
-            title: 'Lịch sử Sức khỏe',
-            subtitle: 'Xem biểu đồ và xu hướng',
-            icon: Icons.timeline,
-            onTap: () => Navigator.pushNamed(context, '/health-history'),
-          ),
+          if (_isLoading)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(32),
+                child: CircularProgressIndicator(),
+              ),
+            )
+          else ...[
+            _HistoryCard(
+              title: 'Kết quả Đột quỵ',
+              subtitle: _latestStroke != null
+                  ? _formatPredictionSubtitle(_latestStroke!)
+                  : 'Chưa có kết quả dự đoán',
+              icon: Icons.insights,
+              hasData: _latestStroke != null,
+              riskLevel: _latestStroke?['riskLevel'],
+              onTap: () {
+                if (_latestStroke != null) {
+                  _viewStrokeResult(_latestStroke!);
+                } else {
+                  Navigator.pushNamed(context, '/stroke-form');
+                }
+              },
+            ),
+            const SizedBox(height: 12),
+            _HistoryCard(
+              title: 'Kết quả Tiểu đường',
+              subtitle: _latestDiabetes != null
+                  ? _formatPredictionSubtitle(_latestDiabetes!)
+                  : 'Chưa có kết quả dự đoán',
+              icon: Icons.query_stats,
+              hasData: _latestDiabetes != null,
+              riskLevel: _latestDiabetes?['riskLevel'],
+              onTap: () {
+                if (_latestDiabetes != null) {
+                  _viewDiabetesResult(_latestDiabetes!);
+                } else {
+                  Navigator.pushNamed(context, '/diabetes-form');
+                }
+              },
+            ),
+            const SizedBox(height: 12),
+            _HistoryCard(
+              title: 'Lịch sử Sức khỏe',
+              subtitle: 'Xem tất cả kết quả dự đoán',
+              icon: Icons.timeline,
+              hasData: true,
+              onTap: () => Navigator.pushNamed(context, '/health-history'),
+            ),
+          ],
         ],
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 1),
     );
+  }
+
+  String _formatPredictionSubtitle(Map<String, dynamic> prediction) {
+    final riskLevelVi = prediction['riskLevelVi'] as String? ?? 'N/A';
+    final createdAt = prediction['createdAt'] as int?;
+    
+    if (createdAt != null) {
+      final date = DateTime.fromMillisecondsSinceEpoch(createdAt);
+      final dateStr = DateFormat('dd/MM/yyyy').format(date);
+      return '$riskLevelVi - $dateStr';
+    }
+    
+    return riskLevelVi;
+  }
+
+  void _viewStrokeResult(Map<String, dynamic> prediction) {
+    final result = {
+      'riskScore': prediction['riskScore'],
+      'riskLevel': prediction['riskLevel'],
+      'riskLevelVi': prediction['riskLevelVi'],
+      'bmi': prediction['bmi'],
+      'bmiCategory': prediction['bmiCategory'],
+      'bpCategory': prediction['bpCategory'],
+      'cholesterolCategory': prediction['cholesterolCategory'],
+    };
+    Navigator.pushNamed(context, '/stroke-result', arguments: result);
+  }
+
+  void _viewDiabetesResult(Map<String, dynamic> prediction) {
+    final result = {
+      'riskScore': prediction['riskScore'],
+      'riskLevel': prediction['riskLevel'],
+      'riskLevelVi': prediction['riskLevelVi'],
+      'bmi': prediction['bmi'],
+      'bmiCategory': prediction['bmiCategory'],
+    };
+    Navigator.pushNamed(context, '/diabetes-result', arguments: result);
   }
 }
 
@@ -166,23 +316,43 @@ class _HistoryCard extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final VoidCallback onTap;
+  final bool hasData;
+  final String? riskLevel;
 
   const _HistoryCard({
     required this.title,
     required this.subtitle,
     required this.icon,
     required this.onTap,
+    this.hasData = false,
+    this.riskLevel,
   });
 
   @override
   Widget build(BuildContext context) {
     const primary = Color(0xFF135BEC);
+    
+    // Xác định màu dựa trên risk level
+    Color iconColor = primary;
+    if (riskLevel != null) {
+      if (riskLevel == 'high') {
+        iconColor = Colors.red;
+      } else if (riskLevel == 'medium') {
+        iconColor = Colors.orange;
+      } else if (riskLevel == 'low') {
+        iconColor = Colors.green;
+      }
+    }
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(
+          color: riskLevel != null 
+              ? iconColor.withOpacity(0.3)
+              : const Color(0xFFE5E7EB),
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -197,10 +367,10 @@ class _HistoryCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: primary.withOpacity(0.1),
+                    color: iconColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(icon, color: primary, size: 24),
+                  child: Icon(icon, color: iconColor, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -209,12 +379,23 @@ class _HistoryCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
-                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: hasData && riskLevel != null
+                              ? iconColor
+                              : Colors.grey,
+                          fontWeight: hasData && riskLevel != null
+                              ? FontWeight.w500
+                              : FontWeight.normal,
+                        ),
                       ),
                     ],
                   ),
