@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "484558690842-n8ki3fc8d98seoaru35295mnbm00uho9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.early_warning_software_for_stroke",
+            "certificate_hash": "d12081050713367058668ffe81ac0b936d77b29c"
+          }
+        },
+        {
           "client_id": "484558690842-o8paac719fa5qbe1pispm4ji2ocn06aj.apps.googleusercontent.com",
           "client_type": 3
         }
