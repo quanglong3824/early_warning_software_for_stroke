@@ -79,37 +79,26 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                _section('TRANG CHÍNH', [
-                  _item(context, 'Trang chủ', Icons.dashboard_rounded, () => Navigator.pushReplacementNamed(context, '/dashboard')),
-                  _item(context, 'Dự đoán', Icons.analytics_rounded, () => Navigator.pushReplacementNamed(context, '/prediction-hub')),
-                  _item(context, 'Cộng đồng', Icons.forum_rounded, () => Navigator.pushReplacementNamed(context, '/forum')),
-                  _item(context, 'Kiến thức', Icons.library_books_rounded, () => Navigator.pushReplacementNamed(context, '/knowledge')),
-                  _item(context, 'Cá nhân', Icons.person_rounded, () => Navigator.pushReplacementNamed(context, '/profile')),
+                _section('KHÁM PHÁ', [
+                  _item(context, 'Cộng đồng', Icons.forum_rounded, () => Navigator.pushNamed(context, '/forum')),
+                  _item(context, 'Kiến thức', Icons.library_books_rounded, () => Navigator.pushNamed(context, '/knowledge')),
+                  _item(context, 'Phòng ngừa', Icons.health_and_safety_rounded, () => Navigator.pushNamed(context, '/healthy-plan')),
                 ]),
 
-                _section('BỆNH VIỆN & BÁC SĨ', [
-                  _item(context, 'Chat Bác sĩ', Icons.chat_bubble, () => Navigator.pushNamed(context, '/chat')),
-                  _item(context, 'Cuộc gọi Video', Icons.videocam, () => Navigator.pushNamed(context, '/video-call')),
-                  _item(context, 'Báo cáo / Lịch hẹn', Icons.assignment, () => Navigator.pushNamed(context, '/report-appointment')),
-                  _item(context, 'Đánh giá Bác sĩ', Icons.grade, () => Navigator.pushNamed(context, '/rate-doctor')),
+                _section('HỖ TRỢ', [
+                  _item(context, 'Trung tâm Hỗ trợ', Icons.help_outline_rounded, () => Navigator.pushNamed(context, '/help-support')),
+                  _item(context, 'Điều khoản Dịch vụ', Icons.description_outlined, () => Navigator.pushNamed(context, '/terms-of-service')),
+                  _item(context, 'Chính sách Bảo mật', Icons.privacy_tip_outlined, () => Navigator.pushNamed(context, '/privacy-policy')),
                 ]),
 
-                _section('QUẢN LÝ BỆNH NHÂN', [
-                  _item(context, 'Hồ sơ Bệnh nhân', Icons.group, () => Navigator.pushNamed(context, '/patient-management')),
-                  _item(context, 'Lịch sử Sức khỏe', Icons.timeline, () => Navigator.pushNamed(context, '/health-history')),
-                ]),
-
-                _section('THUỐC', [
-                  _item(context, 'Nhà thuốc Online', Icons.local_pharmacy, () => Navigator.pushNamed(context, '/pharmacy')),
-                  _item(context, 'Giỏ hàng', Icons.shopping_cart, () => Navigator.pushNamed(context, '/checkout')),
-                ]),
-
-                _section('PHÒNG NGỪ', [
-                  _item(context, 'Kế hoạch Sống khỏe', Icons.checklist, () => Navigator.pushNamed(context, '/healthy-plan')),
+                _section('CÀI ĐẶT', [
+                  _item(context, 'Cài đặt', Icons.settings_rounded, () => Navigator.pushNamed(context, '/settings')),
+                  _item(context, 'Đổi mật khẩu', Icons.lock_outline_rounded, () => Navigator.pushNamed(context, '/change-password')),
                 ]),
               ],
             ),
           ),
+          
           // Footer
           Container(
             padding: const EdgeInsets.all(16),
@@ -131,7 +120,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Các mục Người thân, Lịch hẹn, Đơn thuốc, SOS đã chuyển vào trang Cá nhân',
+                  'Tính năng chính đã chuyển vào Bottom Navigation',
                   style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                 ),
               ],

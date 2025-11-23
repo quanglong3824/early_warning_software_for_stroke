@@ -191,8 +191,8 @@ class UserDashboardService {
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       final now = DateTime.now().millisecondsSinceEpoch;
 
-      data.forEach((key, value) {
-        final appointment = Map<String, dynamic>.from(value as Map);
+      for (var entry in data.entries) {
+        final appointment = Map<String, dynamic>.from(entry.value as Map);
         final apptUserId = appointment['userId'] as String?;
         final status = appointment['status'] as String?;
         final appointmentTime = appointment['appointmentTime'] as int? ?? 0;
@@ -200,9 +200,29 @@ class UserDashboardService {
         if (apptUserId == userId && 
             status == 'confirmed' && 
             appointmentTime > now) {
-          appointments.add(appointment);
+          
+          // Fetch doctor name
+          final doctorId = appointment['doctorId'] as String?;
+          String doctorName = 'Bác sĩ';
+          
+          if (doctorId != null) {
+            try {
+              final doctorSnapshot = await _database.child('users').child(doctorId).get();
+              if (doctorSnapshot.exists) {
+                final doctorData = Map<String, dynamic>.from(doctorSnapshot.value as Map);
+                doctorName = doctorData['name'] as String? ?? 'Bác sĩ';
+              }
+            } catch (e) {
+              print('Error fetching doctor name: $e');
+            }
+          }
+          
+          appointments.add({
+            ...appointment,
+            'doctorName': doctorName,
+          });
         }
-      });
+      }
 
       // Sắp xếp theo thời gian
       appointments.sort((a, b) {

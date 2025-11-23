@@ -46,6 +46,7 @@ import 'features/user/emergency/screen_sos_status.dart';
 import 'features/user/patients/screen_patient_management.dart';
 import 'features/user/health/screen_health_history.dart';
 import 'features/user/health/screen_add_health_record.dart';
+import 'features/user/health/screen_health_hub.dart';
 import 'features/user/telemedicine/screen_video_call.dart';
 import 'features/user/reminders/screen_reminders.dart';
 import 'features/user/reminders/screen_reminders_list.dart';
@@ -60,6 +61,7 @@ import 'features/user/hospital/screen_report_appointment.dart';
 import 'features/user/prevention/screen_healthy_plan.dart';
 import 'features/user/doctors/screen_doctor_list.dart';
 import 'features/user/doctors/screen_doctor_detail.dart';
+import 'features/user/doctors/screen_doctors_hub.dart';
 import 'data/models/doctor_models.dart';
 
 // ===== ADMIN FEATURES =====
@@ -145,6 +147,8 @@ class App extends StatelessWidget {
 
         // ===== MAIN SCREENS (Bottom Nav) =====
         '/dashboard': (_) => const ScreenDashboard(),
+        '/health-hub': (_) => const ScreenHealthHub(),
+        '/doctors-hub': (_) => const ScreenDoctorsHub(),
         '/prediction-hub': (_) => const ScreenPredictionHub(),
         '/forum': (_) => const ScreenForum(),
         '/knowledge': (_) => const ScreenKnowledge(),
