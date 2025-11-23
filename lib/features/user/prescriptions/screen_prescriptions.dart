@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../services/prescription_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/prescription_models.dart';
+import 'screen_prescription_detail.dart';
 
 class ScreenPrescriptions extends StatefulWidget {
   const ScreenPrescriptions({super.key});
@@ -114,11 +115,18 @@ class _ScreenPrescriptionsState extends State<ScreenPrescriptions> {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: _PrescriptionItem(
                   title: 'Đơn thuốc ngày ${_formatDate(prescription.prescribedDate)}',
-                  subtitle: '${prescription.doctorName ?? "Bác sĩ"} - ${prescription.items.length} loại thuốc',
+                  subtitle: '${prescription.doctorName ?? "Bác sĩ"} - ${prescription.medications.length} loại thuốc',
                   status: prescription.status,
-                  itemCount: prescription.items.length,
+                  itemCount: prescription.medications.length,
                   onTap: () {
-                    // TODO: Navigate to prescription detail
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScreenPrescriptionDetail(
+                          prescription: prescription,
+                        ),
+                      ),
+                    );
                   },
                 ),
               );

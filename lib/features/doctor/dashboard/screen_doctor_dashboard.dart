@@ -4,6 +4,7 @@ import '../../../data/providers/app_data_provider.dart';
 import '../../../widgets/doctor_drawer.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
 import '../../../mixins/account_status_check_mixin.dart';
+import '../../../services/auth_service.dart';
 
 class ScreenDoctorDashboard extends StatefulWidget {
   const ScreenDoctorDashboard({super.key});
@@ -14,6 +15,22 @@ class ScreenDoctorDashboard extends StatefulWidget {
 
 class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard> 
     with AccountStatusCheckMixin {
+  
+  final _authService = AuthService();
+  String? _doctorName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDoctorName();
+  }
+
+  Future<void> _loadDoctorName() async {
+    final name = await _authService.getUserName();
+    if (mounted) {
+      setState(() => _doctorName = name);
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -26,8 +43,36 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
     final patients = appData.patients;
     final alerts = appData.alerts;
 
-    return Scaffold(
-      drawer: const DoctorDrawer(doctorName: 'BS. Trần Văn Minh'),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+        
+        final shouldLogout = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Đăng xuất'),
+            content: const Text('Bạn có muốn đăng xuất?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Hủy'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Đăng xuất'),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldLogout == true && context.mounted) {
+          Navigator.of(context).pushReplacementNamed('/doctor/login');
+        }
+      },
+      child: Scaffold(
+      drawer: DoctorDrawer(doctorName: _doctorName ?? 'Bác sĩ'),
       backgroundColor: bgLight,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -146,6 +191,7 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
         icon: const Icon(Icons.emergency),
         label: const Text('SOS Queue'),
       ),
+    ),
     );
   }
 }

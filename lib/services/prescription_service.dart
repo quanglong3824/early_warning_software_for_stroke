@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:firebase_database/firebase_database.dart';
 import '../data/models/prescription_models.dart';
+import '../data/models/medication_models.dart';
 
 class PrescriptionService {
   static final PrescriptionService _instance = PrescriptionService._internal();
@@ -8,6 +10,131 @@ class PrescriptionService {
   PrescriptionService._internal();
 
   final DatabaseReference _db = FirebaseDatabase.instance.ref();
+
+  /// Generate unique prescription code (8 characters: letters + numbers)
+  String generatePrescriptionCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude similar chars
+    final random = Random();
+    final code = List.generate(8, (index) => chars[random.nextInt(chars.length)]).join();
+    return code;
+  }
+
+  /// Check if prescription code exists
+  Future<bool> _codeExists(String code) async {
+    try {
+      final snapshot = await _db
+          .child('prescriptions')
+          .orderByChild('prescriptionCode')
+          .equalTo(code)
+          .limitToFirst(1)
+          .get();
+      return snapshot.exists;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Generate unique prescription code
+  Future<String> generateUniquePrescriptionCode() async {
+    String code;
+    int attempts = 0;
+    do {
+      code = generatePrescriptionCode();
+      attempts++;
+      if (attempts > 10) {
+        // Fallback: add timestamp
+        code = '$code${DateTime.now().millisecondsSinceEpoch % 100}';
+        break;
+      }
+    } while (await _codeExists(code));
+    return code;
+  }
+
+  /// Create prescription with auto-generated code
+  Future<String?> createPrescription({
+    required String doctorId,
+    required String doctorName,
+    required String userId,
+    required String patientName,
+    required List<PrescriptionMedicationModel> medications,
+    String? diagnosis,
+    String? notes,
+  }) async {
+    try {
+      final prescriptionRef = _db.child('prescriptions').push();
+      final prescriptionId = prescriptionRef.key!;
+      final prescriptionCode = await generateUniquePrescriptionCode();
+      
+      // Calculate total amount
+      final totalAmount = medications.fold<double>(
+        0,
+        (sum, med) => sum + med.totalPrice,
+      );
+
+      final prescription = PrescriptionModel(
+        prescriptionId: prescriptionId,
+        prescriptionCode: prescriptionCode,
+        userId: userId,
+        patientName: patientName,
+        doctorId: doctorId,
+        doctorName: doctorName,
+        diagnosis: diagnosis,
+        medications: medications,
+        status: 'active',
+        prescribedDate: DateTime.now().millisecondsSinceEpoch,
+        notes: notes,
+        totalAmount: totalAmount,
+        isPurchased: false,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+      );
+
+      await prescriptionRef.set(prescription.toJson());
+      
+      // Also index by code for quick lookup
+      await _db.child('prescription_codes').child(prescriptionCode).set(prescriptionId);
+      
+      print('✅ Prescription created: $prescriptionCode');
+      return prescriptionId;
+    } catch (e) {
+      print('❌ Error creating prescription: $e');
+      return null;
+    }
+  }
+
+  /// Get prescription by code
+  Future<PrescriptionModel?> getPrescriptionByCode(String code) async {
+    try {
+      // First get prescription ID from code index
+      final codeSnapshot = await _db.child('prescription_codes').child(code).get();
+      if (!codeSnapshot.exists) {
+        print('⚠️ Prescription code not found: $code');
+        return null;
+      }
+
+      final prescriptionId = codeSnapshot.value as String;
+      return getPrescription(prescriptionId);
+    } catch (e) {
+      print('❌ Error getting prescription by code: $e');
+      return null;
+    }
+  }
+
+  /// Mark prescription as purchased
+  Future<bool> markAsPurchased(String prescriptionId, String orderId) async {
+    try {
+      await _db.child('prescriptions').child(prescriptionId).update({
+        'isPurchased': true,
+        'purchaseDate': DateTime.now().millisecondsSinceEpoch,
+        'orderId': orderId,
+        'updatedAt': DateTime.now().millisecondsSinceEpoch,
+      });
+      print('✅ Prescription marked as purchased: $prescriptionId');
+      return true;
+    } catch (e) {
+      print('❌ Error marking prescription as purchased: $e');
+      return false;
+    }
+  }
 
   /// Get all prescriptions for a user
   Stream<List<PrescriptionModel>> getUserPrescriptions(String userId) {

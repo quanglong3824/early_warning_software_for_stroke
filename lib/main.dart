@@ -27,6 +27,9 @@ import 'features/user/profile/screen_profile.dart';
 import 'features/user/profile/screen_edit_profile.dart';
 import 'features/user/pharmacy/screen_pharmacy.dart';
 import 'features/user/pharmacy/screen_checkout.dart';
+import 'features/user/pharmacy/screen_prescription_lookup.dart';
+import 'features/user/pharmacy/screen_prescription_pharmacy.dart';
+import 'features/user/pharmacy/screen_order_history.dart';
 import 'features/user/family/screen_family.dart';
 import 'features/user/appointments/screen_appointments.dart';
 import 'features/user/prescriptions/screen_prescriptions.dart';
@@ -72,6 +75,7 @@ import 'features/admin/sos/screen_admin_sos.dart';
 import 'features/admin/predictions/screen_admin_predictions.dart';
 import 'features/admin/appointments/screen_admin_appointments.dart';
 import 'features/admin/pharmacy/screen_admin_pharmacy.dart';
+import 'features/admin/medications/screen_admin_medications.dart';
 import 'features/admin/knowledge/screen_admin_knowledge.dart';
 import 'features/admin/community/screen_admin_community.dart';
 
@@ -85,6 +89,7 @@ import 'features/doctor/appointments/screen_appointment_request_detail.dart';
 import 'features/doctor/emergency/screen_sos_queue.dart';
 import 'features/doctor/emergency/screen_sos_case_detail.dart';
 import 'features/doctor/communication/screen_doctor_chat.dart';
+import 'features/doctor/communication/screen_doctor_chat_detail.dart';
 import 'features/doctor/communication/screen_doctor_video_call.dart';
 import 'features/doctor/prescriptions/screen_create_prescription.dart';
 import 'features/doctor/reviews/screen_doctor_reviews.dart';
@@ -200,6 +205,12 @@ class App extends StatelessWidget {
         // ===== PHARMACY =====
         '/pharmacy': (_) => const ScreenPharmacy(),
         '/checkout': (_) => const ScreenCheckout(),
+        '/pharmacy/prescription-lookup': (_) => const ScreenPrescriptionLookup(),
+        '/pharmacy/prescription-detail': (context) {
+          final prescription = ModalRoute.of(context)!.settings.arguments;
+          return ScreenPrescriptionPharmacy(prescription: prescription as dynamic);
+        },
+        '/pharmacy/order-history': (_) => const ScreenOrderHistory(),
 
         // ===== KNOWLEDGE & COMMUNITY =====
         '/article-detail': (_) => const ScreenArticleDetail(),
@@ -233,6 +244,7 @@ class App extends StatelessWidget {
         '/admin/predictions': (_) => const ScreenAdminPredictions(),
         '/admin/appointments': (_) => const ScreenAdminAppointments(),
         '/admin/pharmacy': (_) => const ScreenAdminPharmacy(),
+        '/admin/medications': (_) => const ScreenAdminMedications(),
         '/admin/knowledge': (_) => const ScreenAdminKnowledge(),
         '/admin/community': (_) => const ScreenAdminCommunity(),
 
@@ -246,6 +258,14 @@ class App extends StatelessWidget {
         '/doctor/sos-queue': (_) => const ScreenSOSQueue(),
         '/doctor/sos-case': (_) => const ScreenSOSCaseDetail(),
         '/doctor/chat': (_) => const ScreenDoctorChat(),
+        '/doctor/chat-detail': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          return ScreenDoctorChatDetail(
+            conversationId: args?['conversationId'] ?? '',
+            patientName: args?['patientName'] ?? 'Bệnh nhân',
+            userId: args?['userId'] ?? '',
+          );
+        },
         '/doctor/video-call': (_) => const ScreenDoctorVideoCall(),
         '/doctor/create-prescription': (_) => const ScreenCreatePrescription(),
         '/doctor/reviews': (_) => const ScreenDoctorReviews(),

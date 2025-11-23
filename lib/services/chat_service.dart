@@ -18,15 +18,31 @@ class ChatService {
         .orderByChild('userId')
         .equalTo(userId)
         .onValue
-        .map((event) {
+        .asyncMap((event) async {
       final List<ConversationModel> conversations = [];
       if (event.snapshot.exists) {
         final data = Map<String, dynamic>.from(event.snapshot.value as Map);
-        data.forEach((key, value) {
-          final convData = Map<String, dynamic>.from(value as Map);
-          conversations.add(ConversationModel.fromJson(convData));
-        });
+        
+        // Fetch all conversations with doctor names
+        for (var entry in data.entries) {
+          final convData = Map<String, dynamic>.from(entry.value as Map);
+          final doctorId = convData['doctorId'] as String?;
+          
+          // Fetch doctor name from users table
+          String? doctorName;
+          if (doctorId != null) {
+            doctorName = await _fetchDoctorName(doctorId);
+          }
+          
+          // Create conversation with doctor name
+          final conversation = ConversationModel.fromJson({
+            ...convData,
+            'doctorName': doctorName,
+          });
+          conversations.add(conversation);
+        }
       }
+      
       // Sort by lastMessageTime descending
       conversations.sort((a, b) {
         final aTime = a.lastMessageTime ?? 0;
@@ -37,12 +53,27 @@ class ChatService {
     });
   }
 
+  /// Fetch doctor name from users table
+  Future<String?> _fetchDoctorName(String doctorId) async {
+    try {
+      final snapshot = await _db.child('users').child(doctorId).get();
+      if (snapshot.exists) {
+        final userData = Map<String, dynamic>.from(snapshot.value as Map);
+        return userData['name'] as String?;
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching doctor name: $e');
+      return null;
+    }
+  }
+
   /// Get messages for a conversation
   Stream<List<MessageModel>> getMessages(String conversationId) {
     return _db
         .child('messages')
         .child(conversationId)
-        .orderByChild('timestamp')
+        .orderByChild('createdAt')
         .onValue
         .map((event) {
       final List<MessageModel> messages = [];
@@ -137,6 +168,7 @@ class ChatService {
     String? senderName,
     required String message,
     String type = 'text',
+    String? prescriptionId,
   }) async {
     try {
       final messageRef = _db.child('messages').child(conversationId).push();
@@ -150,6 +182,7 @@ class ChatService {
         senderName: senderName,
         message: message,
         type: type,
+        prescriptionId: prescriptionId,
         timestamp: now,
         isRead: false,
       );
@@ -177,6 +210,24 @@ class ChatService {
       print('Error sending message: $e');
       return null;
     }
+  }
+
+  /// Send prescription message
+  Future<String?> sendPrescriptionMessage({
+    required String conversationId,
+    required String senderId,
+    required String senderName,
+    required String prescriptionId,
+    required String prescriptionCode,
+  }) async {
+    return sendMessage(
+      conversationId: conversationId,
+      senderId: senderId,
+      senderName: senderName,
+      message: 'Đã kê đơn thuốc - Mã: $prescriptionCode',
+      type: 'prescription',
+      prescriptionId: prescriptionId,
+    );
   }
 
   /// Mark messages as read

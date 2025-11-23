@@ -3,41 +3,38 @@ import 'package:intl/intl.dart';
 import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/chat_models.dart';
-import '../../doctor/communication/widgets/prescription_message_widget.dart';
+import 'dialogs/create_prescription_dialog.dart';
+import 'widgets/prescription_message_widget.dart';
 
-class ScreenChatDetail extends StatefulWidget {
+class ScreenDoctorChatDetail extends StatefulWidget {
   final String conversationId;
-  final String title;
-  final String? avatarUrl;
-  final Color? avatarColor;
-  final IconData? avatarIcon;
+  final String patientName;
+  final String userId;
 
-  const ScreenChatDetail({
+  const ScreenDoctorChatDetail({
     super.key,
     required this.conversationId,
-    required this.title,
-    this.avatarUrl,
-    this.avatarColor,
-    this.avatarIcon,
+    required this.patientName,
+    required this.userId,
   });
 
   @override
-  State<ScreenChatDetail> createState() => _ScreenChatDetailState();
+  State<ScreenDoctorChatDetail> createState() => _ScreenDoctorChatDetailState();
 }
 
-class _ScreenChatDetailState extends State<ScreenChatDetail> {
+class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
   final _chatService = ChatService();
   final _authService = AuthService();
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   
-  String? _userId;
-  String? _userName;
+  String? _doctorId;
+  String? _doctorName;
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
+    _loadDoctor();
   }
 
   @override
@@ -47,29 +44,32 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
     super.dispose();
   }
 
-  Future<void> _loadUser() async {
-    final userId = await _authService.getUserId();
-    final userName = await _authService.getUserName();
+  Future<void> _loadDoctor() async {
+    final doctorId = await _authService.getUserId();
+    final doctorName = await _authService.getUserName();
     setState(() {
-      _userId = userId;
-      _userName = userName;
+      _doctorId = doctorId;
+      _doctorName = doctorName;
     });
   }
 
   Future<void> _sendMessage() async {
-    if (_messageController.text.trim().isEmpty || _userId == null) return;
+    if (_messageController.text.trim().isEmpty || _doctorId == null) return;
 
     final message = _messageController.text.trim();
     _messageController.clear();
 
     await _chatService.sendMessage(
       conversationId: widget.conversationId,
-      senderId: _userId!,
-      senderName: _userName,
+      senderId: _doctorId!,
+      senderName: _doctorName,
       message: message,
     );
 
-    // Scroll to bottom
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -79,6 +79,25 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
         );
       }
     });
+  }
+
+  Future<void> _createPrescription() async {
+    if (_doctorId == null || _doctorName == null) return;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => CreatePrescriptionDialog(
+        conversationId: widget.conversationId,
+        userId: widget.userId,
+        patientName: widget.patientName,
+        doctorId: _doctorId!,
+        doctorName: _doctorName!,
+      ),
+    );
+
+    if (result == true) {
+      _scrollToBottom();
+    }
   }
 
   String _formatTime(int timestamp) {
@@ -92,13 +111,13 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
     const primary = Color(0xFF135BEC);
     const textPrimary = Color(0xFF111318);
 
-    if (_userId == null) {
+    if (_doctorId == null) {
       return Scaffold(
         backgroundColor: bgLight,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0.5,
-          title: Text(widget.title),
+          title: Text(widget.patientName),
         ),
         body: const Center(child: CircularProgressIndicator()),
       );
@@ -111,7 +130,14 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
         elevation: 0.5,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: textPrimary),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            // Navigate back to doctor dashboard instead of pop
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacementNamed(context, '/doctor/dashboard');
+            }
+          },
         ),
         title: Row(
           children: [
@@ -119,27 +145,40 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: (widget.avatarColor ?? Colors.blue).withOpacity(0.15),
+                color: primary.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: Icon(
-                widget.avatarIcon ?? Icons.person,
-                color: widget.avatarColor ?? Colors.blue,
-                size: 20,
-              ),
+              child: Icon(Icons.person, color: primary, size: 20),
             ),
             const SizedBox(width: 12),
-            Text(
-              widget.title,
-              style: const TextStyle(
-                color: textPrimary,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.patientName,
+                    style: const TextStyle(
+                      color: textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Text(
+                    'Bệnh nhân',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
               ),
             ),
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.medical_services, color: primary),
+            onPressed: _createPrescription,
+            tooltip: 'Tạo đơn thuốc',
+          ),
           IconButton(
             icon: const Icon(Icons.more_vert, color: textPrimary),
             onPressed: () {},
@@ -164,10 +203,17 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
 
                 if (messages.isEmpty) {
                   return const Center(
-                    child: Text(
-                      'Chưa có tin nhắn nào\nGửi tin nhắn đầu tiên!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text(
+                          'Chưa có tin nhắn nào\nGửi tin nhắn đầu tiên!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -178,7 +224,7 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    final isMe = message.senderId == _userId;
+                    final isMe = message.senderId == _doctorId;
                     
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
@@ -197,11 +243,7 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                                 shape: BoxShape.circle,
                               ),
                               alignment: Alignment.center,
-                              child: const Icon(
-                                Icons.person,
-                                color: Colors.blue,
-                                size: 16,
-                              ),
+                              child: const Icon(Icons.person, color: Colors.blue, size: 16),
                             ),
                             const SizedBox(width: 8),
                           ],
@@ -209,7 +251,7 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                             child: message.type == 'prescription'
                                 ? PrescriptionMessageWidget(
                                     message: message,
-                                    isDoctor: false,
+                                    isDoctor: true,
                                   )
                                 : Container(
                                     padding: const EdgeInsets.symmetric(
@@ -219,6 +261,15 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                                     decoration: BoxDecoration(
                                       color: isMe ? primary : Colors.white,
                                       borderRadius: BorderRadius.circular(16),
+                                      boxShadow: isMe
+                                          ? null
+                                          : [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.05),
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                     ),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,6 +311,12 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [
+                IconButton(
+                  icon: const Icon(Icons.medical_services, color: primary),
+                  onPressed: _createPrescription,
+                  tooltip: 'Tạo đơn thuốc',
+                ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(

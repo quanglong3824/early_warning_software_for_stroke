@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../services/appointment_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/appointment_model.dart';
+import 'screen_appointment_detail.dart';
 
 class ScreenAppointments extends StatefulWidget {
   const ScreenAppointments({super.key});
@@ -264,8 +265,19 @@ class _ScreenAppointmentsState extends State<ScreenAppointments> {
                         subtitle: appointment.location,
                         time: _formatDateTime(appointment.appointmentTime),
                         status: _getStatusText(appointment.status),
-                        onTap: () {
-                          // TODO: Navigate to appointment detail
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ScreenAppointmentDetail(
+                                appointment: appointment,
+                              ),
+                            ),
+                          );
+                          // Refresh if appointment was cancelled
+                          if (result == true && mounted) {
+                            setState(() {});
+                          }
                         },
                         onCancel: appointment.canCancel
                             ? () async {

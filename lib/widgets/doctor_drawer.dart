@@ -141,7 +141,7 @@ class DoctorDrawer extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                                Navigator.pushReplacementNamed(context, '/login');
+                                Navigator.pushReplacementNamed(context, '/doctor/login');
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                               child: const Text('Đăng xuất'),

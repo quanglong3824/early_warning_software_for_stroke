@@ -60,7 +60,8 @@ class MessageModel {
   final String senderId;
   final String? senderName;
   final String message;
-  final String type; // text, image, file
+  final String type; // text, image, file, prescription
+  final String? prescriptionId; // For prescription messages
   final int timestamp;
   final bool isRead;
 
@@ -71,6 +72,7 @@ class MessageModel {
     this.senderName,
     required this.message,
     required this.type,
+    this.prescriptionId,
     required this.timestamp,
     required this.isRead,
   });
@@ -83,8 +85,10 @@ class MessageModel {
       senderName: json['senderName'],
       message: json['message'] ?? '',
       type: json['type'] ?? 'text',
-      timestamp: json['timestamp'] ?? DateTime.now().millisecondsSinceEpoch,
-      isRead: json['isRead'] ?? false,
+      prescriptionId: json['prescriptionId'],
+      // Support both 'createdAt' (from Firebase) and 'timestamp' for backward compatibility
+      timestamp: json['createdAt'] ?? json['timestamp'] ?? DateTime.now().millisecondsSinceEpoch,
+      isRead: json['isRead'] ?? json['status'] == 'read',
     );
   }
 
@@ -96,8 +100,10 @@ class MessageModel {
       'senderName': senderName,
       'message': message,
       'type': type,
-      'timestamp': timestamp,
+      'prescriptionId': prescriptionId,
+      'createdAt': timestamp,  // Save as 'createdAt' in Firebase
       'isRead': isRead,
     };
   }
 }
+

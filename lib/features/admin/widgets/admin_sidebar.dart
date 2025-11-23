@@ -26,6 +26,7 @@ class AdminSidebar extends StatelessWidget {
       _NavItem(icon: Icons.analytics, label: 'Dự đoán', route: '/admin/predictions'),
       _NavItem(icon: Icons.calendar_today, label: 'Lịch hẹn', route: '/admin/appointments'),
       _NavItem(icon: Icons.medication, label: 'Thuốc', route: '/admin/pharmacy'),
+      _NavItem(icon: Icons.medication_liquid, label: 'Quản lý thuốc', route: '/admin/medications'),
       _NavItem(icon: Icons.library_books, label: 'Kiến thức', route: '/admin/knowledge'),
       _NavItem(icon: Icons.forum, label: 'Cộng đồng', route: '/admin/community'),
     ];
@@ -102,7 +103,7 @@ class AdminSidebar extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         onItemSelected(index);
-                        Navigator.of(context).pushNamed(item.route);
+                        Navigator.of(context).pushReplacementNamed(item.route);
                       },
                       borderRadius: BorderRadius.circular(8),
                       child: Container(

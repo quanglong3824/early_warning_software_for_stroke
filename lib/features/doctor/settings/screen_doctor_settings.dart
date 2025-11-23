@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
+import '../../../widgets/doctor_drawer.dart';
+import '../../../services/auth_service.dart';
 
-class ScreenDoctorSettings extends StatelessWidget {
+class ScreenDoctorSettings extends StatefulWidget {
   const ScreenDoctorSettings({super.key});
+
+  @override
+  State<ScreenDoctorSettings> createState() => _ScreenDoctorSettingsState();
+}
+
+class _ScreenDoctorSettingsState extends State<ScreenDoctorSettings> {
+  final _authService = AuthService();
+  String? _doctorName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDoctorName();
+  }
+
+  Future<void> _loadDoctorName() async {
+    final name = await _authService.getUserName();
+    if (mounted) {
+      setState(() => _doctorName = name);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +58,9 @@ class ScreenDoctorSettings extends StatelessWidget {
                   child: const Icon(Icons.person, size: 40, color: primary),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'BS. Trần Văn Minh',
-                  style: TextStyle(
+                Text(
+                  _doctorName ?? 'Bác sĩ',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: textPrimary,
@@ -209,7 +232,7 @@ class ScreenDoctorSettings extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.pushReplacementNamed(context, '/doctor/login');
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                         child: const Text('Đăng xuất'),

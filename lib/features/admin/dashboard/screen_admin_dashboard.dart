@@ -77,7 +77,35 @@ class _ScreenAdminDashboardState extends State<ScreenAdminDashboard>
     const primary = Color(0xFF6B46C1);
     const bgLight = Color(0xFFF6F6F8);
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+        
+        final shouldLogout = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Đăng xuất'),
+            content: const Text('Bạn có muốn đăng xuất khỏi Admin Panel?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Hủy'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Đăng xuất'),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldLogout == true && context.mounted) {
+          Navigator.of(context).pushReplacementNamed('/admin/login');
+        }
+      },
+      child: Scaffold(
       backgroundColor: bgLight,
       body: Row(
         children: [
@@ -272,6 +300,7 @@ class _ScreenAdminDashboardState extends State<ScreenAdminDashboard>
           ),
         ],
       ),
+    ),
     );
   }
 }

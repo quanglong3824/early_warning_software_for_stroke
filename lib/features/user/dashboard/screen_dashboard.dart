@@ -105,7 +105,35 @@ class _ScreenDashboardState extends State<ScreenDashboard>
     final latestPrediction = _dashboardStats['latestPrediction'] as Map<String, dynamic>?;
     final hasHighRisk = (_dashboardStats['highRiskCount'] as int? ?? 0) > 0;
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+        
+        final shouldLogout = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Đăng xuất'),
+            content: const Text('Bạn có muốn đăng xuất?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Hủy'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Đăng xuất'),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldLogout == true && context.mounted) {
+          Navigator.of(context).pushReplacementNamed('/login');
+        }
+      },
+      child: Scaffold(
       drawer: AppDrawer(userName: _userName),
       backgroundColor: bgLight,
       extendBody: true,
@@ -373,6 +401,7 @@ class _ScreenDashboardState extends State<ScreenDashboard>
             ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 0),
       floatingActionButton: const SOSFloatingButton(),
+    ),
     );
   }
 
