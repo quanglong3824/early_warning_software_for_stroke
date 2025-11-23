@@ -19,12 +19,25 @@ class MedicationService {
         .onValue
         .map((event) {
       final List<MedicationModel> medications = [];
-      if (event.snapshot.exists) {
-        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+          for (int i = 0; i < value.length; i++) {
+            if (value[i] != null) {
+              data[i.toString()] = value[i];
+            }
+          }
+        }
         data.forEach((key, value) {
-          final medData = Map<String, dynamic>.from(value as Map);
-          medData['medicationId'] = key;
-          medications.add(MedicationModel.fromJson(medData));
+          if (value == null) return;
+          if (value is Map) {
+            final medData = Map<String, dynamic>.from(value);
+            medData['medicationId'] = key;
+            medications.add(MedicationModel.fromJson(medData));
+          }
         });
       }
       medications.sort((a, b) => a.name.compareTo(b.name));

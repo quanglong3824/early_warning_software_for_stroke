@@ -27,8 +27,9 @@ import 'features/user/profile/screen_profile.dart';
 import 'features/user/profile/screen_edit_profile.dart';
 import 'features/user/pharmacy/screen_pharmacy.dart';
 import 'features/user/pharmacy/screen_checkout.dart';
-import 'features/user/pharmacy/screen_prescription_lookup.dart';
+import 'features/doctor/medications/screen_add_medication.dart';
 import 'features/user/pharmacy/screen_prescription_pharmacy.dart';
+import 'features/user/pharmacy/screen_prescription_lookup.dart';
 import 'features/user/pharmacy/screen_order_history.dart';
 import 'features/user/family/screen_family.dart';
 import 'features/user/appointments/screen_appointments.dart';
@@ -204,7 +205,7 @@ class App extends StatelessWidget {
         '/group-detail': (_) => const ScreenGroupDetail(),
         '/invite-members': (_) => const ScreenInviteMembers(),
         '/notifications': (_) => const ScreenNotifications(),
-        '/prescriptions': (_) => const ScreenPrescriptions(),
+        '/doctor/add-medication': (_) => ScreenAddMedication(),
 
         // ===== PHARMACY =====
         '/pharmacy': (_) => const ScreenPharmacy(),
