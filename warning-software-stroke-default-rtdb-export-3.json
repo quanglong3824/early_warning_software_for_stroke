@@ -40,6 +40,8 @@
     "-OekrMmLKmjfrhw_7K5g": {
       "appointmentId": "-OekrMmLKmjfrhw_7K5g",
       "appointmentTime": 1763949600000,
+      "cancelReason": "Hủy bởi người dùng",
+      "cancelledAt": 1763905029582,
       "createdAt": 1763903899263,
       "createdBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
       "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
@@ -47,7 +49,40 @@
       "location": "Phòng khám",
       "notes": "Đặt lịch khám qua ứng dụng",
       "reason": "Khám trực tiếp",
-      "status": "pending",
+      "status": "cancelled",
+      "updatedAt": 1763905029582,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "-OektYn_g1L7PocmMhAJ": {
+      "appointmentId": "-OektYn_g1L7PocmMhAJ",
+      "appointmentTime": 1764210600000,
+      "cancelReason": "Hủy bởi người dùng",
+      "cancelledAt": 1763905020808,
+      "createdAt": 1763904470397,
+      "createdBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+      "doctorName": "Bùi Thế Hoàng",
+      "location": "Phòng khám",
+      "notes": "Đặt lịch khám qua ứng dụng",
+      "reason": "Khám trực tiếp",
+      "status": "cancelled",
+      "updatedAt": 1763905020808,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "-OektgAlSV1Na683EKhc": {
+      "appointmentId": "-OektgAlSV1Na683EKhc",
+      "appointmentTime": 1764036000000,
+      "cancelReason": "Hủy bởi người dùng",
+      "cancelledAt": 1763905025704,
+      "createdAt": 1763904504712,
+      "createdBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "doctorName": "Hoàng Văn Long",
+      "location": "Phòng khám",
+      "notes": "Đặt lịch khám qua ứng dụng",
+      "reason": "Khám trực tiếp",
+      "status": "cancelled",
+      "updatedAt": 1763905025704,
       "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
     }
   },
@@ -1088,7 +1123,7 @@
       "dateOfBirth": 1093798800000,
       "email": "quanglong.3824@gmail.com",
       "gender": "male",
-      "lastLogin": 1763904269105,
+      "lastLogin": 1763905401229,
       "loginMethod": "google",
       "name": "Long Quang",
       "phone": "0987654321",
@@ -1127,7 +1162,7 @@
       },
       "role": "user",
       "uid": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
-      "updatedAt": 1763904269105
+      "updatedAt": 1763905401229
     },
     "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
       "createdAt": 1763384066375,
@@ -1164,6 +1199,73 @@
       "role": "user",
       "uid": "wZops4dRJnUYrWG3mZ0awES9SMy2",
       "updatedAt": 1763297243819
+    }
+  },
+  "prescriptions": {
+    "-Oekm123456789": {
+      "createdAt": 1763906000000,
+      "diagnosis": "Viêm họng cấp",
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "doctorName": "Hoàng Văn Long",
+      "isPurchased": false,
+      "medications": [
+        {
+          "dosage": "500mg",
+          "duration": "5 ngày",
+          "frequency": "Sáng 1, Chiều 1",
+          "instructions": "Uống sau ăn",
+          "medicationId": "med_001",
+          "medicationName": "Paracetamol",
+          "price": 5000,
+          "quantity": 10,
+          "totalPrice": 50000
+        },
+        {
+          "dosage": "500mg",
+          "duration": "5 ngày",
+          "frequency": "Sáng 1, Chiều 1",
+          "instructions": "Uống sau ăn",
+          "medicationId": "med_002",
+          "medicationName": "Amoxicillin",
+          "price": 8000,
+          "quantity": 10,
+          "totalPrice": 80000
+        }
+      ],
+      "notes": "Kiêng đồ lạnh",
+      "patientName": "Long Quang",
+      "prescribedDate": 1763906000000,
+      "prescriptionCode": "RX888888",
+      "prescriptionId": "-Oekm123456789",
+      "status": "active",
+      "totalAmount": 130000,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    }
+  },
+  "prescription_codes": {
+    "RX888888": "-Oekm123456789"
+  },
+  "pharmacy_orders": {
+    "-OekmOrder001": {
+      "createdAt": 1763905000000,
+      "items": [
+        {
+          "medicationId": "med_003",
+          "medicationName": "Vitamin C",
+          "price": 2000,
+          "quantity": 20,
+          "totalPrice": 40000
+        }
+      ],
+      "orderId": "-OekmOrder001",
+      "orderStatus": "completed",
+      "paymentMethod": "vnpay",
+      "paymentStatus": "paid",
+      "prescriptionCode": "RX777777",
+      "prescriptionId": "-OekmOldPresc",
+      "totalAmount": 40000,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "vnpayTransactionId": "12345678"
     }
   }
 }

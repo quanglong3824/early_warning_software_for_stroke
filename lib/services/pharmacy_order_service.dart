@@ -48,12 +48,27 @@ class PharmacyOrderService {
         .onValue
         .map((event) {
       final List<PharmacyOrderModel> orders = [];
-      if (event.snapshot.exists) {
-        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+        
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+           for (int i = 0; i < value.length; i++) {
+             if (value[i] != null) {
+               data[i.toString()] = value[i];
+             }
+           }
+        }
+
         data.forEach((key, value) {
-          final orderData = Map<String, dynamic>.from(value as Map);
-          orderData['orderId'] = key;
-          orders.add(PharmacyOrderModel.fromJson(orderData));
+          if (value == null) return;
+          if (value is Map) {
+             final orderData = Map<String, dynamic>.from(value);
+             orderData['orderId'] = key;
+             orders.add(PharmacyOrderModel.fromJson(orderData));
+          }
         });
       }
       orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));

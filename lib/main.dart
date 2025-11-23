@@ -214,6 +214,10 @@ class App extends StatelessWidget {
           final prescription = ModalRoute.of(context)!.settings.arguments;
           return ScreenPrescriptionPharmacy(prescription: prescription as dynamic);
         },
+        '/pharmacy/prescription-purchase': (context) {
+          final prescription = ModalRoute.of(context)!.settings.arguments;
+          return ScreenPrescriptionPharmacy(prescription: prescription as dynamic);
+        },
         '/pharmacy/order-history': (_) => const ScreenOrderHistory(),
 
         // ===== KNOWLEDGE & COMMUNITY =====
@@ -261,7 +265,20 @@ class App extends StatelessWidget {
         '/doctor/appointment-request': (_) => const ScreenAppointmentRequestDetail(),
         '/doctor/sos-queue': (_) => const ScreenSOSQueue(),
         '/doctor/sos-case': (_) => const ScreenSOSCaseDetail(),
+
         '/doctor/chat': (_) => const ScreenDoctorChat(),
+        '/doctor/create-prescription': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+          if (args == null) {
+             // Handle missing arguments (e.g., redirect or show error)
+             // For now, return a placeholder or redirect
+             return const Scaffold(body: Center(child: Text('Missing arguments')));
+          }
+          return ScreenCreatePrescription(
+            userId: args['userId'],
+            patientName: args['patientName'],
+          );
+        },
         '/doctor/chat-detail': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
           return ScreenDoctorChatDetail(
@@ -271,7 +288,6 @@ class App extends StatelessWidget {
           );
         },
         '/doctor/video-call': (_) => const ScreenDoctorVideoCall(),
-        '/doctor/create-prescription': (_) => const ScreenCreatePrescription(),
         '/doctor/reviews': (_) => const ScreenDoctorReviews(),
         '/doctor/settings': (_) => const ScreenDoctorSettings(),
       },

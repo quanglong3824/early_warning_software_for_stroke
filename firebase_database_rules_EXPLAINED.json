@@ -410,6 +410,14 @@
           }
         }
       },
+      "pharmacy_orders": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": [
+          "userId",
+          "prescriptionId"
+        ]
+      },
       "doctor_stats": {
         ".read": "auth != null",
         "$doctorId": {

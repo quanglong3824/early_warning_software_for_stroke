@@ -134,6 +134,28 @@ class PrescriptionMedicationModel {
   }
 
   double get totalPrice => price * quantity;
+
+  PrescriptionMedicationModel copyWith({
+    String? medicationId,
+    String? medicationName,
+    String? dosage,
+    String? frequency,
+    String? duration,
+    String? instructions,
+    double? price,
+    int? quantity,
+  }) {
+    return PrescriptionMedicationModel(
+      medicationId: medicationId ?? this.medicationId,
+      medicationName: medicationName ?? this.medicationName,
+      dosage: dosage ?? this.dosage,
+      frequency: frequency ?? this.frequency,
+      duration: duration ?? this.duration,
+      instructions: instructions ?? this.instructions,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 class PharmacyOrderModel {

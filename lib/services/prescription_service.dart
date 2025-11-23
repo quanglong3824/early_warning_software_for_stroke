@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_database/firebase_database.dart';
 import '../data/models/prescription_models.dart';
 import '../data/models/medication_models.dart';
+import 'enhanced_notification_service.dart';
 
 class PrescriptionService {
   static final PrescriptionService _instance = PrescriptionService._internal();
@@ -10,6 +11,7 @@ class PrescriptionService {
   PrescriptionService._internal();
 
   final DatabaseReference _db = FirebaseDatabase.instance.ref();
+  final EnhancedNotificationService _notificationService = EnhancedNotificationService();
 
   /// Generate unique prescription code (8 characters: letters + numbers)
   String generatePrescriptionCode() {
@@ -93,6 +95,19 @@ class PrescriptionService {
       // Also index by code for quick lookup
       await _db.child('prescription_codes').child(prescriptionCode).set(prescriptionId);
       
+      // Send notification to user
+      await _notificationService.createNotification(
+        userId: userId,
+        type: 'prescription',
+        title: 'Đơn thuốc mới',
+        message: 'Bác sĩ $doctorName vừa kê đơn thuốc mới cho bạn. Mã đơn: $prescriptionCode',
+        data: {
+          'prescriptionId': prescriptionId,
+          'prescriptionCode': prescriptionCode,
+          'doctorId': doctorId,
+        },
+      );
+      
       print('✅ Prescription created: $prescriptionCode');
       return prescriptionId;
     } catch (e) {
@@ -145,11 +160,26 @@ class PrescriptionService {
         .onValue
         .map((event) {
       final List<PrescriptionModel> prescriptions = [];
-      if (event.snapshot.exists) {
-        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+        
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+           for (int i = 0; i < value.length; i++) {
+             if (value[i] != null) {
+               data[i.toString()] = value[i];
+             }
+           }
+        }
+
         data.forEach((key, value) {
-          final prescriptionData = Map<String, dynamic>.from(value as Map);
-          prescriptions.add(PrescriptionModel.fromJson(prescriptionData));
+          if (value == null) return;
+          if (value is Map) {
+             final prescriptionData = Map<String, dynamic>.from(value);
+             prescriptions.add(PrescriptionModel.fromJson(prescriptionData));
+          }
         });
       }
       prescriptions.sort((a, b) => b.prescribedDate.compareTo(a.prescribedDate));

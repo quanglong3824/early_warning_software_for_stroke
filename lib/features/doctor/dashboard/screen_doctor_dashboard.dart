@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../../../data/providers/app_data_provider.dart';
 import '../../../widgets/doctor_drawer.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
 import '../../../mixins/account_status_check_mixin.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/appointment_service.dart';
+import '../../../data/models/appointment_model.dart';
+import 'dart:math';
 
 class ScreenDoctorDashboard extends StatefulWidget {
   const ScreenDoctorDashboard({super.key});
@@ -17,31 +21,34 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
     with AccountStatusCheckMixin {
   
   final _authService = AuthService();
+  final _appointmentService = AppointmentService();
   String? _doctorName;
+  String? _doctorId;
 
   @override
   void initState() {
     super.initState();
-    _loadDoctorName();
+    _loadDoctorInfo();
   }
 
-  Future<void> _loadDoctorName() async {
+  Future<void> _loadDoctorInfo() async {
     final name = await _authService.getUserName();
+    final id = await _authService.getUserId();
     if (mounted) {
-      setState(() => _doctorName = name);
+      setState(() {
+        _doctorName = name;
+        _doctorId = id;
+      });
     }
   }
   
   @override
   Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
-    const primary = Color(0xFF135BEC);
     const textPrimary = Color(0xFF111318);
-    const textMuted = Color(0xFF6B7280);
 
     final appData = Provider.of<AppDataProvider>(context);
-    final patients = appData.patients;
-    final alerts = appData.alerts;
+    final alerts = appData.alerts; // Keep alerts from provider for now (or make dynamic later)
 
     return PopScope(
       canPop: false,
@@ -123,7 +130,15 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
                   const SizedBox(height: 16),
                   Row(
                     children: [
-                      _buildInfoChip('${patients.length} Bệnh nhân', Icons.people),
+                      _doctorId == null 
+                        ? const SizedBox()
+                        : StreamBuilder<List<AppointmentModel>>(
+                            stream: _appointmentService.getDoctorAppointments(_doctorId!),
+                            builder: (context, snapshot) {
+                              final count = snapshot.data?.map((e) => e.userId).toSet().length ?? 0;
+                              return _buildInfoChip('$count Bệnh nhân', Icons.people);
+                            }
+                          ),
                       const SizedBox(width: 12),
                       _buildInfoChip('${alerts.where((a) => !a.isRead).length} Cảnh báo', Icons.warning_amber),
                     ],
@@ -155,12 +170,12 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
             ),
             const SizedBox(height: 24),
 
-            // Bệnh nhân cần chú ý
+            // Bệnh nhân gần đây (Dynamic)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Bệnh nhân cần chú ý',
+                  'Bệnh nhân gần đây',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textPrimary),
                 ),
                 TextButton(
@@ -170,16 +185,37 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
               ],
             ),
             const SizedBox(height: 12),
-            ...patients.where((p) => p.status == 'high_risk' || p.status == 'warning').map(
-              (patient) => _buildPatientCard(
-                context,
-                patient.name,
-                patient.status == 'high_risk' ? 'Nguy cơ cao' : 'Cảnh báo',
-                patient.status == 'high_risk' ? Colors.red : Colors.orange,
-                patient.mainValue,
-                patient.unit,
-              ),
-            ),
+            
+            _doctorId == null
+                ? const Center(child: CircularProgressIndicator())
+                : StreamBuilder<List<AppointmentModel>>(
+                    stream: _appointmentService.getDoctorAppointments(_doctorId!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      
+                      final appointments = snapshot.data ?? [];
+                      if (appointments.isEmpty) {
+                        return const Center(child: Text('Chưa có bệnh nhân nào'));
+                      }
+
+                      // Get unique patients
+                      final uniquePatientIds = <String>{};
+                      final uniquePatients = <AppointmentModel>[];
+                      for (var apt in appointments) {
+                        if (uniquePatientIds.add(apt.userId)) {
+                          uniquePatients.add(apt);
+                        }
+                        if (uniquePatients.length >= 5) break; // Limit to 5
+                      }
+
+                      return Column(
+                        children: uniquePatients.map((apt) => _PatientCardItem(userId: apt.userId)).toList(),
+                      );
+                    },
+                  ),
+            
             const SizedBox(height: 80),
           ],
         ),
@@ -249,66 +285,103 @@ Widget _buildStatCard(String title, String value, IconData icon, Color color) {
     );
 }
 
-Widget _buildPatientCard(
-    BuildContext context,
-    String name,
-    String status,
-    Color statusColor,
-    String value,
-    String unit,
-  ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: statusColor.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.person, color: statusColor),
+class _PatientCardItem extends StatelessWidget {
+  final String userId;
+
+  const _PatientCardItem({required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    final db = FirebaseDatabase.instance.ref();
+
+    return FutureBuilder<DataSnapshot>(
+      future: db.child('users').child(userId).get(),
+      builder: (context, snapshot) {
+        String name = 'Đang tải...';
+        String status = 'Ổn định'; // Default status
+        Color statusColor = Colors.green;
+
+        if (snapshot.hasData && snapshot.data!.exists && snapshot.data!.value != null) {
+          final dynamic value = snapshot.data!.value;
+          Map<dynamic, dynamic> data = {};
+          if (value is Map) {
+            data = value;
+          } else if (value is List) {
+             // Should not happen for a single user object, but safe to handle
+             // Actually for a single object, List is unlikely unless keys are 0,1...
+             // But if it's a List, we can't easily map it to user fields unless we know the schema.
+             // For 'users/userId', it should be a Map.
+             // If it's not a Map, we skip.
+          }
+          
+          if (value is Map) {
+             final userData = Map<String, dynamic>.from(value);
+             name = userData['name'] ?? 'Bệnh nhân';
+          }
+        }
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: statusColor.withOpacity(0.3)),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Row(
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: statusColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.person, color: statusColor),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        status,
-                        style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
+                    Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: statusColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            status,
+                            style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text('ID: ${userId.substring(0, min(8, userId.length))}...', style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    Text('$value $unit', style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
                   ],
                 ),
-              ],
-            ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  '/doctor/patient-profile',
+                  arguments: {
+                    'userId': userId,
+                    'patientName': name,
+                  },
+                ),
+              ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.arrow_forward_ios, size: 16),
-            onPressed: () => Navigator.pushNamed(context, '/doctor/patient-profile'),
-          ),
-        ],
-      ),
+        );
+      },
     );
+  }
 }
 

@@ -20,10 +20,24 @@ class AppointmentService {
         .onValue
         .asyncMap((event) async {
       final List<AppointmentModel> appointments = [];
-      if (event.snapshot.exists) {
-        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        // Handle if value is List (Firebase array behavior) or Map
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
         
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+           // Convert List to Map if needed, or iterate
+           for (int i = 0; i < value.length; i++) {
+             if (value[i] != null) {
+               data[i.toString()] = value[i];
+             }
+           }
+        }
+
         for (var entry in data.entries) {
+          if (entry.value == null) continue;
           final appointmentData = Map<String, dynamic>.from(entry.value as Map);
           
           // Fetch doctor name if not already present
@@ -65,6 +79,54 @@ class AppointmentService {
     final now = DateTime.now().millisecondsSinceEpoch;
     return getUserAppointments(userId).map((appointments) {
       return appointments.where((apt) => apt.appointmentTime <= now).toList();
+    });
+  }
+
+  /// Get all appointments for a doctor
+  Stream<List<AppointmentModel>> getDoctorAppointments(String doctorId) {
+    return _db
+        .child('appointments')
+        .orderByChild('doctorId')
+        .equalTo(doctorId)
+        .onValue
+        .asyncMap((event) async {
+      final List<AppointmentModel> appointments = [];
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+        
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+           for (int i = 0; i < value.length; i++) {
+             if (value[i] != null) {
+               data[i.toString()] = value[i];
+             }
+           }
+        }
+
+        for (var entry in data.entries) {
+          if (entry.value == null) continue;
+          final appointmentData = Map<String, dynamic>.from(entry.value as Map);
+          
+          // Fetch user name if not already present (for patient name)
+          final userId = appointmentData['userId'] as String;
+          try {
+             final userSnapshot = await _db.child('users').child(userId).get();
+             if (userSnapshot.exists) {
+               final userData = Map<String, dynamic>.from(userSnapshot.value as Map);
+               // Note: AppointmentModel might not support storing patientName directly.
+             }
+          } catch (e) {
+            print('Error fetching user name: $e');
+          }
+          
+          appointments.add(AppointmentModel.fromJson(appointmentData));
+        }
+      }
+      // Sort by appointmentTime descending
+      appointments.sort((a, b) => b.appointmentTime.compareTo(a.appointmentTime));
+      return appointments;
     });
   }
 
