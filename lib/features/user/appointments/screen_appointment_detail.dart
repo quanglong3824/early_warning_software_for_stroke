@@ -27,12 +27,12 @@ class _ScreenAppointmentDetailState extends State<ScreenAppointmentDetail> {
 
   String _formatDateTime(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return DateFormat('EEEE, dd/MM/yyyy - HH:mm', 'vi_VN').format(date);
+    return DateFormat('EEEE, dd/MM/yyyy - HH:mm').format(date);
   }
 
   String _formatDate(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return DateFormat('dd/MM/yyyy HH:mm', 'vi_VN').format(date);
+    return DateFormat('dd/MM/yyyy HH:mm').format(date);
   }
 
   Color _getStatusColor(String status) {

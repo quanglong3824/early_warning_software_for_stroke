@@ -380,6 +380,64 @@
             ".validate": "newData.val() === true"
           }
         }
+      },
+      "doctor_reviews": {
+        ".read": "auth != null",
+        ".indexOn": [
+          "createdAt",
+          "rating"
+        ],
+        "$doctorId": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          "$reviewId": {
+            ".validate": "newData.hasChildren(['userId', 'rating', 'createdAt'])",
+            "userId": {
+              ".validate": "newData.isString() && newData.val() === auth.uid"
+            },
+            "rating": {
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
+            },
+            "comment": {
+              ".validate": "!newData.exists() || newData.isString()"
+            },
+            "isAnonymous": {
+              ".validate": "!newData.exists() || newData.isBoolean()"
+            },
+            "createdAt": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+      },
+      "doctor_stats": {
+        ".read": "auth != null",
+        "$doctorId": {
+          ".read": "auth != null",
+          ".write": "auth != null && (auth.uid === $doctorId || root.child('users').child(auth.uid).child('role').val() === 'doctor' || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+          ".validate": "newData.hasChildren()",
+          "totalReviews": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "averageRating": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "totalPatients": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "totalAppointments": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "completedAppointments": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "totalPrescriptions": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          },
+          "updatedAt": {
+            ".validate": "!newData.exists() || newData.isNumber()"
+          }
+        }
       }
     }
   }

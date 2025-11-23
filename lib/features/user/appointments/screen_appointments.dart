@@ -27,12 +27,13 @@ class _ScreenAppointmentsState extends State<ScreenAppointments> {
 
   Future<void> _loadUser() async {
     final userId = await _authService.getUserId();
+    print('📍 Appointments Screen - User ID: $userId');
     setState(() => _userId = userId);
   }
 
   String _formatDateTime(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return DateFormat('EEEE, dd/MM/yyyy - HH:mm', 'vi_VN').format(date);
+    return DateFormat('EEEE, dd/MM/yyyy - HH:mm').format(date);
   }
 
   Color _getStatusColor(String status) {
@@ -212,15 +213,24 @@ class _ScreenAppointmentsState extends State<ScreenAppointments> {
                   ? _appointmentService.getUpcomingAppointments(_userId!)
                   : _appointmentService.getPastAppointments(_userId!),
               builder: (context, snapshot) {
+                print('📍 Appointments Stream - ConnectionState: ${snapshot.connectionState}');
+                print('📍 Appointments Stream - HasError: ${snapshot.hasError}');
+                print('📍 Appointments Stream - Data count: ${snapshot.data?.length ?? 0}');
+                
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.hasError) {
+                  print('❌ Appointments Error: ${snapshot.error}');
                   return Center(child: Text('Lỗi: ${snapshot.error}'));
                 }
 
                 final appointments = snapshot.data ?? [];
+                print('📍 Appointments loaded: ${appointments.length} items');
+                for (var apt in appointments) {
+                  print('  - ${apt.reason} at ${apt.location} (${apt.status})');
+                }
 
                 if (appointments.isEmpty) {
                   return Center(
@@ -262,7 +272,8 @@ class _ScreenAppointmentsState extends State<ScreenAppointments> {
                         iconBg: _getStatusBgColor(appointment.status),
                         iconColor: _getStatusColor(appointment.status),
                         title: appointment.reason,
-                        subtitle: appointment.location,
+                        subtitle: appointment.doctorName ?? 'Bác sĩ',
+                        location: appointment.location,
                         time: _formatDateTime(appointment.appointmentTime),
                         status: _getStatusText(appointment.status),
                         onTap: () async {
@@ -348,6 +359,7 @@ class _AppointmentCard extends StatelessWidget {
   final Color iconColor;
   final String title;
   final String subtitle;
+  final String location;
   final String time;
   final String status;
   final VoidCallback? onTap;
@@ -359,6 +371,7 @@ class _AppointmentCard extends StatelessWidget {
     required this.iconColor,
     required this.title,
     required this.subtitle,
+    required this.location,
     required this.time,
     required this.status,
     this.onTap,
@@ -407,6 +420,14 @@ class _AppointmentCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
+                    style: const TextStyle(
+                      color: Color(0xFF135BEC),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    location,
                     style: const TextStyle(
                       color: Color(0xFF6B7280),
                       fontSize: 13,

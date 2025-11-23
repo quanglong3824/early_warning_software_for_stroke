@@ -38,13 +38,13 @@ class DoctorModel {
       email: json['email'],
       phone: json['phone'],
       photoURL: json['photoURL'],
-      specialization: json['specialization'],
+      specialization: json['specialization'] ?? json['specialty'], // Support both fields
       hospital: json['hospital'],
       department: json['department'],
       licenseNumber: json['licenseNumber'],
       yearsOfExperience: json['yearsOfExperience'],
       bio: json['bio'],
-      isVerified: json['isVerified'] ?? false,
+      isVerified: json['isVerified'] ?? true, // Default true for existing doctors
       isAvailable: json['isAvailable'] ?? true,
       createdAt: json['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
     );

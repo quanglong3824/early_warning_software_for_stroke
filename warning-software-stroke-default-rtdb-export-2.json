@@ -36,6 +36,19 @@
       "status": "confirmed",
       "updatedAt": 1763392903492,
       "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "-OekrMmLKmjfrhw_7K5g": {
+      "appointmentId": "-OekrMmLKmjfrhw_7K5g",
+      "appointmentTime": 1763949600000,
+      "createdAt": 1763903899263,
+      "createdBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+      "doctorName": "Bùi Thế Hoàng",
+      "location": "Phòng khám",
+      "notes": "Đặt lịch khám qua ứng dụng",
+      "reason": "Khám trực tiếp",
+      "status": "pending",
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
     }
   },
   "conversations": {
@@ -43,10 +56,10 @@
       "conversationId": "-OeH4KEEFNyFyo19uDg8",
       "createdAt": 1763387463401,
       "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
-      "doctorUnreadCount": 0,
-      "lastMessage": "hi",
-      "lastMessageTime": 1763394055998,
-      "updatedAt": 1763394055998,
+      "doctorUnreadCount": 1,
+      "lastMessage": "Chào anh",
+      "lastMessageTime": 1763901669345,
+      "updatedAt": 1763901669345,
       "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
       "userUnreadCount": 0
     },
@@ -54,10 +67,10 @@
       "conversationId": "-OeH4N3-4E7fFw0dPT_7",
       "createdAt": 1763387474972,
       "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
-      "doctorUnreadCount": 0,
-      "lastMessage": "hi",
-      "lastMessageTime": 1763394134396,
-      "updatedAt": 1763394134396,
+      "doctorUnreadCount": 4,
+      "lastMessage": "Chào bác",
+      "lastMessageTime": 1763901660408,
+      "updatedAt": 1763901660408,
       "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
       "userUnreadCount": 0
     },
@@ -82,8 +95,29 @@
       }
     }
   },
+  "family_group_invitations": {
+    "-OekjNfcO6MS5eyQmuNg": {
+      "acceptedAt": 1763902120425,
+      "createdAt": 1763901803576,
+      "fromUserId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "fromUserName": "Long Quang",
+      "groupId": "-OeBxmwdeh-qo8x8Xeop",
+      "groupName": "hi",
+      "id": "-OekjNfcO6MS5eyQmuNg",
+      "status": "accepted",
+      "toUserId": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
+      "toUserName": "Quang Long"
+    }
+  },
   "family_group_members": {
     "-OeBxmwdeh-qo8x8Xeop": {
+      "0ltzpvxZXCUYSQUEgp44eqeaI1R2": {
+        "addedBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "joinedAt": 1763902118212,
+        "role": "member",
+        "userId": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
+        "userName": "Quang Long"
+      },
       "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
         "addedBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
         "joinedAt": 1763301603376,
@@ -99,9 +133,9 @@
       "creatorId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
       "description": "",
       "id": "-OeBxmwdeh-qo8x8Xeop",
-      "memberCount": 2,
+      "memberCount": 3,
       "name": "hi",
-      "updatedAt": 1763301604023
+      "updatedAt": 1763902118855
     }
   },
   "hospital_notifications": {
@@ -109,6 +143,13 @@
       "-OeH8BtgkkRUdV2FTjYZ": {
         "createdAt": "2025-11-17T21:08:01.163",
         "sosId": "-OeH8Big-PWl2UCKE166",
+        "type": "new_sos"
+      }
+    },
+    "hospital_default": {
+      "-Oekm-ASqhlpUg3sMkEP": {
+        "createdAt": "2025-11-23T19:54:49.525",
+        "sosId": "-Oekm-3Zxwk2Y9iFvnjX",
         "type": "new_sos"
       }
     }
@@ -191,6 +232,16 @@
         "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
         "senderRole": "doctor",
         "status": "read"
+      },
+      "-Oekirw8qVJIEWemiTr6": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763901669345,
+        "isRead": false,
+        "message": "Chào anh",
+        "messageId": "-Oekirw8qVJIEWemiTr6",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderName": "Long Quang",
+        "type": "text"
       }
     },
     "-OeH4N3-4E7fFw0dPT_7": {
@@ -270,6 +321,46 @@
         "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
         "senderRole": "doctor",
         "status": "read"
+      },
+      "-OekZ5ZDZe6P6Bs2N_7F": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "isRead": false,
+        "message": "Chào",
+        "messageId": "-OekZ5ZDZe6P6Bs2N_7F",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderName": "Long Quang",
+        "timestamp": 1763898845967,
+        "type": "text"
+      },
+      "-OekZ6yy2rK8IJfObsnu": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "isRead": false,
+        "message": "Chào",
+        "messageId": "-OekZ6yy2rK8IJfObsnu",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderName": "Long Quang",
+        "timestamp": 1763898851775,
+        "type": "text"
+      },
+      "-OekiDuA4KJDfuVcIjom": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "isRead": false,
+        "message": "Hii",
+        "messageId": "-OekiDuA4KJDfuVcIjom",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderName": "Long Quang",
+        "timestamp": 1763901503387,
+        "type": "text"
+      },
+      "-OekipkUoz5X_7zxAWsh": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763901660408,
+        "isRead": false,
+        "message": "Chào bác",
+        "messageId": "-OekipkUoz5X_7zxAWsh",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderName": "Long Quang",
+        "type": "text"
       }
     },
     "-OeLJxpBuLR0eEikaYQv": {
@@ -287,6 +378,31 @@
     }
   },
   "notifications": {
+    "0ltzpvxZXCUYSQUEgp44eqeaI1R2": {
+      "-OekjNizTKSkXYNZE-4c": {
+        "createdAt": 1763901803789,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop",
+          "invitationId": "-OekjNfcO6MS5eyQmuNg"
+        },
+        "id": "-OekjNizTKSkXYNZE-4c",
+        "isRead": false,
+        "message": "Long Quang mời bạn tham gia nhóm \"hi\"",
+        "title": "Lời mời vào nhóm gia đình",
+        "type": "group_invitation"
+      },
+      "-Oekk_iFYRWIx9sVVXid": {
+        "createdAt": 1763902119166,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekk_iFYRWIx9sVVXid",
+        "isRead": false,
+        "message": "Bạn đã được thêm vào nhóm gia đình",
+        "title": "Thêm vào nhóm gia đình",
+        "type": "added_to_group"
+      }
+    },
     "WlTJe1BMHmUH8fv3179dYlKt3n82": {
       "-OeH56MB8HvAu9EQ4HHs": {
         "body": "Long Quang: Hi",
@@ -434,6 +550,138 @@
         "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
         "title": "Tin nhắn mới",
         "type": "new_message"
+      },
+      "-Oekk_mwxBR_rW6Qyjp3": {
+        "createdAt": 1763902119438,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekk_mwxBR_rW6Qyjp3",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-Oekk_vJzaeL6aoBcmxA": {
+        "createdAt": 1763902119973,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekk_vJzaeL6aoBcmxA",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
+      },
+      "-Oekka-fVFhJwjR1uBgU": {
+        "createdAt": 1763902120311,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka-fVFhJwjR1uBgU",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-Oekka1T4entkYMODLLi": {
+        "createdAt": 1763902120422,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka1T4entkYMODLLi",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-Oekka4Dr5epBwOobH6X": {
+        "createdAt": 1763902120610,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka4Dr5epBwOobH6X",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-Oekka7WCwC6ScBQv5Xi": {
+        "createdAt": 1763902120817,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka7WCwC6ScBQv5Xi",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-Oekka7Zqqhm1CPJkRIL": {
+        "createdAt": 1763902120818,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka7Zqqhm1CPJkRIL",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
+      },
+      "-Oekka8ozfl4K74ez4AE": {
+        "createdAt": 1763902120893,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka8ozfl4K74ez4AE",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
+      },
+      "-Oekka8qQTS4lrfxk0sX": {
+        "createdAt": 1763902120896,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-Oekka8qQTS4lrfxk0sX",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm \"hi\"",
+        "title": "Lời mời được chấp nhận",
+        "type": "invitation_accepted"
+      },
+      "-OekkaCRjC4N4UNPlBwZ": {
+        "createdAt": 1763902121139,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-OekkaCRjC4N4UNPlBwZ",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
+      },
+      "-OekkaG5Htd5UryiRZwz": {
+        "createdAt": 1763902121364,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-OekkaG5Htd5UryiRZwz",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
+      },
+      "-OekkaGD1Io2igscUzFc": {
+        "createdAt": 1763902121373,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-OekkaGD1Io2igscUzFc",
+        "isRead": false,
+        "message": "Quang Long đã tham gia nhóm",
+        "title": "Thành viên mới",
+        "type": "group_update"
       }
     },
     "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
@@ -676,6 +924,23 @@
         "latitude": 11.001767586547905,
         "longitude": 106.87663238282948
       }
+    },
+    "-Oekm-3Zxwk2Y9iFvnjX": {
+      "acknowledgedAt": "2025-11-23T19:55:19.905",
+      "assignedHospitalId": "hospital_default",
+      "createdAt": "2025-11-23T19:54:49.085",
+      "id": "-Oekm-3Zxwk2Y9iFvnjX",
+      "notes": "Yêu cầu cấp cứu khẩn cấp",
+      "patientId": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
+      "patientName": "Quang Long",
+      "status": "acknowledged",
+      "updatedAt": "2025-11-23T19:55:19.905",
+      "userId": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
+      "userLocation": {
+        "address": "Lỗi lấy địa chỉ",
+        "latitude": 10.957468027580614,
+        "longitude": 106.84479331090175
+      }
     }
   },
   "user_conversations": {
@@ -700,6 +965,13 @@
     }
   },
   "user_family_groups": {
+    "0ltzpvxZXCUYSQUEgp44eqeaI1R2": {
+      "-OeBxmwdeh-qo8x8Xeop": {
+        "groupId": "-OeBxmwdeh-qo8x8Xeop",
+        "joinedAt": 1763902118430,
+        "role": "member"
+      }
+    },
     "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
       "-OeBxmwdeh-qo8x8Xeop": {
         "groupId": "-OeBxmwdeh-qo8x8Xeop",
@@ -728,15 +1000,29 @@
   },
   "users": {
     "0ltzpvxZXCUYSQUEgp44eqeaI1R2": {
+      "address": "Biên Hoà",
       "createdAt": 1763888782244,
+      "dateOfBirth": 1093798800000,
       "email": "15.lequanglong@gmail.com",
-      "lastLogin": 1763888843852,
+      "gender": "male",
+      "lastLogin": 1763902100630,
       "loginMethod": "google",
-      "name": "15 Lê Quang Long",
+      "name": "Quang Long",
+      "phone": "0969875278",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKye63XJrM6P_TKQJrW8bMsQAcI4hfnQhOEqX9Jt3kH-0J2zg=s96-c",
       "role": "user",
       "uid": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
-      "updatedAt": 1763888843852
+      "updatedAt": 1763902100630
+    },
+    "1t1yEueoEWRzocHlq0dBXY58CBa2": {
+      "createdAt": 1763900969909,
+      "email": "longdev.08@gmail.com",
+      "loginMethod": "google",
+      "name": "Long Quang",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJQsNS68y6f20vdimP4mRmGe3U-tMausEPGmo6q43KETsFjB9ju=s96-c",
+      "role": "user",
+      "uid": "1t1yEueoEWRzocHlq0dBXY58CBa2",
+      "updatedAt": 1763900969909
     },
     "3xaPK67aBdOUGIyf4Sjm73JsCN62": {
       "blockedAt": 1763299794875,
@@ -765,6 +1051,7 @@
     "KEh1ruwr3dQ5aNrrmIWzIFCcKTt1": {
       "createdAt": 1763549204526,
       "email": "long.lequang308@gmail.com",
+      "lastLogin": 1763900951145,
       "loginMethod": "google",
       "name": "Long Quang",
       "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKOkiVeZmvgg6JT_uXnZk_IxejyzgK0E1oQfCWN9xa4391JemNp=s96-c",
@@ -777,7 +1064,7 @@
       },
       "role": "user",
       "uid": "KEh1ruwr3dQ5aNrrmIWzIFCcKTt1",
-      "updatedAt": 1763549204526
+      "updatedAt": 1763900951145
     },
     "WlTJe1BMHmUH8fv3179dYlKt3n82": {
       "createdAt": 1763300271553,
@@ -801,7 +1088,7 @@
       "dateOfBirth": 1093798800000,
       "email": "quanglong.3824@gmail.com",
       "gender": "male",
-      "lastLogin": 1763397837287,
+      "lastLogin": 1763904269105,
       "loginMethod": "google",
       "name": "Long Quang",
       "phone": "0987654321",
@@ -840,7 +1127,7 @@
       },
       "role": "user",
       "uid": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
-      "updatedAt": 1763397837287
+      "updatedAt": 1763904269105
     },
     "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
       "createdAt": 1763384066375,

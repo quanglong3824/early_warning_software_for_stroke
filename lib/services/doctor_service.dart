@@ -11,13 +11,20 @@ class DoctorService {
 
   /// Get all doctors
   Stream<List<DoctorModel>> getAllDoctors() {
-    return _db.child('doctors').onValue.map((event) {
+    return _db.child('users').onValue.map((event) {
       final List<DoctorModel> doctors = [];
       if (event.snapshot.exists) {
         final data = Map<String, dynamic>.from(event.snapshot.value as Map);
         data.forEach((key, value) {
-          final doctorData = Map<String, dynamic>.from(value as Map);
-          doctors.add(DoctorModel.fromJson(doctorData));
+          final userData = Map<String, dynamic>.from(value as Map);
+          // Only include users with role='doctor'
+          if (userData['role'] == 'doctor') {
+            try {
+              doctors.add(DoctorModel.fromJson(userData));
+            } catch (e) {
+              print('Error parsing doctor $key: $e');
+            }
+          }
         });
       }
       return doctors;
@@ -41,10 +48,13 @@ class DoctorService {
   /// Get doctor by ID
   Future<DoctorModel?> getDoctor(String doctorId) async {
     try {
-      final snapshot = await _db.child('doctors').child(doctorId).get();
+      final snapshot = await _db.child('users').child(doctorId).get();
       if (snapshot.exists) {
         final data = Map<String, dynamic>.from(snapshot.value as Map);
-        return DoctorModel.fromJson(data);
+        // Verify it's a doctor
+        if (data['role'] == 'doctor') {
+          return DoctorModel.fromJson(data);
+        }
       }
       return null;
     } catch (e) {
@@ -159,21 +169,28 @@ class DoctorService {
   /// Search doctors by name or specialization
   Future<List<DoctorModel>> searchDoctors(String query) async {
     try {
-      final snapshot = await _db.child('doctors').get();
+      final snapshot = await _db.child('users').get();
       if (!snapshot.exists) return [];
 
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       final doctors = <DoctorModel>[];
       
       data.forEach((key, value) {
-        final doctorData = Map<String, dynamic>.from(value as Map);
-        final doctor = DoctorModel.fromJson(doctorData);
-        
-        final lowerQuery = query.toLowerCase();
-        if (doctor.name.toLowerCase().contains(lowerQuery) ||
-            (doctor.specialization?.toLowerCase().contains(lowerQuery) ?? false) ||
-            (doctor.hospital?.toLowerCase().contains(lowerQuery) ?? false)) {
-          doctors.add(doctor);
+        final userData = Map<String, dynamic>.from(value as Map);
+        // Only include doctors
+        if (userData['role'] == 'doctor') {
+          try {
+            final doctor = DoctorModel.fromJson(userData);
+            
+            final lowerQuery = query.toLowerCase();
+            if (doctor.name.toLowerCase().contains(lowerQuery) ||
+                (doctor.specialization?.toLowerCase().contains(lowerQuery) ?? false) ||
+                (doctor.hospital?.toLowerCase().contains(lowerQuery) ?? false)) {
+              doctors.add(doctor);
+            }
+          } catch (e) {
+            print('Error parsing doctor $key: $e');
+          }
         }
       });
 

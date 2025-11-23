@@ -18,14 +18,33 @@ class AppointmentService {
         .orderByChild('userId')
         .equalTo(userId)
         .onValue
-        .map((event) {
+        .asyncMap((event) async {
       final List<AppointmentModel> appointments = [];
       if (event.snapshot.exists) {
         final data = Map<String, dynamic>.from(event.snapshot.value as Map);
-        data.forEach((key, value) {
-          final appointmentData = Map<String, dynamic>.from(value as Map);
+        
+        for (var entry in data.entries) {
+          final appointmentData = Map<String, dynamic>.from(entry.value as Map);
+          
+          // Fetch doctor name if not already present
+          if (appointmentData['doctorName'] == null) {
+            final doctorId = appointmentData['doctorId'] as String?;
+            if (doctorId != null) {
+              try {
+                final doctorSnapshot = await _db.child('users').child(doctorId).get();
+                if (doctorSnapshot.exists) {
+                  final doctorData = Map<String, dynamic>.from(doctorSnapshot.value as Map);
+                  appointmentData['doctorName'] = doctorData['name'] as String? ?? 'Bác sĩ';
+                }
+              } catch (e) {
+                print('Error fetching doctor name: $e');
+                appointmentData['doctorName'] = 'Bác sĩ';
+              }
+            }
+          }
+          
           appointments.add(AppointmentModel.fromJson(appointmentData));
-        });
+        }
       }
       // Sort by appointmentTime descending (newest first)
       appointments.sort((a, b) => b.appointmentTime.compareTo(a.appointmentTime));
