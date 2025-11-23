@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/prescription_service.dart';
 import '../../../services/notification_service.dart';
+import '../../../data/models/prescription_models.dart';
 
 class ScreenRemindersList extends StatefulWidget {
   const ScreenRemindersList({super.key});
@@ -12,11 +13,9 @@ class ScreenRemindersList extends StatefulWidget {
 
 class _ScreenRemindersListState extends State<ScreenRemindersList> {
   final _authService = AuthService();
+  final _reminderService = ReminderService();
   final _notificationService = NotificationService();
-  final _database = FirebaseDatabase.instance.ref();
   
-  List<Map<String, dynamic>> _reminders = [];
-  bool _isLoading = true;
   bool _hasPermission = false;
 
   @override
@@ -28,24 +27,18 @@ class _ScreenRemindersListState extends State<ScreenRemindersList> {
   Future<void> _initialize() async {
     await _notificationService.initialize();
     await _checkPermission();
-    await _loadReminders();
   }
 
   Future<void> _checkPermission() async {
     final hasPermission = await _notificationService.hasPermission();
-    setState(() {
-      _hasPermission = hasPermission;
-    });
+    if (mounted) setState(() => _hasPermission = hasPermission);
   }
 
   Future<void> _requestPermission() async {
     final granted = await _notificationService.requestPermission();
-    setState(() {
-      _hasPermission = granted;
-    });
+    if (mounted) setState(() => _hasPermission = granted);
     
-    if (!granted) {
-      if (!mounted) return;
+    if (!granted && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Vui lòng cấp quyền thông báo trong cài đặt'),
@@ -55,99 +48,31 @@ class _ScreenRemindersListState extends State<ScreenRemindersList> {
     }
   }
 
-  Future<void> _loadReminders() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final userId = await _authService.getUserId();
-      if (userId == null) return;
-
-      final snapshot = await _database
-          .child('reminders')
-          .child(userId)
-          .get();
-
-      if (snapshot.exists) {
-        final data = Map<String, dynamic>.from(snapshot.value as Map);
-        final reminders = <Map<String, dynamic>>[];
-        
-        data.forEach((key, value) {
-          final reminder = Map<String, dynamic>.from(value as Map);
-          reminder['id'] = key;
-          reminders.add(reminder);
-        });
-
-        // Sắp xếp theo thời gian trong code
-        reminders.sort((a, b) {
-          final timeA = a['time'] as String? ?? '00:00';
-          final timeB = b['time'] as String? ?? '00:00';
-          return timeA.compareTo(timeB);
-        });
-
-        setState(() {
-          _reminders = reminders;
-        });
-      } else {
-        setState(() {
-          _reminders = [];
-        });
-      }
-    } catch (e) {
-      print('Error loading reminders: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _toggleReminder(String reminderId, bool currentStatus) async {
-    try {
-      final userId = await _authService.getUserId();
-      if (userId == null) return;
-
-      final newStatus = !currentStatus;
-      
-      await _database
-          .child('reminders')
-          .child(userId)
-          .child(reminderId)
-          .update({'isActive': newStatus});
-
-      // Cập nhật notification
-      final reminder = _reminders.firstWhere((r) => r['id'] == reminderId);
-      final notificationId = reminderId.hashCode;
-
-      if (newStatus) {
-        // Bật thông báo
-        final timeParts = (reminder['time'] as String).split(':');
+  Future<void> _toggleReminder(ReminderModel reminder, bool value) async {
+    await _reminderService.toggleReminder(reminder.reminderId, value);
+    
+    if (value) {
+      // Re-schedule notification
+      // Note: This logic needs to be robust. For now, simple re-schedule.
+      // In a real app, we might need to handle multiple times.
+      // Assuming 'times' list has "HH:mm" strings.
+      if (reminder.times.isNotEmpty) {
+        final timeParts = reminder.times[0].split(':');
         final hour = int.parse(timeParts[0]);
         final minute = int.parse(timeParts[1]);
-
+        
         await _notificationService.scheduleDailyNotification(
-          id: notificationId,
-          title: reminder['title'] ?? 'Nhắc nhở',
-          body: reminder['note'] ?? '',
+          id: reminder.reminderId.hashCode,
+          title: reminder.medicationName,
+          body: 'Đã đến giờ uống thuốc: ${reminder.medicationName}',
           hour: hour,
           minute: minute,
-          payload: reminderId,
+          payload: reminder.reminderId,
         );
-      } else {
-        // Tắt thông báo
-        await _notificationService.cancelNotification(notificationId);
       }
-
-      await _loadReminders();
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Lỗi: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    } else {
+      // Cancel notification
+      await _notificationService.cancelNotification(reminder.reminderId.hashCode);
     }
   }
 
@@ -155,8 +80,8 @@ class _ScreenRemindersListState extends State<ScreenRemindersList> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Xác nhận xóa'),
-        content: const Text('Bạn có chắc muốn xóa nhắc nhở này?'),
+        title: const Text('Xóa nhắc nhở?'),
+        content: const Text('Bạn có chắc chắn muốn xóa nhắc nhở này không?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -170,39 +95,9 @@ class _ScreenRemindersListState extends State<ScreenRemindersList> {
       ),
     );
 
-    if (confirm != true) return;
-
-    try {
-      final userId = await _authService.getUserId();
-      if (userId == null) return;
-
-      await _database
-          .child('reminders')
-          .child(userId)
-          .child(reminderId)
-          .remove();
-
-      // Hủy notification
-      final notificationId = reminderId.hashCode;
-      await _notificationService.cancelNotification(notificationId);
-
-      await _loadReminders();
-
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Đã xóa nhắc nhở'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Lỗi: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (confirm == true) {
+      await _reminderService.deleteReminder(reminderId);
+      await _notificationService.cancelNotification(reminderId.hashCode);
     }
   }
 
@@ -210,171 +105,154 @@ class _ScreenRemindersListState extends State<ScreenRemindersList> {
   Widget build(BuildContext context) {
     const bgLight = Color(0xFFF6F6F8);
     const primary = Color(0xFF135BEC);
-    const textPrimary = Color(0xFF111318);
-    const textSecondary = Color(0xFF616F89);
 
     return Scaffold(
       backgroundColor: bgLight,
       appBar: AppBar(
-        title: const Text('Nhắc nhở uống thuốc'),
+        title: const Text('Nhắc nhở uống thuốc', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0.5,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () async {
-              final result = await Navigator.of(context).pushNamed('/add-reminder');
-              if (result == true) {
-                _loadReminders();
-              }
-            },
-          ),
+          if (!_hasPermission)
+            IconButton(
+              icon: const Icon(Icons.notifications_off, color: Colors.orange),
+              onPressed: _requestPermission,
+              tooltip: 'Bật thông báo',
+            ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                if (!_hasPermission)
-                  Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.orange.withOpacity(0.3)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.notifications_off, color: Colors.orange),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Chưa cấp quyền thông báo',
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Cấp quyền để nhận nhắc nhở đúng giờ',
-                                style: TextStyle(color: Colors.orange, fontSize: 12),
-                              ),
-                            ],
-                          ),
+      body: FutureBuilder<String?>(
+        future: _authService.getUserId(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          final userId = snapshot.data!;
+
+          return StreamBuilder<List<ReminderModel>>(
+            stream: _reminderService.getUserReminders(userId),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Lỗi: ${snapshot.error}'));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final reminders = snapshot.data ?? [];
+
+              if (reminders.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.alarm_off, size: 64, color: Colors.grey[400]),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Chưa có nhắc nhở nào',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () => Navigator.pushNamed(context, '/add-reminder'),
+                        icon: const Icon(Icons.add),
+                        label: const Text('Thêm nhắc nhở'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        TextButton(
-                          onPressed: _requestPermission,
-                          child: const Text('Cấp quyền'),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                Expanded(
-                  child: _reminders.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: reminders.length,
+                itemBuilder: (context, index) {
+                  final reminder = reminders[index];
+                  final time = reminder.times.isNotEmpty ? reminder.times[0] : '??:??';
+                  
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 2,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      leading: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: reminder.isActive ? primary.withOpacity(0.1) : Colors.grey[100],
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.medication,
+                          color: reminder.isActive ? primary : Colors.grey,
+                        ),
+                      ),
+                      title: Text(
+                        reminder.medicationName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: reminder.isActive ? Colors.black : Colors.grey,
+                          decoration: reminder.isActive ? null : TextDecoration.lineThrough,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          Row(
                             children: [
-                              Icon(Icons.alarm_off, size: 64, color: Colors.grey.shade400),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Chưa có nhắc nhở nào',
-                                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                              ),
-                              const SizedBox(height: 8),
-                              TextButton.icon(
-                                onPressed: () async {
-                                  final result = await Navigator.of(context).pushNamed('/add-reminder');
-                                  if (result == true) {
-                                    _loadReminders();
-                                  }
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text('Thêm nhắc nhở'),
-                              ),
+                              Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
+                              const SizedBox(width: 4),
+                              Text(time, style: TextStyle(color: Colors.grey[600])),
+                              const SizedBox(width: 12),
+                              if (reminder.dosage.isNotEmpty) ...[
+                                Icon(Icons.medical_services_outlined, size: 14, color: Colors.grey[600]),
+                                const SizedBox(width: 4),
+                                Text(reminder.dosage, style: TextStyle(color: Colors.grey[600])),
+                              ],
                             ],
                           ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: _reminders.length,
-                          itemBuilder: (context, index) {
-                            final reminder = _reminders[index];
-                            final isActive = reminder['isActive'] ?? false;
-                            
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.medication,
-                                  color: isActive ? primary : Colors.grey,
-                                  size: 32,
-                                ),
-                                title: Text(
-                                  reminder['title'] ?? 'Nhắc nhở',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      reminder['note'] ?? '',
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          reminder['time'] ?? '',
-                                          style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Switch(
-                                      value: isActive,
-                                      activeColor: primary,
-                                      onChanged: (value) {
-                                        _toggleReminder(reminder['id'], isActive);
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit, color: primary),
-                                      onPressed: () async {
-                                        final result = await Navigator.of(context).pushNamed(
-                                          '/edit-reminder',
-                                          arguments: reminder,
-                                        );
-                                        if (result == true) {
-                                          _loadReminders();
-                                        }
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () => _deleteReminder(reminder['id']),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ],
-            ),
+                        ],
+                      ),
+                      trailing: Switch(
+                        value: reminder.isActive,
+                        onChanged: (val) => _toggleReminder(reminder, val),
+                        activeColor: primary,
+                      ),
+                      onTap: () {
+                        // Navigate to edit (converting model to map for compatibility if needed, or update Edit screen)
+                        // For now, let's update Edit screen to accept ReminderModel or Map
+                        // Or just pass arguments as Map for simplicity with existing route
+                        Navigator.pushNamed(
+                          context,
+                          '/edit-reminder',
+                          arguments: reminder.toJson(),
+                        );
+                      },
+                      onLongPress: () => _deleteReminder(reminder.reminderId),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/add-reminder'),
+        backgroundColor: primary,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }

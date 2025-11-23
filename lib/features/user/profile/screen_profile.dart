@@ -1,59 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import '../../../data/providers/app_data_provider.dart';
 import '../../../widgets/app_bottom_nav.dart';
 import '../../../services/auth_service.dart';
 
-class ScreenProfile extends StatefulWidget {
+class ScreenProfile extends StatelessWidget {
   const ScreenProfile({super.key});
-
-  @override
-  State<ScreenProfile> createState() => _ScreenProfileState();
-}
-
-class _ScreenProfileState extends State<ScreenProfile> {
-  final _authService = AuthService();
-  String _userName = 'User';
-  String? _userEmail;
-  String? _userPhone;
-  String? _userAddress;
-  String? _userGender;
-  String? _userDateOfBirth;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    try {
-      final userId = await _authService.getUserId();
-      if (userId == null) return;
-
-      final database = FirebaseDatabase.instance.ref();
-      final snapshot = await database.child('users').child(userId).get();
-
-      if (snapshot.exists) {
-        final userData = Map<String, dynamic>.from(snapshot.value as Map);
-        setState(() {
-          _userName = userData['name'] ?? 'User';
-          _userEmail = userData['email'];
-          _userPhone = userData['phone'];
-          _userAddress = userData['address'];
-          _userGender = userData['gender'];
-          
-          if (userData['dateOfBirth'] != null) {
-            final date = DateTime.fromMillisecondsSinceEpoch(userData['dateOfBirth'] as int);
-            _userDateOfBirth = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
-          }
-        });
-      }
-    } catch (e) {
-      print('Error loading user info: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +17,20 @@ class _ScreenProfileState extends State<ScreenProfile> {
 
     final appData = Provider.of<AppDataProvider>(context);
     final currentUser = appData.currentUser;
+
+    // Helper to format date
+    String formatDate(DateTime? date) {
+      if (date == null) return 'Chưa cập nhật';
+      return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    }
+
+    // Helper to format gender
+    String formatGender(String? gender) {
+      if (gender == 'male') return 'Nam';
+      if (gender == 'female') return 'Nữ';
+      if (gender == 'other') return 'Khác';
+      return 'Chưa cập nhật';
+    }
 
     return Scaffold(
       backgroundColor: bgLight,
@@ -83,7 +50,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                 CircleAvatar(
                   radius: 56,
                   backgroundImage: currentUser?.avatarUrl != null
-                      ? NetworkImage(currentUser!.avatarUrl)
+                      ? NetworkImage(currentUser!.avatarUrl!)
                       : null,
                   child: currentUser?.avatarUrl == null
                       ? const Icon(Icons.person, size: 56)
@@ -91,31 +58,31 @@ class _ScreenProfileState extends State<ScreenProfile> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  _userName,
+                  currentUser?.name ?? 'User',
                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textPrimary),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _userEmail ?? '',
+                  currentUser?.email ?? '',
                   style: const TextStyle(fontSize: 16, color: textMuted),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            _InfoRow(icon: Icons.person, label: 'Họ và tên', value: _userName),
+            _InfoRow(icon: Icons.person, label: 'Họ và tên', value: currentUser?.name ?? 'Chưa cập nhật'),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.mail, label: 'Email', value: _userEmail ?? 'Chưa cập nhật'),
+            _InfoRow(icon: Icons.mail, label: 'Email', value: currentUser?.email ?? 'Chưa cập nhật'),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.phone, label: 'Số điện thoại', value: _userPhone ?? 'Chưa cập nhật'),
+            _InfoRow(icon: Icons.phone, label: 'Số điện thoại', value: currentUser?.phone ?? 'Chưa cập nhật'),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.location_on, label: 'Địa chỉ', value: _userAddress ?? 'Chưa cập nhật'),
+            _InfoRow(icon: Icons.location_on, label: 'Địa chỉ', value: currentUser?.address ?? 'Chưa cập nhật'),
             const SizedBox(height: 8),
-            _InfoRow(icon: Icons.cake, label: 'Ngày sinh', value: _userDateOfBirth ?? 'Chưa cập nhật'),
+            _InfoRow(icon: Icons.cake, label: 'Ngày sinh', value: formatDate(currentUser?.dateOfBirth)),
             const SizedBox(height: 8),
             _InfoRow(
               icon: Icons.wc,
               label: 'Giới tính',
-              value: _userGender == 'male' ? 'Nam' : _userGender == 'female' ? 'Nữ' : _userGender == 'other' ? 'Khác' : 'Chưa cập nhật',
+              value: formatGender(currentUser?.gender),
             ),
             const SizedBox(height: 24),
             SizedBox(
@@ -127,11 +94,8 @@ class _ScreenProfileState extends State<ScreenProfile> {
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                onPressed: () async {
-                  final result = await Navigator.of(context).pushNamed('/edit-profile');
-                  if (result == true) {
-                    _loadUserInfo();
-                  }
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/edit-profile');
                 },
                 child: const Text('Chỉnh sửa thông tin', style: TextStyle(fontWeight: FontWeight.w700)),
               ),
@@ -182,7 +146,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
             ),
             const SizedBox(height: 24),
             TextButton.icon(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+              onPressed: () async {
+                await AuthService().logout();
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, '/login');
+                }
+              },
               icon: const Icon(Icons.logout, color: Colors.red),
               label: const Text('Đăng xuất', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700)),
             ),

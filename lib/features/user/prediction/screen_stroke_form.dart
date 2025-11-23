@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../services/stroke_prediction_service.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/ai_stroke_prediction_service.dart';
 
 class ScreenStrokeForm extends StatefulWidget {
   const ScreenStrokeForm({super.key});
@@ -14,6 +15,7 @@ class _ScreenStrokeFormState extends State<ScreenStrokeForm> {
   final _formKey = GlobalKey<FormState>();
   final _predictionService = StrokePredictionService();
   final _authService = AuthService();
+  final _aiService = AIStrokePredictionService();
 
   // Controllers
   final _ageController = TextEditingController();
@@ -32,6 +34,22 @@ class _ScreenStrokeFormState extends State<ScreenStrokeForm> {
   String _workType = 'moderate';
   bool _isLoading = false;
   double? _bmi;
+  bool? _apiConnected; // null = checking, true = connected, false = disconnected
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAPIConnection();
+  }
+
+  Future<void> _checkAPIConnection() async {
+    final isConnected = await _aiService.checkHealth();
+    if (mounted) {
+      setState(() {
+        _apiConnected = isConnected;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -84,7 +102,7 @@ class _ScreenStrokeFormState extends State<ScreenStrokeForm> {
         'workType': _workType,
       };
 
-      final predictionResult = _predictionService.predictStrokeRisk(
+      final predictionResult = await _predictionService.predictStrokeRisk(
         age: inputData['age'] as int,
         gender: inputData['gender'] as String,
         heightCm: inputData['heightCm'] as double,
@@ -178,6 +196,44 @@ class _ScreenStrokeFormState extends State<ScreenStrokeForm> {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            // API Status Banner
+            if (_apiConnected != null)
+              Container(
+                decoration: BoxDecoration(
+                  color: _apiConnected! 
+                      ? Colors.green.withOpacity(0.1) 
+                      : Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _apiConnected! ? Colors.green : Colors.orange,
+                    width: 1,
+                  ),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Icon(
+                      _apiConnected! ? Icons.check_circle : Icons.info,
+                      color: _apiConnected! ? Colors.green : Colors.orange,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        _apiConnected!
+                            ? '✓ API đã được kết nối thành công! Sử dụng AI prediction'
+                            : 'Sử dụng dự đoán rule-based (API không khả dụng)',
+                        style: TextStyle(
+                          color: _apiConnected! ? Colors.green.shade800 : Colors.orange.shade800,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             const SizedBox(height: 16),
             const _SectionTitle('Thông tin cá nhân'),
             TextFormField(

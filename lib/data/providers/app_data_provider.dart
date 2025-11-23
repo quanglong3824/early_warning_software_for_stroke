@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/user_model.dart';
@@ -42,54 +45,68 @@ class AppDataProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  // Load data from JSON file (simulating Firebase)
+  // Initialize Provider
   Future<void> loadData() async {
     _isLoading = true;
     notifyListeners();
 
     try {
+      // Listen to auth state
+      FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+        if (user != null) {
+          await _fetchUserData(user.uid);
+        } else {
+          _currentUser = null;
+          notifyListeners();
+        }
+      });
+      
+      // Initial check
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _fetchUserData(user.uid);
+      }
+
+      // Load other data (to be replaced with real data later)
+      // For now we still load mock data for other features to avoid breaking the app completely
+      // while we transition
       final String jsonString = await rootBundle.loadString('assets/data/app_data.json');
       final Map<String, dynamic> jsonData = json.decode(jsonString);
 
-      // Load current user
-      if (jsonData['currentUser'] != null) {
-        _currentUser = UserModel.fromJson(jsonData['currentUser']);
-      }
-
-      // Load patients
+      // Load patients (Mock)
       if (jsonData['patients'] != null) {
         _patients = (jsonData['patients'] as List)
             .map((p) => PatientModel.fromJson(p))
             .toList();
       }
 
-      // Load alerts
+      // Load alerts (Mock)
       if (jsonData['alerts'] != null) {
         _alerts = (jsonData['alerts'] as List)
             .map((a) => AlertModel.fromJson(a))
             .toList();
       }
 
-      // Load dashboard stats
+      // Load dashboard stats (Mock)
       if (jsonData['dashboardStats'] != null) {
         _dashboardStats = Map<String, int>.from(jsonData['dashboardStats']);
       }
 
-      // Load forum posts
+      // Load forum posts (Mock)
       if (jsonData['forumPosts'] != null) {
         _forumPosts = (jsonData['forumPosts'] as List)
             .map((p) => ForumPostModel.fromJson(p))
             .toList();
       }
 
-      // Load knowledge articles
+      // Load knowledge articles (Mock)
       if (jsonData['knowledgeArticles'] != null) {
         _knowledgeArticles = (jsonData['knowledgeArticles'] as List)
             .map((a) => KnowledgeArticleModel.fromJson(a))
             .toList();
       }
 
-      // Load prediction results
+      // Load prediction results (Mock)
       if (jsonData['predictionResults'] != null) {
         _predictionResults = (jsonData['predictionResults'] as List)
             .map((r) => PredictionResultModel.fromJson(r))
@@ -101,6 +118,30 @@ class AppDataProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  StreamSubscription<DatabaseEvent>? _userSubscription;
+
+  // Fetch user data from Firebase
+  Future<void> _fetchUserData(String uid) async {
+    try {
+      _userSubscription?.cancel();
+      _userSubscription = FirebaseDatabase.instance.ref('users/$uid').onValue.listen((event) {
+        if (event.snapshot.exists) {
+          final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+          _currentUser = UserModel.fromJson(data);
+          notifyListeners();
+        }
+      });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _userSubscription?.cancel();
+    super.dispose();
   }
 
   // Get patient by ID

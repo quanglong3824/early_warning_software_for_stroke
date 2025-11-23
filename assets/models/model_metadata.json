@@ -1,0 +1,26 @@
+{
+    "model_type": "RandomForestClassifier",
+    "input_shape": [
+        1,
+        11
+    ],
+    "output_shape": [
+        1,
+        2
+    ],
+    "feature_names": [
+        "age",
+        "gender",
+        "bmi",
+        "systolicBP",
+        "diastolicBP",
+        "cholesterol",
+        "glucose",
+        "hypertension",
+        "heartDisease",
+        "smoking",
+        "workType"
+    ],
+    "preprocessing": "StandardScaler",
+    "description": "Stroke prediction model metadata. This is a placeholder until the actual model is converted."
+}

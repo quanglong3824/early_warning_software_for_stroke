@@ -1,13 +1,28 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
+import 'ai_stroke_prediction_service.dart';
 
 /// Service xử lý dự đoán nguy cơ đột quỵ
 class StrokePredictionService {
   static final StrokePredictionService _instance = StrokePredictionService._internal();
   factory StrokePredictionService() => _instance;
-  StrokePredictionService._internal();
+  StrokePredictionService._internal() {
+    _checkAPIHealth();
+  }
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  final AIStrokePredictionService _aiService = AIStrokePredictionService();
+  bool _useAI = false;
+
+  /// Check if Flask API is available
+  Future<void> _checkAPIHealth() async {
+    _useAI = await _aiService.checkHealth();
+    if (_useAI) {
+      print('✅ Flask API is available - using AI predictions');
+    } else {
+      print('⚠️ Flask API unavailable - using rule-based predictions');
+    }
+  }
 
   /// Tính toán BMI
   double calculateBMI(double heightCm, double weightKg) {
@@ -15,8 +30,8 @@ class StrokePredictionService {
     return weightKg / (heightM * heightM);
   }
 
-  /// Dự đoán nguy cơ đột quỵ
-  Map<String, dynamic> predictStrokeRisk({
+  /// Dự đoán nguy cơ đột quỵ (AI hoặc rule-based)
+  Future<Map<String, dynamic>> predictStrokeRisk({
     required int age,
     required String gender, // 'male' hoặc 'female'
     required double heightCm,
@@ -29,6 +44,66 @@ class StrokePredictionService {
     required bool heartDisease,
     required bool smoking,
     required String workType, // 'sedentary', 'moderate', 'active'
+  }) async {
+    // Try AI prediction first
+    if (_useAI) {
+      try {
+        final aiResult = await _aiService.predictStrokeRisk(
+          age: age,
+          gender: gender,
+          heightCm: heightCm,
+          weightKg: weightKg,
+          systolicBP: systolicBP,
+          diastolicBP: diastolicBP,
+          cholesterol: cholesterol,
+          glucose: glucose,
+          hypertension: hypertension,
+          heartDisease: heartDisease,
+          smoking: smoking,
+          workType: workType,
+        );
+
+        if (aiResult != null) {
+          print('🤖 Using AI prediction');
+          return aiResult;
+        }
+      } catch (e) {
+        print('⚠️ AI prediction failed, falling back to rule-based: $e');
+      }
+    }
+
+    // Fallback to rule-based prediction
+    print('📊 Using rule-based prediction');
+    return _ruleBasedPrediction(
+      age: age,
+      gender: gender,
+      heightCm: heightCm,
+      weightKg: weightKg,
+      systolicBP: systolicBP,
+      diastolicBP: diastolicBP,
+      cholesterol: cholesterol,
+      glucose: glucose,
+      hypertension: hypertension,
+      heartDisease: heartDisease,
+      smoking: smoking,
+      workType: workType,
+    );
+  }
+
+  /// Rule-based prediction (original logic)
+  Map<String, dynamic> _ruleBasedPrediction({
+    required int age,
+    required String gender,
+    required double heightCm,
+    required double weightKg,
+    required double systolicBP,
+    required double diastolicBP,
+    required double cholesterol,
+    required double glucose,
+    required bool hypertension,
+    required bool heartDisease,
+    required bool smoking,
+    required String workType,
   }) {
     double riskScore = 0.0;
 
@@ -134,6 +209,7 @@ class StrokePredictionService {
       'bmiCategory': _getBMICategory(bmi),
       'bpCategory': _getBPCategory(systolicBP, diastolicBP),
       'cholesterolCategory': _getCholesterolCategory(cholesterol),
+      'predictionMethod': 'Rule-based',
     };
   }
 

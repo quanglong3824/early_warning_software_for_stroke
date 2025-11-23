@@ -201,11 +201,53 @@ class SOSService {
     }
   }
 
-  /// Find nearest hospital (mock implementation)
+  /// Find nearest hospital from Firebase database
   Future<String> _findNearestHospital(double lat, double lng) async {
-    // TODO: Query hospitals from database and find nearest
-    // For now, return mock hospital ID
-    return 'hospital_BVCR_001';
+    try {
+      // Query hospitals from Firebase
+      final snapshot = await _db.ref('hospitals').get();
+      
+      if (!snapshot.exists) {
+        print('⚠️ No hospitals found in database, using fallback');
+        return 'hospital_default';
+      }
+
+      final hospitalsData = Map<String, dynamic>.from(snapshot.value as Map);
+      String? nearestHospitalId;
+      double minDistance = double.infinity;
+
+      // Calculate distance to each hospital
+      for (var entry in hospitalsData.entries) {
+        final hospitalData = Map<String, dynamic>.from(entry.value as Map);
+        final hospitalLat = hospitalData['latitude'] as double?;
+        final hospitalLng = hospitalData['longitude'] as double?;
+
+        if (hospitalLat != null && hospitalLng != null) {
+          final distance = Geolocator.distanceBetween(
+            lat,
+            lng,
+            hospitalLat,
+            hospitalLng,
+          );
+
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestHospitalId = entry.key;
+          }
+        }
+      }
+
+      if (nearestHospitalId != null) {
+        print('✅ Found nearest hospital: $nearestHospitalId (${(minDistance / 1000).toStringAsFixed(2)} km)');
+        return nearestHospitalId;
+      }
+
+      print('⚠️ No hospital with coordinates found, using fallback');
+      return hospitalsData.keys.first;
+    } catch (e) {
+      print('Error finding nearest hospital: $e');
+      return 'hospital_default';
+    }
   }
 
   /// Notify family members

@@ -1,0 +1,882 @@
+{
+  "appointments": {
+    "-OeHFRS0wml4Tg0Xfx9i": {
+      "appointmentId": "-OeHFRS0wml4Tg0Xfx9i",
+      "appointmentTime": 1763431200000,
+      "building": "A",
+      "confirmedAt": 1763392792950,
+      "createdAt": 1763390380180,
+      "createdBy": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "department": "Khoa Nội",
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "floor": "4",
+      "location": "Bệnh viện đa khoa Đồng Nai",
+      "reason": "Khám tổng quát",
+      "room": "P201",
+      "status": "confirmed",
+      "updatedAt": 1763392792950,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "-OeHOvd_5daw5gOtB-Vr": {
+      "appointmentId": "-OeHOvd_5daw5gOtB-Vr",
+      "appointmentTime": 1763604000000,
+      "building": "A",
+      "createdAt": 1763392865714,
+      "createdBy": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "department": "Khoa Nội",
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "floor": "4",
+      "location": "Đa khoa đồng nai",
+      "proposedByUser": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "proposedTime": 1763604000000,
+      "reason": "Tái khám",
+      "rescheduleReason": "bận",
+      "rescheduledAt": 1763392903492,
+      "room": "201",
+      "status": "confirmed",
+      "updatedAt": 1763392903492,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    }
+  },
+  "conversations": {
+    "-OeH4KEEFNyFyo19uDg8": {
+      "conversationId": "-OeH4KEEFNyFyo19uDg8",
+      "createdAt": 1763387463401,
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "doctorUnreadCount": 0,
+      "lastMessage": "hi",
+      "lastMessageTime": 1763394055998,
+      "updatedAt": 1763394055998,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "userUnreadCount": 0
+    },
+    "-OeH4N3-4E7fFw0dPT_7": {
+      "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+      "createdAt": 1763387474972,
+      "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+      "doctorUnreadCount": 0,
+      "lastMessage": "hi",
+      "lastMessageTime": 1763394134396,
+      "updatedAt": 1763394134396,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "userUnreadCount": 0
+    },
+    "-OeLJxpBuLR0eEikaYQv": {
+      "conversationId": "-OeLJxpBuLR0eEikaYQv",
+      "createdAt": 1763458671881,
+      "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "doctorUnreadCount": 0,
+      "lastMessage": "Hi",
+      "lastMessageTime": 1763458677102,
+      "updatedAt": 1763458677102,
+      "userId": "vnGsLd5jURZVtV1hOX8wPxkXqHq2",
+      "userUnreadCount": 0
+    }
+  },
+  "doctor_conversations": {
+    "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
+      "-OeLJxpBuLR0eEikaYQv": {
+        "conversationId": "-OeLJxpBuLR0eEikaYQv",
+        "createdAt": 1763458672573,
+        "userId": "vnGsLd5jURZVtV1hOX8wPxkXqHq2"
+      }
+    }
+  },
+  "family_group_members": {
+    "-OeBxmwdeh-qo8x8Xeop": {
+      "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+        "addedBy": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "joinedAt": 1763301603376,
+        "role": "admin",
+        "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "userName": "Long Quang"
+      }
+    }
+  },
+  "family_groups": {
+    "-OeBxmwdeh-qo8x8Xeop": {
+      "createdAt": 1763301602908,
+      "creatorId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "description": "",
+      "id": "-OeBxmwdeh-qo8x8Xeop",
+      "memberCount": 2,
+      "name": "hi",
+      "updatedAt": 1763301604023
+    }
+  },
+  "hospital_notifications": {
+    "hospital_BVCR_001": {
+      "-OeH8BtgkkRUdV2FTjYZ": {
+        "createdAt": "2025-11-17T21:08:01.163",
+        "sosId": "-OeH8Big-PWl2UCKE166",
+        "type": "new_sos"
+      }
+    }
+  },
+  "messages": {
+    "-OeH4KEEFNyFyo19uDg8": {
+      "-OeH7TzBZwclXHNdDEMw": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763388293341,
+        "message": "Hi bác sĩ",
+        "messageId": "-OeH7TzBZwclXHNdDEMw",
+        "readAt": 1763388316775,
+        "receiverId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderRole": "user",
+        "status": "read"
+      },
+      "-OeH7a-iuk3gz2Rg7Ep6": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763388320920,
+        "message": "Em cần gì ?",
+        "messageId": "-OeH7a-iuk3gz2Rg7Ep6",
+        "readAt": 1763388321220,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHFRaswQmPfz595wtq": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763390380808,
+        "message": "📅 Tôi đã tạo lịch hẹn cho bạn. Vui lòng kiểm tra và xác nhận.",
+        "messageId": "-OeHFRaswQmPfz595wtq",
+        "readAt": 1763390432093,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHOijc3K_waYMD6zvz": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763392812894,
+        "message": "ổn chưa em",
+        "messageId": "-OeHOijc3K_waYMD6zvz",
+        "readAt": 1763392828249,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHOvm-7qsdOPHIAx4c": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763392866259,
+        "message": "📅 Tôi đã tạo lịch hẹn cho bạn. Vui lòng kiểm tra và xác nhận.",
+        "messageId": "-OeHOvm-7qsdOPHIAx4c",
+        "readAt": 1763392866593,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHSAsuiV7iruNqsO0-": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763393720300,
+        "message": "hi em",
+        "messageId": "-OeHSAsuiV7iruNqsO0-",
+        "readAt": 1763393769108,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHTT-XumUsltpnCgW9": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763394055758,
+        "message": "hi",
+        "messageId": "-OeHTT-XumUsltpnCgW9",
+        "readAt": 1763396088209,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderRole": "doctor",
+        "status": "read"
+      }
+    },
+    "-OeH4N3-4E7fFw0dPT_7": {
+      "-OeH56BRy71YJsaV3YYV": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763387668988,
+        "message": "Hi",
+        "messageId": "-OeH56BRy71YJsaV3YYV",
+        "readAt": 1763388095747,
+        "receiverId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderRole": "user",
+        "status": "read"
+      },
+      "-OeH6lj_7TPY0JO3UtJn": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763388106826,
+        "message": "Chào bạn, bạn cần tư vấn gì?",
+        "messageId": "-OeH6lj_7TPY0JO3UtJn",
+        "readAt": 1763388159619,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeH710FP0cTmaoMoodK": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763388174692,
+        "message": "Dạ em bị khó thở",
+        "messageId": "-OeH710FP0cTmaoMoodK",
+        "readAt": 1763388178033,
+        "receiverId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderRole": "user",
+        "status": "read"
+      },
+      "-OeH74kN3dpgOYgEPwBY": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763388188806,
+        "message": "ừ em !!!",
+        "messageId": "-OeH74kN3dpgOYgEPwBY",
+        "readAt": 1763388191513,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeH7EMAUK0c2TPHDphl": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763388229329,
+        "message": "tệ !!!",
+        "messageId": "-OeH7EMAUK0c2TPHDphl",
+        "readAt": 1763388229707,
+        "receiverId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderRole": "user",
+        "status": "read"
+      },
+      "-OeH7G6I0JrpfTtuGIQk": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763388235326,
+        "message": "ok em!!!",
+        "messageId": "-OeH7G6I0JrpfTtuGIQk",
+        "readAt": 1763388235611,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderRole": "doctor",
+        "status": "read"
+      },
+      "-OeHTl89ThEVovl7yGaX": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763394134167,
+        "message": "hi",
+        "messageId": "-OeHTl89ThEVovl7yGaX",
+        "readAt": 1763396085143,
+        "receiverId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "senderRole": "doctor",
+        "status": "read"
+      }
+    },
+    "-OeLJxpBuLR0eEikaYQv": {
+      "-OeLJz1uO8eixPMdccHi": {
+        "conversationId": "-OeLJxpBuLR0eEikaYQv",
+        "createdAt": 1763458676892,
+        "message": "Hi",
+        "messageId": "-OeLJz1uO8eixPMdccHi",
+        "readAt": 1763458716644,
+        "receiverId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "senderId": "vnGsLd5jURZVtV1hOX8wPxkXqHq2",
+        "senderRole": "user",
+        "status": "read"
+      }
+    }
+  },
+  "notifications": {
+    "WlTJe1BMHmUH8fv3179dYlKt3n82": {
+      "-OeH56MB8HvAu9EQ4HHs": {
+        "body": "Long Quang: Hi",
+        "createdAt": 1763387669714,
+        "isRead": false,
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeH718h9BfX6N2exil_": {
+        "body": "Long Quang: Dạ em bị khó thở",
+        "createdAt": 1763388175448,
+        "isRead": false,
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeH7ETsSvh6Ej_3vez6": {
+        "body": "Long Quang: tệ !!!",
+        "createdAt": 1763388230051,
+        "isRead": false,
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      }
+    },
+    "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+      "-OeBxnGK3r01epc7TQTu": {
+        "createdAt": 1763301604227,
+        "data": {
+          "groupId": "-OeBxmwdeh-qo8x8Xeop"
+        },
+        "id": "-OeBxnGK3r01epc7TQTu",
+        "isRead": true,
+        "message": "Bạn đã được thêm vào nhóm gia đình",
+        "title": "Thêm vào nhóm gia đình",
+        "type": "added_to_group"
+      },
+      "-OeH6lqUmOvwb4imnm0d": {
+        "body": "Bùi Thế Hoàng: Chào bạn, bạn cần tư vấn gì?",
+        "createdAt": 1763388107512,
+        "isRead": true,
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeH74rU2B2WEnM1-EXG": {
+        "body": "Bùi Thế Hoàng: ừ em !!!",
+        "createdAt": 1763388189463,
+        "isRead": true,
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeH7GDMimgJABgPvGpv": {
+        "body": "Bùi Thế Hoàng: ok em!!!",
+        "createdAt": 1763388236005,
+        "isRead": true,
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeH7a6m1mT5TZeurFFz": {
+        "body": "Hoàng Văn Long: Em cần gì ?",
+        "createdAt": 1763388321582,
+        "isRead": true,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHFRXSBjASBmAVPhCY": {
+        "appointmentId": "-OeHFRS0wml4Tg0Xfx9i",
+        "createdAt": 1763390380521,
+        "isRead": true,
+        "message": "Bác sĩ đã tạo lịch hẹn cho bạn",
+        "notificationId": "-OeHFRXSBjASBmAVPhCY",
+        "title": "Lịch hẹn mới",
+        "type": "appointment",
+        "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+      },
+      "-OeHFRpXgz_6AW1D_kBu": {
+        "body": "Hoàng Văn Long: 📅 Tôi đã tạo lịch hẹn cho bạn. Vui lòng kiểm tra và xác nhận.",
+        "createdAt": 1763390382233,
+        "isRead": true,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHOir_SRNSTVaTCcO7": {
+        "body": "Hoàng Văn Long: ổn chưa em",
+        "createdAt": 1763392813602,
+        "isRead": true,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHOvhY5asaDGqewbkc": {
+        "appointmentId": "-OeHOvd_5daw5gOtB-Vr",
+        "createdAt": 1763392865980,
+        "isRead": true,
+        "message": "Bác sĩ đã tạo lịch hẹn cho bạn",
+        "notificationId": "-OeHOvhY5asaDGqewbkc",
+        "title": "Lịch hẹn mới",
+        "type": "appointment",
+        "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+      },
+      "-OeHOvyLqjjqeNStgTch": {
+        "body": "Hoàng Văn Long: 📅 Tôi đã tạo lịch hẹn cho bạn. Vui lòng kiểm tra và xác nhận.",
+        "createdAt": 1763392867289,
+        "isRead": true,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHP3vikAqp688WNtIm": {
+        "appointmentId": "-OeHOvd_5daw5gOtB-Vr",
+        "createdAt": 1763392903743,
+        "isRead": true,
+        "message": "Bác sĩ đã chấp nhận thời gian bạn đề xuất",
+        "notificationId": "-OeHP3vikAqp688WNtIm",
+        "title": "Đổi lịch thành công",
+        "type": "appointment",
+        "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+      },
+      "-OeHSB-mBkLLXEQpBm_0": {
+        "body": "Hoàng Văn Long: hi em",
+        "createdAt": 1763393720999,
+        "isRead": true,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHTT7n85KuiBP2lIFB": {
+        "body": "Hoàng Văn Long: hi",
+        "createdAt": 1763394056514,
+        "isRead": false,
+        "senderId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHTlG-VDsJgNLCFyHU": {
+        "body": "Bùi Thế Hoàng: hi",
+        "createdAt": 1763394134861,
+        "isRead": false,
+        "senderId": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      }
+    },
+    "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
+      "-OeH7U84yw-MLrLf4j-g": {
+        "body": "Long Quang: Hi bác sĩ",
+        "createdAt": 1763388294192,
+        "isRead": false,
+        "senderId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      },
+      "-OeHOdnU_3m6qMbSJGTy": {
+        "appointmentId": "-OeHFRS0wml4Tg0Xfx9i",
+        "createdAt": 1763392793239,
+        "isRead": false,
+        "message": "Bệnh nhân đã xác nhận lịch hẹn",
+        "notificationId": "-OeHOdnU_3m6qMbSJGTy",
+        "title": "Lịch hẹn đã được xác nhận",
+        "type": "appointment",
+        "userId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3"
+      },
+      "-OeHP0e2svpFNuYw8h1o": {
+        "appointmentId": "-OeHOvd_5daw5gOtB-Vr",
+        "createdAt": 1763392890924,
+        "isRead": false,
+        "message": "Bệnh nhân đề xuất thời gian khác",
+        "notificationId": "-OeHP0e2svpFNuYw8h1o",
+        "title": "Yêu cầu đổi lịch hẹn",
+        "type": "appointment",
+        "userId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3"
+      },
+      "-OeLJz9WI4F63rQAPza-": {
+        "body": "Le Quang Long: Hi",
+        "createdAt": 1763458677586,
+        "isRead": false,
+        "senderId": "vnGsLd5jURZVtV1hOX8wPxkXqHq2",
+        "title": "Tin nhắn mới",
+        "type": "new_message"
+      }
+    }
+  },
+  "predictions": {
+    "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303132653": {
+      "bmi": "26.0",
+      "bmiCategory": "Thừa cân",
+      "createdAt": 1763303133732,
+      "id": "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303132653",
+      "inputData": {
+        "activityLevel": "moderate",
+        "age": 21,
+        "familyHistory": true,
+        "fastingGlucose": 80,
+        "gender": "male",
+        "heightCm": 170,
+        "systolicBP": 95,
+        "weightKg": 75
+      },
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 27,
+      "type": "diabetes",
+      "updatedAt": 1763303133732,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303694867": {
+      "bmi": "26.0",
+      "bmiCategory": "Thừa cân",
+      "createdAt": 1763303695958,
+      "id": "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303694867",
+      "inputData": {
+        "activityLevel": "moderate",
+        "age": 21,
+        "familyHistory": true,
+        "fastingGlucose": 85,
+        "gender": "male",
+        "heightCm": 170,
+        "systolicBP": 98,
+        "weightKg": 75
+      },
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 27,
+      "type": "diabetes",
+      "updatedAt": 1763303695958,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304923585": {
+      "bmi": "26.1",
+      "bmiCategory": "Thừa cân",
+      "createdAt": 1763304924720,
+      "id": "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304923585",
+      "inputData": {
+        "activityLevel": "moderate",
+        "age": 21,
+        "familyHistory": true,
+        "fastingGlucose": 90,
+        "gender": "male",
+        "heightCm": 175,
+        "systolicBP": 110,
+        "weightKg": 80
+      },
+      "riskLevel": "medium",
+      "riskLevelVi": "Nguy cơ trung bình",
+      "riskScore": 37,
+      "type": "diabetes",
+      "updatedAt": 1763304924720,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "stroke_KEh1ruwr3dQ5aNrrmIWzIFCcKTt1_1763549260568": {
+      "bmi": "26.1",
+      "bmiCategory": "Thừa cân",
+      "bpCategory": "Tiền tăng huyết áp",
+      "cholesterolCategory": "Bình thường",
+      "confidence": 0.335386946953697,
+      "createdAt": 1763549264949,
+      "id": "stroke_KEh1ruwr3dQ5aNrrmIWzIFCcKTt1_1763549260568",
+      "inputData": {
+        "age": 22,
+        "cholesterol": 175,
+        "diastolicBP": 85,
+        "gender": "male",
+        "glucose": 85,
+        "heartDisease": false,
+        "heightCm": 175,
+        "hypertension": false,
+        "smoking": false,
+        "systolicBP": 110,
+        "weightKg": 80,
+        "workType": "moderate"
+      },
+      "modelVersion": "unknown",
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 33,
+      "type": "stroke",
+      "updatedAt": 1763549264949,
+      "userId": "KEh1ruwr3dQ5aNrrmIWzIFCcKTt1"
+    },
+    "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303041564": {
+      "bmi": "26.0",
+      "bmiCategory": "Thừa cân",
+      "bpCategory": "Tăng huyết áp độ 2",
+      "cholesterolCategory": "Bình thường",
+      "createdAt": 1763303042642,
+      "id": "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303041564",
+      "inputData": {
+        "age": 21,
+        "cholesterol": 150,
+        "diastolicBP": 100,
+        "gender": "male",
+        "glucose": 85,
+        "heartDisease": false,
+        "heightCm": 170,
+        "hypertension": false,
+        "smoking": false,
+        "systolicBP": 89,
+        "weightKg": 75,
+        "workType": "moderate"
+      },
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 26,
+      "type": "stroke",
+      "updatedAt": 1763303042642,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304596127": {
+      "bmi": "24.8",
+      "bmiCategory": "Thừa cân nhẹ",
+      "bpCategory": "Tăng huyết áp độ 3",
+      "cholesterolCategory": "Bình thường",
+      "createdAt": 1763304597252,
+      "id": "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304596127",
+      "inputData": {
+        "age": 21,
+        "cholesterol": 180,
+        "diastolicBP": 110,
+        "gender": "male",
+        "glucose": 90,
+        "heartDisease": false,
+        "heightCm": 175,
+        "hypertension": false,
+        "smoking": false,
+        "systolicBP": 85,
+        "weightKg": 76,
+        "workType": "moderate"
+      },
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 31,
+      "type": "stroke",
+      "updatedAt": 1763304597252,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    },
+    "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763388466468": {
+      "bmi": "27.0",
+      "bmiCategory": "Thừa cân",
+      "bpCategory": "Tăng huyết áp độ 3",
+      "cholesterolCategory": "Bình thường",
+      "createdAt": 1763388466705,
+      "id": "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763388466468",
+      "inputData": {
+        "age": 22,
+        "cholesterol": 150,
+        "diastolicBP": 110,
+        "gender": "male",
+        "glucose": 88,
+        "heartDisease": false,
+        "heightCm": 172,
+        "hypertension": false,
+        "smoking": false,
+        "systolicBP": 90,
+        "weightKg": 80,
+        "workType": "sedentary"
+      },
+      "riskLevel": "low",
+      "riskLevelVi": "Nguy cơ thấp",
+      "riskScore": 34,
+      "type": "stroke",
+      "updatedAt": 1763388466705,
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3"
+    }
+  },
+  "sos_requests": {
+    "-OeH8Big-PWl2UCKE166": {
+      "acknowledgedAt": "2025-11-17T21:08:31.637",
+      "assignedHospitalId": "hospital_BVCR_001",
+      "createdAt": "2025-11-17T21:08:00.460",
+      "dispatchedAt": "2025-11-17T21:10:01.731",
+      "id": "-OeH8Big-PWl2UCKE166",
+      "notes": "Yêu cầu cấp cứu khẩn cấp",
+      "patientId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "patientName": "Long Quang",
+      "resolvedAt": "2025-11-17T21:18:01.756",
+      "status": "resolved",
+      "updatedAt": "2025-11-17T21:18:01.755",
+      "userId": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "userLocation": {
+        "address": "Lỗi lấy địa chỉ",
+        "latitude": 11.001767586547905,
+        "longitude": 106.87663238282948
+      }
+    }
+  },
+  "user_conversations": {
+    "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+      "-OeH4KEEFNyFyo19uDg8": {
+        "conversationId": "-OeH4KEEFNyFyo19uDg8",
+        "createdAt": 1763387463615,
+        "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3"
+      },
+      "-OeH4N3-4E7fFw0dPT_7": {
+        "conversationId": "-OeH4N3-4E7fFw0dPT_7",
+        "createdAt": 1763387475185,
+        "doctorId": "WlTJe1BMHmUH8fv3179dYlKt3n82"
+      }
+    },
+    "vnGsLd5jURZVtV1hOX8wPxkXqHq2": {
+      "-OeLJxpBuLR0eEikaYQv": {
+        "conversationId": "-OeLJxpBuLR0eEikaYQv",
+        "createdAt": 1763458672257,
+        "doctorId": "iA5HPOfwHbUM2B0cgBu75TFjSLD3"
+      }
+    }
+  },
+  "user_family_groups": {
+    "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+      "-OeBxmwdeh-qo8x8Xeop": {
+        "groupId": "-OeBxmwdeh-qo8x8Xeop",
+        "joinedAt": 1763301603587,
+        "role": "admin"
+      }
+    }
+  },
+  "user_status": {
+    "WlTJe1BMHmUH8fv3179dYlKt3n82": {
+      "isOnline": false,
+      "lastSeen": 1763394137986
+    },
+    "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+      "isOnline": false,
+      "lastSeen": 1763396089604
+    },
+    "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
+      "isOnline": true,
+      "lastSeen": 1763458707472
+    },
+    "vnGsLd5jURZVtV1hOX8wPxkXqHq2": {
+      "isOnline": false,
+      "lastSeen": 1763458682715
+    }
+  },
+  "users": {
+    "0ltzpvxZXCUYSQUEgp44eqeaI1R2": {
+      "createdAt": 1763888782244,
+      "email": "15.lequanglong@gmail.com",
+      "lastLogin": 1763888843852,
+      "loginMethod": "google",
+      "name": "15 Lê Quang Long",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKye63XJrM6P_TKQJrW8bMsQAcI4hfnQhOEqX9Jt3kH-0J2zg=s96-c",
+      "role": "user",
+      "uid": "0ltzpvxZXCUYSQUEgp44eqeaI1R2",
+      "updatedAt": 1763888843852
+    },
+    "3xaPK67aBdOUGIyf4Sjm73JsCN62": {
+      "blockedAt": 1763299794875,
+      "createdAt": 1763298598432,
+      "email": "hoangnam312@gmail.com",
+      "isBlocked": true,
+      "isDeleted": false,
+      "loginMethod": "email",
+      "name": "Hoàng Nam",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "phone": "0919456739",
+      "role": "user",
+      "uid": "3xaPK67aBdOUGIyf4Sjm73JsCN62",
+      "updatedAt": 1763299794875
+    },
+    "7JPv2rRkLyRvKKzkS71UpsjAY6O2": {
+      "createdAt": 1763297801033,
+      "email": "admin@sews.app",
+      "loginMethod": "email",
+      "name": "Admin SEWS",
+      "password": "ac0e7d037817094e9e0b4441f9bae3209d67b02fa484917065f71b16109a1a78",
+      "role": "admin",
+      "uid": "7JPv2rRkLyRvKKzkS71UpsjAY6O2",
+      "updatedAt": 1763297801033
+    },
+    "KEh1ruwr3dQ5aNrrmIWzIFCcKTt1": {
+      "createdAt": 1763549204526,
+      "email": "long.lequang308@gmail.com",
+      "loginMethod": "google",
+      "name": "Long Quang",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKOkiVeZmvgg6JT_uXnZk_IxejyzgK0E1oQfCWN9xa4391JemNp=s96-c",
+      "predictions": {
+        "stroke_KEh1ruwr3dQ5aNrrmIWzIFCcKTt1_1763549260568": {
+          "createdAt": 1763549265158,
+          "riskLevel": "low",
+          "type": "stroke"
+        }
+      },
+      "role": "user",
+      "uid": "KEh1ruwr3dQ5aNrrmIWzIFCcKTt1",
+      "updatedAt": 1763549204526
+    },
+    "WlTJe1BMHmUH8fv3179dYlKt3n82": {
+      "createdAt": 1763300271553,
+      "email": "thehoang.doctor@sews.com",
+      "isBlocked": false,
+      "isDeleted": false,
+      "loginMethod": "email",
+      "name": "Bùi Thế Hoàng",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "phone": "0983778339",
+      "rating": 0,
+      "role": "doctor",
+      "specialty": "Tim mạch",
+      "totalReviews": 0,
+      "uid": "WlTJe1BMHmUH8fv3179dYlKt3n82",
+      "updatedAt": 1763300271553
+    },
+    "Zd7QhK5LckcI6eXxriM0AR6xG4H3": {
+      "address": "Biên Hoà",
+      "createdAt": 1763301344079,
+      "dateOfBirth": 1093798800000,
+      "email": "quanglong.3824@gmail.com",
+      "gender": "male",
+      "lastLogin": 1763397837287,
+      "loginMethod": "google",
+      "name": "Long Quang",
+      "phone": "0987654321",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocLn_ThubLaAq44AbKSFFGdXu0tR-NVGTWsOddLM7B_OTE3OyFI=s96-c",
+      "predictions": {
+        "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303132653": {
+          "createdAt": 1763303134038,
+          "riskLevel": "low",
+          "type": "diabetes"
+        },
+        "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303694867": {
+          "createdAt": 1763303696241,
+          "riskLevel": "low",
+          "type": "diabetes"
+        },
+        "diabetes_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304923585": {
+          "createdAt": 1763304925056,
+          "riskLevel": "medium",
+          "type": "diabetes"
+        },
+        "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763303041564": {
+          "createdAt": 1763303042980,
+          "riskLevel": "low",
+          "type": "stroke"
+        },
+        "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763304596127": {
+          "createdAt": 1763304597553,
+          "riskLevel": "low",
+          "type": "stroke"
+        },
+        "stroke_Zd7QhK5LckcI6eXxriM0AR6xG4H3_1763388466468": {
+          "createdAt": 1763388466961,
+          "riskLevel": "low",
+          "type": "stroke"
+        }
+      },
+      "role": "user",
+      "uid": "Zd7QhK5LckcI6eXxriM0AR6xG4H3",
+      "updatedAt": 1763397837287
+    },
+    "iA5HPOfwHbUM2B0cgBu75TFjSLD3": {
+      "createdAt": 1763384066375,
+      "email": "vanlong.doctor@sews.com",
+      "isBlocked": false,
+      "isDeleted": false,
+      "loginMethod": "email",
+      "name": "Hoàng Văn Long",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "phone": "0933478339",
+      "rating": 0,
+      "role": "doctor",
+      "specialty": "Nội trú tim mạch",
+      "totalReviews": 0,
+      "uid": "iA5HPOfwHbUM2B0cgBu75TFjSLD3",
+      "updatedAt": 1763384066375
+    },
+    "vnGsLd5jURZVtV1hOX8wPxkXqHq2": {
+      "createdAt": 1763458657175,
+      "email": "23810067@student.hcmute.edu.vn",
+      "loginMethod": "google",
+      "name": "Le Quang Long",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocL88K2CMnTw8MkI77vN2M4o5Dtkar8-VUTA4Hm0HBx29wURzA=s96-c",
+      "role": "user",
+      "uid": "vnGsLd5jURZVtV1hOX8wPxkXqHq2",
+      "updatedAt": 1763458657175
+    },
+    "wZops4dRJnUYrWG3mZ0awES9SMy2": {
+      "createdAt": 1763297243819,
+      "email": "long.lequang308@gmail.com",
+      "loginMethod": "google",
+      "name": "Long Quang",
+      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKOkiVeZmvgg6JT_uXnZk_IxejyzgK0E1oQfCWN9xa4391JemNp=s96-c",
+      "role": "user",
+      "uid": "wZops4dRJnUYrWG3mZ0awES9SMy2",
+      "updatedAt": 1763297243819
+    }
+  }
+}

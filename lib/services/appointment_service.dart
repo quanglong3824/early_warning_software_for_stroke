@@ -1,0 +1,203 @@
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
+import '../data/models/appointment_model.dart';
+import '../services/auth_service.dart';
+
+class AppointmentService {
+  static final AppointmentService _instance = AppointmentService._internal();
+  factory AppointmentService() => _instance;
+  AppointmentService._internal();
+
+  final DatabaseReference _db = FirebaseDatabase.instance.ref();
+  final AuthService _authService = AuthService();
+
+  /// Get all appointments for a user
+  Stream<List<AppointmentModel>> getUserAppointments(String userId) {
+    return _db
+        .child('appointments')
+        .orderByChild('userId')
+        .equalTo(userId)
+        .onValue
+        .map((event) {
+      final List<AppointmentModel> appointments = [];
+      if (event.snapshot.exists) {
+        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
+        data.forEach((key, value) {
+          final appointmentData = Map<String, dynamic>.from(value as Map);
+          appointments.add(AppointmentModel.fromJson(appointmentData));
+        });
+      }
+      // Sort by appointmentTime descending (newest first)
+      appointments.sort((a, b) => b.appointmentTime.compareTo(a.appointmentTime));
+      return appointments;
+    });
+  }
+
+  /// Get upcoming appointments
+  Stream<List<AppointmentModel>> getUpcomingAppointments(String userId) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return getUserAppointments(userId).map((appointments) {
+      return appointments.where((apt) => apt.appointmentTime > now).toList();
+    });
+  }
+
+  /// Get past appointments
+  Stream<List<AppointmentModel>> getPastAppointments(String userId) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return getUserAppointments(userId).map((appointments) {
+      return appointments.where((apt) => apt.appointmentTime <= now).toList();
+    });
+  }
+
+  /// Create new appointment
+  Future<String?> createAppointment({
+    required String userId,
+    required String doctorId,
+    String? doctorName,
+    required int appointmentTime,
+    required String location,
+    String? department,
+    String? building,
+    String? floor,
+    String? room,
+    required String reason,
+    String? notes,
+  }) async {
+    try {
+      final appointmentRef = _db.child('appointments').push();
+      final appointmentId = appointmentRef.key!;
+      final now = DateTime.now().millisecondsSinceEpoch;
+
+      final appointment = AppointmentModel(
+        appointmentId: appointmentId,
+        userId: userId,
+        doctorId: doctorId,
+        doctorName: doctorName,
+        appointmentTime: appointmentTime,
+        location: location,
+        department: department,
+        building: building,
+        floor: floor,
+        room: room,
+        reason: reason,
+        status: 'pending',
+        createdBy: userId,
+        createdAt: now,
+        notes: notes,
+      );
+
+      await appointmentRef.set(appointment.toJson());
+      return appointmentId;
+    } catch (e) {
+      print('Error creating appointment: $e');
+      return null;
+    }
+  }
+
+  /// Confirm appointment
+  Future<bool> confirmAppointment(String appointmentId) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'status': 'confirmed',
+        'confirmedAt': now,
+        'updatedAt': now,
+      });
+      return true;
+    } catch (e) {
+      print('Error confirming appointment: $e');
+      return false;
+    }
+  }
+
+  /// Cancel appointment
+  Future<bool> cancelAppointment(String appointmentId, String reason) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'status': 'cancelled',
+        'cancelReason': reason,
+        'cancelledAt': now,
+        'updatedAt': now,
+      });
+      return true;
+    } catch (e) {
+      print('Error cancelling appointment: $e');
+      return false;
+    }
+  }
+
+  /// Reschedule appointment
+  Future<bool> rescheduleAppointment({
+    required String appointmentId,
+    required int newTime,
+    String? reason,
+  }) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'appointmentTime': newTime,
+        'status': 'confirmed',
+        'rescheduleReason': reason,
+        'rescheduledAt': now,
+        'updatedAt': now,
+      });
+      return true;
+    } catch (e) {
+      print('Error rescheduling appointment: $e');
+      return false;
+    }
+  }
+
+  /// Propose new time for appointment
+  Future<bool> proposeReschedule({
+    required String appointmentId,
+    required int proposedTime,
+    required String userId,
+    String? reason,
+  }) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'proposedTime': proposedTime,
+        'proposedByUser': userId,
+        'rescheduleReason': reason,
+        'updatedAt': now,
+      });
+      return true;
+    } catch (e) {
+      print('Error proposing reschedule: $e');
+      return false;
+    }
+  }
+
+  /// Complete appointment
+  Future<bool> completeAppointment(String appointmentId) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'status': 'completed',
+        'updatedAt': now,
+      });
+      return true;
+    } catch (e) {
+      print('Error completing appointment: $e');
+      return false;
+    }
+  }
+
+  /// Get appointment by ID
+  Future<AppointmentModel?> getAppointment(String appointmentId) async {
+    try {
+      final snapshot = await _db.child('appointments').child(appointmentId).get();
+      if (snapshot.exists) {
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+        return AppointmentModel.fromJson(data);
+      }
+      return null;
+    } catch (e) {
+      print('Error getting appointment: $e');
+      return null;
+    }
+  }
+}

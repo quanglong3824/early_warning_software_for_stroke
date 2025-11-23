@@ -1,15 +1,65 @@
 import 'package:flutter/material.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/doctor_service.dart';
+import '../../../data/models/doctor_models.dart';
 
 class ScreenRateDoctor extends StatefulWidget {
-  const ScreenRateDoctor({super.key});
+  final DoctorModel doctor;
+
+  const ScreenRateDoctor({super.key, required this.doctor});
 
   @override
   State<ScreenRateDoctor> createState() => _ScreenRateDoctorState();
 }
 
 class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
-  int stars = 4;
+  final _authService = AuthService();
+  final _doctorService = DoctorService();
+  
+  int stars = 5;
   bool anonymous = false;
+  final _commentController = TextEditingController();
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    setState(() => _isSubmitting = true);
+
+    try {
+      final userId = await _authService.getUserId();
+      if (userId == null) {
+        throw Exception('Vui lòng đăng nhập để đánh giá');
+      }
+
+      await _doctorService.submitReview(
+        doctorId: widget.doctor.doctorId,
+        userId: userId,
+        rating: stars.toDouble(),
+        comment: _commentController.text.trim(),
+        isAnonymous: anonymous,
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cảm ơn bạn đã đánh giá!'), backgroundColor: Colors.green),
+      );
+      
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi: $e'), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +69,13 @@ class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
     const textMuted = Color(0xFF616F89);
 
     return Scaffold(
-      backgroundColor: bgLight,
+      backgroundColor: Colors.black54, // Transparent background effect
       body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
         Container(
           decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
           child: Column(children: [
             const SizedBox(height: 12),
-            Container(width: 36, height: 4, decoration: BoxDecoration(color: Color(0xFFDBDFE6), borderRadius: BorderRadius.circular(2))),
+            Container(width: 36, height: 4, decoration: BoxDecoration(color: const Color(0xFFDBDFE6), borderRadius: BorderRadius.circular(2))),
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -36,14 +86,15 @@ class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 36,
-                  backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuDKVA6xcF0oAVJJ7kROK-duDLRPo9mHSeZtuBuFevcWN7b_31mWTtXxIEg3Ux_SC6IXi12ID6XnwJx9WzSCBqhHeSqhh7P8QrK_1x1HMhIzNYGmsO6NQDeoaGRGrRKqldPiLQOX9ahnUOj7wywwBAKNH42VVFUIXpBoj2MwJ9Ya1eBF74QDGf7bNeE2607Z8xRFI-_xSLMiYAriC3s9pdeUCO8wx_O3gRaAZttp9FwroI4tGABXmwBVMi6cQGFi9F7ZvJjV-lMYVUQ'),
+                  backgroundImage: NetworkImage(widget.doctor.photoURL ?? 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(widget.doctor.name)}&background=random'),
+                  onBackgroundImageError: (_, __) => const Icon(Icons.person, size: 36),
                 ),
                 const SizedBox(height: 12),
-                const Text('BS. Nguyễn Văn An', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textPrimary)),
+                Text(widget.doctor.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textPrimary)),
                 const SizedBox(height: 4),
-                const Text('Chuyên khoa Tim mạch', style: TextStyle(color: textMuted)),
+                Text(widget.doctor.specialization ?? 'Bác sĩ', style: const TextStyle(color: textMuted)),
                 const SizedBox(height: 12),
                 const Text('Chia sẻ trải nghiệm của bạn', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textPrimary)),
                 const SizedBox(height: 4),
@@ -66,6 +117,7 @@ class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
                     const Text('Để lại bình luận (Không bắt buộc)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _commentController,
                       maxLines: 4,
                       decoration: InputDecoration(
                         hintText: 'Bác sĩ tư vấn có tận tình không? Bạn có góp ý gì thêm?...',
@@ -85,8 +137,10 @@ class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: primary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                    onPressed: () {},
-                    child: const Text('Gửi Đánh giá', style: TextStyle(fontWeight: FontWeight.bold)),
+                    onPressed: _isSubmitting ? null : _submitReview,
+                    child: _isSubmitting 
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Text('Gửi Đánh giá', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -94,7 +148,7 @@ class _ScreenRateDoctorState extends State<ScreenRateDoctor> {
                   height: 48,
                   width: double.infinity,
                   child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(foregroundColor: primary, side: BorderSide(color: primary), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                    style: OutlinedButton.styleFrom(foregroundColor: primary, side: const BorderSide(color: primary), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                     onPressed: () => Navigator.pop(context),
                     child: const Text('Để sau', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
