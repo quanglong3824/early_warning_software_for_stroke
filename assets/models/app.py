@@ -5,7 +5,7 @@ Run: python app.py
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pickle
+import joblib
 import numpy as np
 import os
 
@@ -14,17 +14,18 @@ CORS(app)  # Enable CORS for Flutter web
 
 # Load models
 print("Loading models...")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 try:
-    with open('moHinhDotQuy_final.pkl', 'rb') as f:
-        model = pickle.load(f)
+    with open(os.path.join(BASE_DIR, 'moHinhDotQuy_final.pkl'), 'rb') as f:
+        model = joblib.load(f)
     print(f"✅ Model loaded: {type(model).__name__}")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
     model = None
 
 try:
-    with open('preprocessor.pkl', 'rb') as f:
-        preprocessor = pickle.load(f)
+    with open(os.path.join(BASE_DIR, 'preprocessor.pkl'), 'rb') as f:
+        preprocessor = joblib.load(f)
     print(f"✅ Preprocessor loaded: {type(preprocessor).__name__}")
 except Exception as e:
     print(f"❌ Error loading preprocessor: {e}")
@@ -91,23 +92,88 @@ def predict():
         
         # Encode categorical variables
         gender_encoded = 1.0 if data['gender'] == 'male' else 0.0
-        work_type_map = {'sedentary': 0.0, 'moderate': 1.0, 'active': 2.0}
-        work_type_encoded = work_type_map.get(data['workType'], 1.0)
         
-        # Prepare input features (must match training data order)
-        features = np.array([[
+        # Feature engineering to match training data
+        # Assume ever_married based on age (people over 25 are more likely married)
+        ever_married = 1.0 if data['age'] >= 25 else 0.0
+        
+        # Assume urban residence (can be made configurable later)
+        residence_type = 1.0  # 1 = Urban, 0 = Rural
+        
+        # Work type encoding
+        work_type_map = {'sedentary': 'Private', 'moderate': 'Self-employed', 'active': 'Govt_job'}
+        work_type_str = work_type_map.get(data['workType'], 'Private')
+        
+        # Smoking status encoding
+        smoking_status = 'formerly smoked' if data['smoking'] else 'never smoked'
+        
+        # Create engineered features
+        # nhomTuoi (age group)
+        if data['age'] < 30:
+            nhom_tuoi = 0
+        elif data['age'] < 45:
+            nhom_tuoi = 1
+        elif data['age'] < 60:
+            nhom_tuoi = 2
+        else:
+            nhom_tuoi = 3
+        
+        # nhomBMI (BMI group)
+        if bmi < 18.5:
+            nhom_bmi = 0
+        elif bmi < 23:
+            nhom_bmi = 1
+        elif bmi < 25:
+            nhom_bmi = 2
+        elif bmi < 30:
+            nhom_bmi = 3
+        else:
+            nhom_bmi = 4
+        
+        # nhomGlucose (glucose group)
+        if data['glucose'] < 100:
+            nhom_glucose = 0
+        elif data['glucose'] < 126:
+            nhom_glucose = 1
+        else:
+            nhom_glucose = 2
+        
+        # diemNguyCo (risk score) - calculated based on risk factors
+        diem_nguy_co = 0.0
+        if data['hypertension']:
+            diem_nguy_co += 1.0
+        if data['heartDisease']:
+            diem_nguy_co += 1.0
+        if data['smoking']:
+            diem_nguy_co += 1.0
+        if bmi >= 30:
+            diem_nguy_co += 1.0
+        if data['glucose'] >= 126:
+            diem_nguy_co += 1.0
+        
+        # Prepare input features in the exact order expected by the model
+        # Order: gender, age, hypertension, heart_disease, ever_married, work_type,
+        #        Residence_type, avg_glucose_level, bmi, smoking_status, 
+        #        nhomTuoi, nhomBMI, nhomGlucose, diemNguyCo
+        import pandas as pd
+        features = pd.DataFrame([[
+            data['gender'],
             float(data['age']),
-            gender_encoded,
-            bmi,
-            float(data['systolicBP']),
-            float(data['diastolicBP']),
-            float(data['cholesterol']),
+            1 if data['hypertension'] else 0,
+            1 if data['heartDisease'] else 0,
+            'Yes' if ever_married == 1.0 else 'No',
+            work_type_str,
+            'Urban' if residence_type == 1.0 else 'Rural',
             float(data['glucose']),
-            1.0 if data['hypertension'] else 0.0,
-            1.0 if data['heartDisease'] else 0.0,
-            1.0 if data['smoking'] else 0.0,
-            work_type_encoded,
-        ]])
+            bmi,
+            smoking_status,
+            nhom_tuoi,
+            nhom_bmi,
+            nhom_glucose,
+            diem_nguy_co
+        ]], columns=['gender', 'age', 'hypertension', 'heart_disease', 'ever_married', 
+                     'work_type', 'Residence_type', 'avg_glucose_level', 'bmi', 
+                     'smoking_status', 'nhomTuoi', 'nhomBMI', 'nhomGlucose', 'diemNguyCo'])
         
         # Preprocess
         if preprocessor is not None:
