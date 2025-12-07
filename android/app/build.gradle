@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sews.stroke_warning"
+    namespace = "com.example.early_warning_software_for_stroke"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.sews.stroke_warning"
+        applicationId = "com.example.early_warning_software_for_stroke"
         minSdkVersion flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = 1
