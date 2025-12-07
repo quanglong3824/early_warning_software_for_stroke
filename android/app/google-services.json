@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "484558690842-oj7ekkdkmmj91a3f0q4iisqukkd3sq5v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.early_warning_software_for_stroke",
+            "certificate_hash": "4fcefd66459ac21659977bf4504a004f93d4722b"
+          }
+        },
+        {
           "client_id": "484558690842-o8paac719fa5qbe1pispm4ji2ocn06aj.apps.googleusercontent.com",
           "client_type": 3
         }

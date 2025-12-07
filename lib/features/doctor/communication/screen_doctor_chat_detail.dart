@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/appointment_service.dart';
+import '../../../services/doctor_schedule_service.dart';
 import '../../../data/models/chat_models.dart';
 
 class ScreenDoctorChatDetail extends StatefulWidget {
@@ -25,6 +27,8 @@ class ScreenDoctorChatDetail extends StatefulWidget {
 class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
   final _chatService = ChatService();
   final _authService = AuthService();
+  final _appointmentService = AppointmentService();
+  final _scheduleService = DoctorScheduleService();
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   final _imagePicker = ImagePicker();
@@ -182,6 +186,307 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
     }
   }
 
+  /// Show appointment booking dialog for doctor to schedule appointment with patient
+  Future<void> _showAppointmentDialog() async {
+    if (_doctorId == null) return;
+
+    DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
+    TimeSlot? selectedSlot;
+    List<TimeSlot> availableSlots = [];
+    bool isLoadingSlots = true;
+    final reasonController = TextEditingController();
+    final locationController = TextEditingController(text: 'Phòng khám');
+
+    // Load available slots for initial date
+    Future<void> loadSlots(DateTime date, StateSetter setDialogState) async {
+      setDialogState(() => isLoadingSlots = true);
+      try {
+        final slots = await _scheduleService.getAvailableSlots(_doctorId!, date);
+        setDialogState(() {
+          availableSlots = slots;
+          selectedSlot = null;
+          isLoadingSlots = false;
+        });
+      } catch (e) {
+        setDialogState(() {
+          availableSlots = [];
+          isLoadingSlots = false;
+        });
+      }
+    }
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            // Load slots on first build
+            if (isLoadingSlots && availableSlots.isEmpty) {
+              loadSlots(selectedDate, setDialogState);
+            }
+
+            return AlertDialog(
+              title: Row(
+                children: [
+                  const Icon(Icons.calendar_month, color: Color(0xFF135BEC)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Đặt lịch hẹn',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Patient info
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF135BEC).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.person, color: Color(0xFF135BEC)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Bệnh nhân: ${widget.patientName}',
+                                style: const TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Date picker
+                      const Text('Chọn ngày:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(const Duration(days: 30)),
+                          );
+                          if (date != null) {
+                            setDialogState(() => selectedDate = date);
+                            loadSlots(date, setDialogState);
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.calendar_today, size: 20),
+                              const SizedBox(width: 8),
+                              Text(DateFormat('EEEE, dd/MM/yyyy', 'vi').format(selectedDate)),
+                              const Spacer(),
+                              const Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Time slots
+                      const Text('Chọn giờ:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      if (isLoadingSlots)
+                        const Center(child: CircularProgressIndicator())
+                      else if (availableSlots.isEmpty)
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.warning, color: Colors.orange),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Không có lịch trống trong ngày này. Vui lòng chọn ngày khác.',
+                                  style: TextStyle(color: Colors.orange),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: availableSlots.map((slot) {
+                            final isSelected = selectedSlot == slot;
+                            final timeStr = '${slot.startTime.hour.toString().padLeft(2, '0')}:${slot.startTime.minute.toString().padLeft(2, '0')}';
+                            return ChoiceChip(
+                              label: Text(timeStr),
+                              selected: isSelected,
+                              onSelected: (selected) {
+                                setDialogState(() => selectedSlot = selected ? slot : null);
+                              },
+                              selectedColor: const Color(0xFF135BEC),
+                              labelStyle: TextStyle(
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      const SizedBox(height: 16),
+
+                      // Location
+                      const Text('Địa điểm:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          hintText: 'Nhập địa điểm khám',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Reason
+                      const Text('Lý do khám:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: reasonController,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          hintText: 'Nhập lý do khám (tùy chọn)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: const Text('Hủy'),
+                ),
+                ElevatedButton(
+                  onPressed: selectedSlot == null
+                      ? null
+                      : () async {
+                          Navigator.pop(dialogContext);
+                          await _createAppointment(
+                            selectedDate,
+                            selectedSlot!,
+                            locationController.text,
+                            reasonController.text,
+                          );
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF135BEC),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Đặt lịch'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    reasonController.dispose();
+    locationController.dispose();
+  }
+
+  /// Create appointment and send message to chat
+  Future<void> _createAppointment(
+    DateTime date,
+    TimeSlot slot,
+    String location,
+    String reason,
+  ) async {
+    if (_doctorId == null) return;
+
+    try {
+      // Combine date and time
+      final appointmentTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        slot.startTime.hour,
+        slot.startTime.minute,
+      );
+
+      // Create appointment
+      final appointmentId = await _appointmentService.createAppointment(
+        userId: widget.userId,
+        doctorId: _doctorId!,
+        doctorName: _doctorName,
+        appointmentTime: appointmentTime.millisecondsSinceEpoch,
+        location: location.isNotEmpty ? location : 'Phòng khám',
+        reason: reason.isNotEmpty ? reason : 'Khám theo lịch hẹn',
+      );
+
+      if (appointmentId != null) {
+        // Confirm appointment immediately since doctor created it
+        await _appointmentService.confirmAppointment(appointmentId);
+
+        // Send appointment message to chat
+        final formattedDate = DateFormat('EEEE, dd/MM/yyyy', 'vi').format(appointmentTime);
+        final formattedTime = '${slot.startTime.hour.toString().padLeft(2, '0')}:${slot.startTime.minute.toString().padLeft(2, '0')}';
+        
+        await _chatService.sendMessage(
+          conversationId: widget.conversationId,
+          senderId: _doctorId!,
+          senderName: _doctorName,
+          message: '📅 Đã đặt lịch hẹn khám\n\n'
+              '📆 Ngày: $formattedDate\n'
+              '⏰ Giờ: $formattedTime\n'
+              '📍 Địa điểm: ${location.isNotEmpty ? location : 'Phòng khám'}\n'
+              '${reason.isNotEmpty ? '📝 Lý do: $reason' : ''}',
+          type: 'appointment',
+        );
+
+        _scrollToBottom();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Đã đặt lịch hẹn thành công!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        throw Exception('Không thể tạo lịch hẹn');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: $e')),
+        );
+      }
+    }
+  }
+
   void _showAttachmentOptions() {
     showModalBottomSheet(
       context: context,
@@ -237,6 +542,21 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
                 onTap: () {
                   Navigator.pop(context);
                   _createPrescription();
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF135BEC).withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.calendar_month, color: Color(0xFF135BEC)),
+                ),
+                title: const Text('Đặt lịch hẹn'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showAppointmentDialog();
                 },
               ),
             ],

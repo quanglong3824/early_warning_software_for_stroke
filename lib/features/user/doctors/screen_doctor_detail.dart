@@ -3,6 +3,8 @@ import '../../../data/models/doctor_models.dart';
 import '../../../services/appointment_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/doctor_schedule_service.dart';
+import '../../../services/chat_service.dart';
+import '../chat/screen_chat_detail.dart';
 
 class ScreenDoctorDetail extends StatefulWidget {
   final DoctorModel doctor;
@@ -17,6 +19,9 @@ class _ScreenDoctorDetailState extends State<ScreenDoctorDetail> {
   final _appointmentService = AppointmentService();
   final _authService = AuthService();
   final _scheduleService = DoctorScheduleService();
+  final _chatService = ChatService();
+  
+  bool _isStartingChat = false;
   
   DateTime _selectedDate = DateTime.now();
   TimeSlot? _selectedSlot;
@@ -218,22 +223,44 @@ class _ScreenDoctorDetailState extends State<ScreenDoctorDetail> {
           ],
         ),
         const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton.icon(
-            onPressed: () => Navigator.pushNamed(
-              context,
-              '/rate-doctor',
-              arguments: widget.doctor,
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _isStartingChat ? null : _startChat,
+                icon: _isStartingChat 
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.chat_bubble_outline),
+                label: const Text('Nhắn tin'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: primary,
+                  side: BorderSide(color: primary),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
             ),
-            icon: const Icon(Icons.star_border),
-            label: const Text('Viết đánh giá'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: primary,
-              side: BorderSide(color: primary),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  '/rate-doctor',
+                  arguments: widget.doctor,
+                ),
+                icon: const Icon(Icons.star_border),
+                label: const Text('Đánh giá'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: primary,
+                  side: BorderSide(color: primary),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
         const SizedBox(height: 16),
         const Text(
@@ -447,6 +474,51 @@ class _ScreenDoctorDetailState extends State<ScreenDoctorDetail> {
       case 6: return 'T7';
       case 7: return 'CN';
       default: return '';
+    }
+  }
+
+  Future<void> _startChat() async {
+    setState(() => _isStartingChat = true);
+    
+    try {
+      final userId = await _authService.getUserId();
+      if (userId == null) {
+        throw Exception('Vui lòng đăng nhập để nhắn tin');
+      }
+
+      // Create or get existing conversation
+      final conversationId = await _chatService.createOrGetConversation(
+        userId: userId,
+        doctorId: widget.doctor.doctorId,
+        doctorName: widget.doctor.name,
+      );
+
+      if (conversationId == null) {
+        throw Exception('Không thể tạo cuộc trò chuyện');
+      }
+
+      if (!mounted) return;
+
+      // Navigate to chat detail
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ScreenChatDetail(
+            conversationId: conversationId,
+            title: widget.doctor.name,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isStartingChat = false);
+      }
     }
   }
 }

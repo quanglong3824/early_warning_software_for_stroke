@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../../services/patient_service.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/chat_service.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
+import '../communication/screen_doctor_chat_detail.dart';
 
 class ScreenPatientList extends StatefulWidget {
   const ScreenPatientList({super.key});
@@ -142,7 +144,10 @@ class _ScreenPatientListState extends State<ScreenPatientList> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: _searchResults.length,
         itemBuilder: (context, index) {
-          return _PatientCard(patient: _searchResults[index]);
+          return _PatientCard(
+            patient: _searchResults[index],
+            doctorId: _doctorId!,
+          );
         },
       );
     }
@@ -190,7 +195,10 @@ class _ScreenPatientListState extends State<ScreenPatientList> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: patients.length,
           itemBuilder: (context, index) {
-            return _PatientCard(patient: patients[index]);
+            return _PatientCard(
+              patient: patients[index],
+              doctorId: _doctorId!,
+            );
           },
         );
       },
@@ -199,79 +207,160 @@ class _ScreenPatientListState extends State<ScreenPatientList> {
 }
 
 
-class _PatientCard extends StatelessWidget {
+class _PatientCard extends StatefulWidget {
   final PatientSummary patient;
+  final String doctorId;
 
-  const _PatientCard({required this.patient});
+  const _PatientCard({required this.patient, required this.doctorId});
+
+  @override
+  State<_PatientCard> createState() => _PatientCardState();
+}
+
+class _PatientCardState extends State<_PatientCard> {
+  final _chatService = ChatService();
+  final _authService = AuthService();
+  bool _isStartingChat = false;
+
+  Future<void> _startChat() async {
+    setState(() => _isStartingChat = true);
+    
+    try {
+      final doctorName = await _authService.getUserName();
+      
+      // Create or get existing conversation
+      final conversationId = await _chatService.createOrGetConversation(
+        userId: widget.patient.id,
+        doctorId: widget.doctorId,
+        doctorName: doctorName,
+      );
+
+      if (conversationId == null) {
+        throw Exception('Không thể tạo cuộc trò chuyện');
+      }
+
+      if (!mounted) return;
+
+      // Navigate to chat detail
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ScreenDoctorChatDetail(
+            conversationId: conversationId,
+            patientName: widget.patient.name,
+            userId: widget.patient.id,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isStartingChat = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    const primary = Color(0xFF135BEC);
+    
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            '/doctor/patient-profile',
-            arguments: {
-              'userId': patient.id,
-              'patientName': patient.name,
-            },
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              // Avatar
-              CircleAvatar(
-                radius: 28,
-                backgroundColor: _getStatusColor(patient.healthStatus).withOpacity(0.2),
-                backgroundImage: patient.avatarUrl != null
-                    ? NetworkImage(patient.avatarUrl!)
-                    : null,
-                child: patient.avatarUrl == null
-                    ? Icon(Icons.person, color: _getStatusColor(patient.healthStatus))
-                    : null,
-              ),
-              const SizedBox(width: 16),
-              
-              // Patient info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/doctor/patient-profile',
+                  arguments: {
+                    'userId': widget.patient.id,
+                    'patientName': widget.patient.name,
+                  },
+                );
+              },
+              child: Row(
+                children: [
+                  // Avatar
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor: _getStatusColor(widget.patient.healthStatus).withOpacity(0.2),
+                    backgroundImage: widget.patient.avatarUrl != null
+                        ? NetworkImage(widget.patient.avatarUrl!)
+                        : null,
+                    child: widget.patient.avatarUrl == null
+                        ? Icon(Icons.person, color: _getStatusColor(widget.patient.healthStatus))
+                        : null,
+                  ),
+                  const SizedBox(width: 16),
+                  
+                  // Patient info
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            patient.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.patient.name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ),
+                            _buildStatusBadge(widget.patient.healthStatus),
+                          ],
                         ),
-                        _buildStatusBadge(patient.healthStatus),
+                        const SizedBox(height: 4),
+                        if (widget.patient.phone != null)
+                          Text(
+                            widget.patient.phone!,
+                            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                          ),
+                        const SizedBox(height: 4),
+                        _buildHealthInfo(widget.patient),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    if (patient.phone != null)
-                      Text(
-                        patient.phone!,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                      ),
-                    const SizedBox(height: 4),
-                    _buildHealthInfo(patient),
-                  ],
+                  ),
+                  
+                  const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Chat button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _isStartingChat ? null : _startChat,
+                icon: _isStartingChat
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.chat_bubble_outline, size: 18),
+                label: const Text('Nhắn tin'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: primary,
+                  side: BorderSide(color: primary),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
               ),
-              
-              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

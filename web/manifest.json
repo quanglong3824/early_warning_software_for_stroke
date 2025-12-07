@@ -1,13 +1,15 @@
 {
-    "name": "early_warning_software_for_stroke",
-    "short_name": "early_warning_software_for_stroke",
+    "name": "SEWS - Cảnh báo sớm đột quỵ",
+    "short_name": "SEWS",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#135BEC",
+    "description": "Hệ thống cảnh báo sớm đột quỵ - Theo dõi sức khỏe, dự đoán nguy cơ đột quỵ và tiểu đường",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["health", "medical"],
+    "lang": "vi",
     "icons": [
         {
             "src": "icons/Icon-192.png",

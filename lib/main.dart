@@ -80,6 +80,8 @@ import 'features/doctor/emergency/screen_sos_queue.dart';
 import 'features/doctor/emergency/screen_sos_case_detail.dart';
 import 'features/doctor/communication/screen_doctor_chat.dart';
 import 'features/doctor/communication/screen_doctor_chat_detail.dart';
+import 'features/doctor/communication/screen_select_patient_chat.dart';
+import 'features/user/chat/screen_select_doctor_chat.dart';
 import 'features/doctor/reviews/screen_doctor_reviews.dart';
 import 'features/doctor/settings/screen_doctor_settings.dart';
 import 'features/doctor/schedule/screen_schedule_management.dart';
@@ -185,7 +187,8 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      title: 'SEWS',
+      title: 'SEWS - Cảnh báo sớm đột quỵ',
+      debugShowCheckedModeBanner: false, // Tắt nhãn DEBUG
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF135BEC)),
         useMaterial3: true,
@@ -241,6 +244,7 @@ class _AppState extends State<App> {
 
         // ===== COMMUNICATION =====
         '/chat': (_) => const ScreenChatList(),
+        '/chat/select-doctor': (_) => const ScreenSelectDoctorChat(),
         '/chat-detail': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
           return ScreenChatDetail(
@@ -327,6 +331,7 @@ class _AppState extends State<App> {
         '/doctor/sos-queue': (_) => const ScreenSOSQueue(),
         '/doctor/sos-case': (_) => const ScreenSOSCaseDetail(),
         '/doctor/chat': (_) => const ScreenDoctorChat(),
+        '/doctor/chat/select-patient': (_) => const ScreenSelectPatientChat(),
         '/doctor/chat-detail': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
           return ScreenDoctorChatDetail(

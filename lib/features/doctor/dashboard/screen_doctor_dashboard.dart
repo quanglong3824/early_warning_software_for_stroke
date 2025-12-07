@@ -227,8 +227,13 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
               return _buildStatCardError(
                   'Lịch hẹn', Icons.calendar_today, Colors.blue);
             }
-            return _buildStatCard('Lịch hẹn', '${snapshot.data ?? 0}',
-                Icons.calendar_today, Colors.blue);
+            return _buildStatCard(
+              'Lịch hẹn', 
+              '${snapshot.data ?? 0}',
+              Icons.calendar_today, 
+              Colors.blue,
+              onTap: () => Navigator.pushNamed(context, '/doctor/appointments'),
+            );
           },
         ),
         // SOS đang hoạt động - Requirements 1.2
@@ -242,7 +247,12 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
               return _buildStatCardError('SOS', Icons.emergency, Colors.red);
             }
             return _buildStatCard(
-                'SOS', '${snapshot.data ?? 0}', Icons.emergency, Colors.red);
+              'SOS', 
+              '${snapshot.data ?? 0}', 
+              Icons.emergency, 
+              Colors.red,
+              onTap: () => Navigator.pushNamed(context, '/doctor/sos-queue'),
+            );
           },
         ),
         // Tin nhắn chưa đọc - Requirements 1.3
@@ -257,8 +267,13 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
               return _buildStatCardError(
                   'Tư vấn', Icons.chat_bubble, Colors.green);
             }
-            return _buildStatCard('Tư vấn', '${snapshot.data ?? 0}',
-                Icons.chat_bubble, Colors.green);
+            return _buildStatCard(
+              'Tư vấn', 
+              '${snapshot.data ?? 0}',
+              Icons.chat_bubble, 
+              Colors.green,
+              onTap: () => Navigator.pushNamed(context, '/doctor/chat'),
+            );
           },
         ),
         // Đơn thuốc hôm nay - Requirements 1.4
@@ -273,8 +288,13 @@ class _ScreenDoctorDashboardState extends State<ScreenDoctorDashboard>
               return _buildStatCardError(
                   'Đơn thuốc', Icons.medication, Colors.orange);
             }
-            return _buildStatCard('Đơn thuốc', '${snapshot.data ?? 0}',
-                Icons.medication, Colors.orange);
+            return _buildStatCard(
+              'Đơn thuốc', 
+              '${snapshot.data ?? 0}',
+              Icons.medication, 
+              Colors.orange,
+              onTap: () => Navigator.pushNamed(context, '/doctor/patients'),
+            );
           },
         ),
       ],
@@ -349,38 +369,50 @@ Widget _buildInfoChip(String label, IconData icon) {
   );
 }
 
-Widget _buildStatCard(String title, String value, IconData icon, Color color) {
-  return Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title,
-                style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
-            Icon(icon, color: color, size: 24),
-          ],
-        ),
-        Text(
-          value,
-          style:
-              TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
-        ),
-      ],
+Widget _buildStatCard(String title, String value, IconData icon, Color color, {VoidCallback? onTap}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(12),
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title,
+                  style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280))),
+              Row(
+                children: [
+                  Icon(icon, color: color, size: 24),
+                  if (onTap != null) ...[
+                    const SizedBox(width: 4),
+                    Icon(Icons.chevron_right, color: color.withOpacity(0.5), size: 16),
+                  ],
+                ],
+              ),
+            ],
+          ),
+          Text(
+            value,
+            style:
+                TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
+          ),
+        ],
+      ),
     ),
   );
 }

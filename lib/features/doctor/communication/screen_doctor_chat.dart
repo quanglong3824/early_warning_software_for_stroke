@@ -5,6 +5,7 @@ import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/chat_models.dart';
 import 'screen_doctor_chat_detail.dart';
+import 'screen_select_patient_chat.dart';
 
 class ScreenDoctorChat extends StatefulWidget {
   const ScreenDoctorChat({super.key});
@@ -202,6 +203,19 @@ class _ScreenDoctorChatState extends State<ScreenDoctorChat> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const ScreenSelectPatientChat(),
+            ),
+          );
+        },
+        backgroundColor: primary,
+        icon: const Icon(Icons.add_comment, color: Colors.white),
+        label: const Text('Nhắn tin mới', style: TextStyle(color: Colors.white)),
       ),
       bottomNavigationBar: const DoctorBottomNav(currentIndex: -1),
     );

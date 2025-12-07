@@ -4,6 +4,7 @@ import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/chat_models.dart';
 import 'screen_chat_detail.dart';
+import 'screen_select_doctor_chat.dart';
 
 class ScreenChatList extends StatefulWidget {
   const ScreenChatList({super.key});
@@ -79,8 +80,16 @@ class _ScreenChatListState extends State<ScreenChatList> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: textPrimary),
-            onPressed: () {},
+            icon: const Icon(Icons.add_comment, color: textPrimary),
+            tooltip: 'Nhắn tin bác sĩ mới',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ScreenSelectDoctorChat(),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -115,6 +124,27 @@ class _ScreenChatListState extends State<ScreenChatList> {
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ScreenSelectDoctorChat(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text('Chọn bác sĩ để nhắn tin'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF135BEC),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ],

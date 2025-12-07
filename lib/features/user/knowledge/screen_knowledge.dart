@@ -410,7 +410,7 @@ class _ScreenKnowledgeState extends State<ScreenKnowledge> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const ScreenArticleDetail(),
+        builder: (_) => ScreenArticleDetail(article: article),
       ),
     );
   }

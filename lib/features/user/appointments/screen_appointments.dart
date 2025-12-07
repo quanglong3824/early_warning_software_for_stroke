@@ -132,9 +132,10 @@ class _ScreenAppointmentsState extends State<ScreenAppointments> {
         actions: [
           IconButton(
             onPressed: () {
-              // TODO: Navigate to create appointment screen
+              Navigator.pushNamed(context, '/doctor-list');
             },
             icon: const Icon(Icons.add, color: textPrimary),
+            tooltip: 'Đặt lịch mới',
           ),
         ],
       ),
