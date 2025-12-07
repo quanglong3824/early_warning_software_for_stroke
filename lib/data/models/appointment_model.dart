@@ -3,6 +3,8 @@ class AppointmentModel {
   final String userId;
   final String doctorId;
   final String? doctorName;
+  final String? patientName;
+  final String? patientPhone;
   final int appointmentTime;
   final String location;
   final String? department;
@@ -10,13 +12,15 @@ class AppointmentModel {
   final String? floor;
   final String? room;
   final String reason;
-  final String status; // pending, confirmed, cancelled, completed, rescheduled
+  final String status; // pending, confirmed, cancelled, completed, rescheduled, rejected
   final String createdBy;
   final int createdAt;
   final int? updatedAt;
   final int? confirmedAt;
   final int? cancelledAt;
   final String? cancelReason;
+  final int? rejectedAt;
+  final String? rejectReason;
   final int? rescheduledAt;
   final String? rescheduleReason;
   final int? proposedTime;
@@ -28,6 +32,8 @@ class AppointmentModel {
     required this.userId,
     required this.doctorId,
     this.doctorName,
+    this.patientName,
+    this.patientPhone,
     required this.appointmentTime,
     required this.location,
     this.department,
@@ -42,6 +48,8 @@ class AppointmentModel {
     this.confirmedAt,
     this.cancelledAt,
     this.cancelReason,
+    this.rejectedAt,
+    this.rejectReason,
     this.rescheduledAt,
     this.rescheduleReason,
     this.proposedTime,
@@ -55,6 +63,8 @@ class AppointmentModel {
       userId: json['userId'] ?? '',
       doctorId: json['doctorId'] ?? '',
       doctorName: json['doctorName'],
+      patientName: json['patientName'],
+      patientPhone: json['patientPhone'],
       appointmentTime: json['appointmentTime'] ?? 0,
       location: json['location'] ?? '',
       department: json['department'],
@@ -69,6 +79,8 @@ class AppointmentModel {
       confirmedAt: json['confirmedAt'],
       cancelledAt: json['cancelledAt'],
       cancelReason: json['cancelReason'],
+      rejectedAt: json['rejectedAt'],
+      rejectReason: json['rejectReason'],
       rescheduledAt: json['rescheduledAt'],
       rescheduleReason: json['rescheduleReason'],
       proposedTime: json['proposedTime'],
@@ -83,6 +95,8 @@ class AppointmentModel {
       'userId': userId,
       'doctorId': doctorId,
       'doctorName': doctorName,
+      'patientName': patientName,
+      'patientPhone': patientPhone,
       'appointmentTime': appointmentTime,
       'location': location,
       'department': department,
@@ -97,6 +111,8 @@ class AppointmentModel {
       'confirmedAt': confirmedAt,
       'cancelledAt': cancelledAt,
       'cancelReason': cancelReason,
+      'rejectedAt': rejectedAt,
+      'rejectReason': rejectReason,
       'rescheduledAt': rescheduledAt,
       'rescheduleReason': rescheduleReason,
       'proposedTime': proposedTime,

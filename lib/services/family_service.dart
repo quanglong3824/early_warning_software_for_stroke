@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
+import '../data/models/family_forum_models.dart';
 
 class FamilyService {
   static final FamilyService _instance = FamilyService._internal();
@@ -11,6 +12,228 @@ class FamilyService {
   // Cache for better performance
   final Map<String, List<Map<String, dynamic>>> _familyMembersCache = {};
   final Map<String, List<Map<String, dynamic>>> _familyGroupsCache = {};
+
+  // Stream controllers for real-time updates
+  final Map<String, StreamController<List<FamilyMemberHealth>>> _healthStatusControllers = {};
+
+  /// Add a family member with bidirectional relationship
+  /// This ensures both users have each other in their family lists
+  /// Requirements: 6.1
+  Future<bool> addFamilyMemberBidirectional({
+    required String userId,
+    required String userName,
+    required String memberId,
+    required String memberName,
+    required String relationship,
+  }) async {
+    try {
+      // Check if already connected
+      final existingConnection = await _checkExistingConnection(userId, memberId);
+      if (existingConnection == 'already_member') {
+        print('⚠️ Already family members');
+        return false;
+      }
+
+      // Create bidirectional relationship
+      final memberId1 = _database.child('family_members').child(userId).push().key!;
+      final memberId2 = _database.child('family_members').child(memberId).push().key!;
+
+      // Add member to user's family list
+      await _database
+          .child('family_members')
+          .child(userId)
+          .child(memberId1)
+          .set({
+        'id': memberId1,
+        'memberId': memberId,
+        'memberName': memberName,
+        'relationship': relationship,
+        'addedAt': ServerValue.timestamp,
+      });
+
+      // Add user to member's family list (reverse relationship)
+      await _database
+          .child('family_members')
+          .child(memberId)
+          .child(memberId2)
+          .set({
+        'id': memberId2,
+        'memberId': userId,
+        'memberName': userName,
+        'relationship': _reverseRelationship(relationship),
+        'addedAt': ServerValue.timestamp,
+      });
+
+      print('✅ Bidirectional family relationship created');
+      return true;
+    } catch (e) {
+      print('❌ Error creating bidirectional relationship: $e');
+      return false;
+    }
+  }
+
+  /// Get real-time stream of family members' health status
+  /// Requirements: 6.3
+  Stream<List<FamilyMemberHealth>> getFamilyHealthStatus(String userId) {
+    // Create or reuse stream controller
+    if (!_healthStatusControllers.containsKey(userId)) {
+      _healthStatusControllers[userId] = StreamController<List<FamilyMemberHealth>>.broadcast();
+      _startHealthStatusListener(userId);
+    }
+    return _healthStatusControllers[userId]!.stream;
+  }
+
+  /// Start listening to family members' health status
+  void _startHealthStatusListener(String userId) async {
+    // Listen to family members changes
+    _database.child('family_members').child(userId).onValue.listen((event) async {
+      if (!event.snapshot.exists) {
+        _healthStatusControllers[userId]?.add([]);
+        return;
+      }
+
+      final membersData = Map<String, dynamic>.from(event.snapshot.value as Map);
+      final healthStatuses = <FamilyMemberHealth>[];
+
+      for (var entry in membersData.entries) {
+        final memberData = Map<String, dynamic>.from(entry.value as Map);
+        final memberId = memberData['memberId'] as String;
+        final memberName = memberData['memberName'] as String? ?? 'Không rõ';
+        final relationship = memberData['relationship'] as String? ?? 'Người thân';
+
+        // Get latest prediction for this member
+        final healthStatus = await _getMemberHealthStatus(
+          memberId: memberId,
+          name: memberName,
+          relationship: relationship,
+        );
+        healthStatuses.add(healthStatus);
+      }
+
+      // Sort by risk level (high first)
+      healthStatuses.sort((a, b) {
+        final riskOrder = {'high': 0, 'medium': 1, 'low': 2, null: 3};
+        return (riskOrder[a.latestRiskLevel] ?? 3)
+            .compareTo(riskOrder[b.latestRiskLevel] ?? 3);
+      });
+
+      _healthStatusControllers[userId]?.add(healthStatuses);
+    });
+  }
+
+  /// Get health status for a single family member
+  Future<FamilyMemberHealth> _getMemberHealthStatus({
+    required String memberId,
+    required String name,
+    required String relationship,
+  }) async {
+    try {
+      // Get latest stroke prediction
+      final strokeSnapshot = await _database
+          .child('predictions')
+          .orderByChild('userId')
+          .equalTo(memberId)
+          .limitToLast(1)
+          .get();
+
+      String? latestRiskLevel;
+      int? latestRiskScore;
+      String? predictionType;
+      DateTime? lastUpdate;
+
+      if (strokeSnapshot.exists) {
+        final data = Map<String, dynamic>.from(strokeSnapshot.value as Map);
+        if (data.isNotEmpty) {
+          final latestPrediction = Map<String, dynamic>.from(data.values.first as Map);
+          latestRiskLevel = latestPrediction['riskLevel'] as String?;
+          latestRiskScore = latestPrediction['riskScore'] as int?;
+          predictionType = latestPrediction['type'] as String?;
+          final createdAt = latestPrediction['createdAt'];
+          if (createdAt != null) {
+            lastUpdate = DateTime.fromMillisecondsSinceEpoch(createdAt as int);
+          }
+        }
+      }
+
+      // Get latest health record
+      Map<String, dynamic>? latestHealthRecord;
+      final healthSnapshot = await _database
+          .child('health_records')
+          .child(memberId)
+          .orderByChild('recordedAt')
+          .limitToLast(1)
+          .get();
+
+      if (healthSnapshot.exists) {
+        final data = Map<String, dynamic>.from(healthSnapshot.value as Map);
+        if (data.isNotEmpty) {
+          latestHealthRecord = Map<String, dynamic>.from(data.values.first as Map);
+          // Update lastUpdate if health record is more recent
+          final recordedAt = latestHealthRecord['recordedAt'];
+          if (recordedAt != null) {
+            final recordDate = DateTime.fromMillisecondsSinceEpoch(recordedAt as int);
+            if (lastUpdate == null || recordDate.isAfter(lastUpdate)) {
+              lastUpdate = recordDate;
+            }
+          }
+        }
+      }
+
+      return FamilyMemberHealth(
+        memberId: memberId,
+        name: name,
+        relationship: relationship,
+        latestRiskLevel: latestRiskLevel,
+        lastUpdate: lastUpdate,
+        latestRiskScore: latestRiskScore,
+        predictionType: predictionType,
+        latestHealthRecord: latestHealthRecord,
+      );
+    } catch (e) {
+      print('Error getting member health status: $e');
+      return FamilyMemberHealth(
+        memberId: memberId,
+        name: name,
+        relationship: relationship,
+      );
+    }
+  }
+
+  /// Get all family member IDs for a user
+  Future<List<String>> getFamilyMemberIds(String userId) async {
+    try {
+      final snapshot = await _database
+          .child('family_members')
+          .child(userId)
+          .get();
+
+      if (!snapshot.exists) return [];
+
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      final memberIds = <String>[];
+
+      data.forEach((key, value) {
+        final member = Map<String, dynamic>.from(value as Map);
+        final memberId = member['memberId'] as String?;
+        if (memberId != null) {
+          memberIds.add(memberId);
+        }
+      });
+
+      return memberIds;
+    } catch (e) {
+      print('Error getting family member IDs: $e');
+      return [];
+    }
+  }
+
+  /// Dispose stream controllers
+  void dispose() {
+    for (var controller in _healthStatusControllers.values) {
+      controller.close();
+    }
+    _healthStatusControllers.clear();
+  }
 
   // Tìm user bằng email hoặc phone
   Future<Map<String, dynamic>?> findUserByEmailOrPhone(String query) async {

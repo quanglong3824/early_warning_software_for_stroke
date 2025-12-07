@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/service_initializer.dart';
 
+/// Optimized splash screen with preloading
+/// Requirements: 10.1 - Display main dashboard within 3 seconds
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});
 
@@ -10,17 +14,52 @@ class ScreenSplash extends StatefulWidget {
 
 class _ScreenSplashState extends State<ScreenSplash> {
   final _authService = AuthService();
+  final _serviceInitializer = ServiceInitializer();
+  
+  String _statusMessage = 'Đang khởi tạo...';
+  double _progress = 0.0;
+  StreamSubscription<InitializationProgress>? _progressSubscription;
 
   @override
   void initState() {
     super.initState();
-    _checkSession();
+    _initializeAndCheckSession();
+  }
+
+  @override
+  void dispose() {
+    _progressSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initializeAndCheckSession() async {
+    // Listen to initialization progress
+    _progressSubscription = _serviceInitializer.progressStream.listen((progress) {
+      if (mounted) {
+        setState(() {
+          _statusMessage = progress.message;
+          _progress = progress.progress;
+        });
+      }
+    });
+
+    // Start service initialization in parallel with minimum splash time
+    final initFuture = _serviceInitializer.initialize();
+    final minSplashFuture = Future.delayed(const Duration(milliseconds: 1500));
+
+    // Wait for both critical services and minimum splash time
+    await Future.wait([
+      _serviceInitializer.waitForCritical(),
+      minSplashFuture,
+    ]);
+
+    if (!mounted) return;
+
+    // Check session while non-critical services continue loading in background
+    await _checkSession();
   }
 
   Future<void> _checkSession() async {
-    // Wait for splash animation
-    await Future.delayed(const Duration(seconds: 2));
-
     if (!mounted) return;
 
     // Check if user is logged in
@@ -136,13 +175,38 @@ class _ScreenSplashState extends State<ScreenSplash> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Progress indicator with value
                   SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 4,
-                      valueColor: AlwaysStoppedAnimation<Color>(primary),
-                      backgroundColor: const Color(0xFFE5E7EB),
+                    width: 48,
+                    height: 48,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          value: _progress > 0 ? _progress : null,
+                          strokeWidth: 4,
+                          valueColor: AlwaysStoppedAnimation<Color>(primary),
+                          backgroundColor: const Color(0xFFE5E7EB),
+                        ),
+                        if (_progress > 0)
+                          Text(
+                            '${(_progress * 100).toInt()}%',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: primary,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Status message
+                  Text(
+                    _statusMessage,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: textSecondary.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 16),

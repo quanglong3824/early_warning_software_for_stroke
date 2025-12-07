@@ -1,7 +1,24 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import '../data/models/appointment_model.dart';
+import '../data/models/user_model.dart';
+import '../data/models/health_record_model.dart';
 import '../services/auth_service.dart';
+
+/// Model chi tiết lịch hẹn với thông tin bệnh nhân đầy đủ
+class AppointmentDetailModel {
+  final AppointmentModel appointment;
+  final UserModel? patient;
+  final List<AppointmentModel> previousAppointments;
+  final List<HealthRecordModel> healthRecords;
+
+  AppointmentDetailModel({
+    required this.appointment,
+    this.patient,
+    this.previousAppointments = const [],
+    this.healthRecords = const [],
+  });
+}
 
 class AppointmentService {
   static final AppointmentService _instance = AppointmentService._internal();
@@ -278,6 +295,274 @@ class AppointmentService {
       return null;
     } catch (e) {
       print('Error getting appointment: $e');
+      return null;
+    }
+  }
+
+  /// Lấy lịch hẹn theo trạng thái cho bác sĩ
+  /// Requirements: 2.1
+  Stream<List<AppointmentModel>> getAppointmentsByStatus(
+    String doctorId,
+    String status,
+  ) {
+    return _db
+        .child('appointments')
+        .orderByChild('doctorId')
+        .equalTo(doctorId)
+        .onValue
+        .asyncMap((event) async {
+      final List<AppointmentModel> appointments = [];
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+          for (int i = 0; i < value.length; i++) {
+            if (value[i] != null) {
+              data[i.toString()] = value[i];
+            }
+          }
+        }
+
+        for (var entry in data.entries) {
+          if (entry.value == null) continue;
+          final appointmentData = Map<String, dynamic>.from(entry.value as Map);
+          final appointment = AppointmentModel.fromJson(appointmentData);
+          
+          // Lọc theo trạng thái
+          if (appointment.status == status) {
+            // Fetch patient name
+            final userId = appointmentData['userId'] as String?;
+            if (userId != null) {
+              try {
+                final userSnapshot = await _db.child('users').child(userId).get();
+                if (userSnapshot.exists) {
+                  final userData = Map<String, dynamic>.from(userSnapshot.value as Map);
+                  appointmentData['patientName'] = userData['name'] as String? ?? 'Bệnh nhân';
+                }
+              } catch (e) {
+                print('Error fetching patient name: $e');
+              }
+            }
+            appointments.add(AppointmentModel.fromJson(appointmentData));
+          }
+        }
+      }
+      // Sắp xếp theo thời gian hẹn
+      appointments.sort((a, b) => a.appointmentTime.compareTo(b.appointmentTime));
+      return appointments;
+    });
+  }
+
+  /// Lấy lịch hẹn hôm nay cho bác sĩ
+  /// Requirements: 2.1
+  Stream<List<AppointmentModel>> getTodayAppointments(String doctorId) {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day).millisecondsSinceEpoch;
+    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59).millisecondsSinceEpoch;
+
+    return getDoctorAppointments(doctorId).map((appointments) {
+      return appointments.where((apt) {
+        return apt.appointmentTime >= startOfDay &&
+            apt.appointmentTime <= endOfDay &&
+            (apt.status == 'confirmed' || apt.status == 'pending');
+      }).toList()
+        ..sort((a, b) => a.appointmentTime.compareTo(b.appointmentTime));
+    });
+  }
+
+  /// Lấy lịch hẹn sắp tới cho bác sĩ (sau hôm nay)
+  /// Requirements: 2.1
+  Stream<List<AppointmentModel>> getUpcomingDoctorAppointments(String doctorId) {
+    final now = DateTime.now();
+    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59).millisecondsSinceEpoch;
+
+    return getDoctorAppointments(doctorId).map((appointments) {
+      return appointments.where((apt) {
+        return apt.appointmentTime > endOfDay &&
+            (apt.status == 'confirmed' || apt.status == 'pending');
+      }).toList()
+        ..sort((a, b) => a.appointmentTime.compareTo(b.appointmentTime));
+    });
+  }
+
+  /// Lấy yêu cầu lịch hẹn đang chờ xác nhận
+  /// Requirements: 2.2
+  Stream<List<AppointmentModel>> getPendingRequests(String doctorId) {
+    return _db
+        .child('appointments')
+        .orderByChild('doctorId')
+        .equalTo(doctorId)
+        .onValue
+        .asyncMap((event) async {
+      final List<AppointmentModel> appointments = [];
+      if (event.snapshot.exists && event.snapshot.value != null) {
+        final dynamic value = event.snapshot.value;
+        Map<dynamic, dynamic> data = {};
+
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+          for (int i = 0; i < value.length; i++) {
+            if (value[i] != null) {
+              data[i.toString()] = value[i];
+            }
+          }
+        }
+
+        for (var entry in data.entries) {
+          if (entry.value == null) continue;
+          final appointmentData = Map<String, dynamic>.from(entry.value as Map);
+          final appointment = AppointmentModel.fromJson(appointmentData);
+
+          // Chỉ lấy các yêu cầu đang chờ
+          if (appointment.status == 'pending') {
+            // Fetch patient name
+            final userId = appointmentData['userId'] as String?;
+            if (userId != null) {
+              try {
+                final userSnapshot = await _db.child('users').child(userId).get();
+                if (userSnapshot.exists) {
+                  final userData = Map<String, dynamic>.from(userSnapshot.value as Map);
+                  appointmentData['patientName'] = userData['name'] as String? ?? 'Bệnh nhân';
+                  appointmentData['patientPhone'] = userData['phone'] as String?;
+                }
+              } catch (e) {
+                print('Error fetching patient info: $e');
+              }
+            }
+            appointments.add(AppointmentModel.fromJson(appointmentData));
+          }
+        }
+      }
+      // Sắp xếp theo thời gian tạo (mới nhất trước)
+      appointments.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return appointments;
+    });
+  }
+
+  /// Từ chối lịch hẹn với lý do
+  /// Requirements: 2.4
+  Future<bool> rejectAppointment(String appointmentId, String reason) async {
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await _db.child('appointments').child(appointmentId).update({
+        'status': 'rejected',
+        'rejectReason': reason,
+        'rejectedAt': now,
+        'updatedAt': now,
+      });
+
+      // TODO: Gửi notification cho bệnh nhân
+      return true;
+    } catch (e) {
+      print('Error rejecting appointment: $e');
+      return false;
+    }
+  }
+
+  /// Lấy chi tiết lịch hẹn với thông tin bệnh nhân đầy đủ
+  /// Requirements: 2.7
+  Future<AppointmentDetailModel?> getAppointmentDetail(String appointmentId) async {
+    try {
+      // Lấy thông tin lịch hẹn
+      final appointmentSnapshot = await _db.child('appointments').child(appointmentId).get();
+      if (!appointmentSnapshot.exists) {
+        return null;
+      }
+
+      final appointmentData = Map<String, dynamic>.from(appointmentSnapshot.value as Map);
+      final appointment = AppointmentModel.fromJson(appointmentData);
+
+      // Lấy thông tin bệnh nhân
+      UserModel? patient;
+      final userId = appointment.userId;
+      final userSnapshot = await _db.child('users').child(userId).get();
+      if (userSnapshot.exists) {
+        final userData = Map<String, dynamic>.from(userSnapshot.value as Map);
+        patient = UserModel.fromJson(userData);
+      }
+
+      // Lấy lịch sử lịch hẹn trước đó của bệnh nhân với bác sĩ này
+      final List<AppointmentModel> previousAppointments = [];
+      final previousSnapshot = await _db
+          .child('appointments')
+          .orderByChild('userId')
+          .equalTo(userId)
+          .get();
+
+      if (previousSnapshot.exists && previousSnapshot.value != null) {
+        final dynamic value = previousSnapshot.value;
+        Map<dynamic, dynamic> data = {};
+
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+          for (int i = 0; i < value.length; i++) {
+            if (value[i] != null) {
+              data[i.toString()] = value[i];
+            }
+          }
+        }
+
+        for (var entry in data.entries) {
+          if (entry.value == null) continue;
+          final prevData = Map<String, dynamic>.from(entry.value as Map);
+          final prevAppointment = AppointmentModel.fromJson(prevData);
+          
+          // Chỉ lấy các lịch hẹn đã hoàn thành và không phải lịch hẹn hiện tại
+          if (prevAppointment.appointmentId != appointmentId &&
+              prevAppointment.doctorId == appointment.doctorId &&
+              prevAppointment.status == 'completed') {
+            previousAppointments.add(prevAppointment);
+          }
+        }
+        // Sắp xếp theo thời gian mới nhất
+        previousAppointments.sort((a, b) => b.appointmentTime.compareTo(a.appointmentTime));
+      }
+
+      // Lấy hồ sơ sức khỏe gần đây của bệnh nhân
+      final List<HealthRecordModel> healthRecords = [];
+      final healthSnapshot = await _db
+          .child('healthRecords')
+          .orderByChild('userId')
+          .equalTo(userId)
+          .limitToLast(5)
+          .get();
+
+      if (healthSnapshot.exists && healthSnapshot.value != null) {
+        final dynamic value = healthSnapshot.value;
+        Map<dynamic, dynamic> data = {};
+
+        if (value is Map) {
+          data = value;
+        } else if (value is List) {
+          for (int i = 0; i < value.length; i++) {
+            if (value[i] != null) {
+              data[i.toString()] = value[i];
+            }
+          }
+        }
+
+        for (var entry in data.entries) {
+          if (entry.value == null) continue;
+          final recordData = Map<String, dynamic>.from(entry.value as Map);
+          healthRecords.add(HealthRecordModel.fromJson(recordData));
+        }
+        // Sắp xếp theo thời gian mới nhất
+        healthRecords.sort((a, b) => b.recordedAt.compareTo(a.recordedAt));
+      }
+
+      return AppointmentDetailModel(
+        appointment: appointment,
+        patient: patient,
+        previousAppointments: previousAppointments,
+        healthRecords: healthRecords,
+      );
+    } catch (e) {
+      print('Error getting appointment detail: $e');
       return null;
     }
   }

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/family_service.dart';
+import '../../../data/models/family_forum_models.dart';
 
 class ScreenFamilyManagement extends StatefulWidget {
   const ScreenFamilyManagement({super.key});
@@ -16,12 +18,41 @@ class _ScreenFamilyManagementState extends State<ScreenFamilyManagement> {
   List<Map<String, dynamic>> _familyMembers = [];
   List<Map<String, dynamic>> _pendingRequests = [];
   List<Map<String, dynamic>> _sentRequests = [];
+  List<FamilyMemberHealth> _familyHealthStatus = [];
+  StreamSubscription<List<FamilyMemberHealth>>? _healthStatusSubscription;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    _subscribeToHealthStatus();
+  }
+
+  @override
+  void dispose() {
+    _healthStatusSubscription?.cancel();
+    super.dispose();
+  }
+
+  /// Subscribe to real-time family health status updates
+  /// Requirements: 6.3, 6.5
+  Future<void> _subscribeToHealthStatus() async {
+    final userId = await _authService.getUserId();
+    if (userId == null) return;
+
+    _healthStatusSubscription = _familyService.getFamilyHealthStatus(userId).listen(
+      (healthStatuses) {
+        if (mounted) {
+          setState(() {
+            _familyHealthStatus = healthStatuses;
+          });
+        }
+      },
+      onError: (e) {
+        print('Error in health status stream: $e');
+      },
+    );
   }
 
   Future<void> _loadData() async {
@@ -48,6 +79,17 @@ class _ScreenFamilyManagementState extends State<ScreenFamilyManagement> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  /// Get health status for a specific member
+  FamilyMemberHealth? _getHealthStatusForMember(String memberId) {
+    try {
+      return _familyHealthStatus.firstWhere(
+        (status) => status.memberId == memberId,
+      );
+    } catch (e) {
+      return null;
     }
   }
 
@@ -344,6 +386,48 @@ class _ScreenFamilyManagementState extends State<ScreenFamilyManagement> {
                   ),
                   const SizedBox(height: 12),
                   
+                  // High-risk alerts section - Requirements: 6.4
+                  if (_familyHealthStatus.any((s) => s.isHighRisk)) ...[
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.warning_amber_rounded, color: Colors.red.shade700, size: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Cảnh báo nguy cơ cao',
+                                style: TextStyle(
+                                  color: Colors.red.shade700,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          ..._familyHealthStatus
+                              .where((s) => s.isHighRisk)
+                              .map((status) => Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      '• ${status.name} - ${status.riskLevelVi}',
+                                      style: TextStyle(color: Colors.red.shade700),
+                                    ),
+                                  )),
+                        ],
+                      ),
+                    ),
+                  ],
+
                   if (_familyMembers.isEmpty)
                     Center(
                       child: Padding(
@@ -366,13 +450,17 @@ class _ScreenFamilyManagementState extends State<ScreenFamilyManagement> {
                       ),
                     )
                   else
-                    ..._familyMembers.map((member) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _MemberCard(
-                            member: member,
-                            onRemove: () => _removeMember(member['id'], member['memberName']),
-                          ),
-                        )),
+                    ..._familyMembers.map((member) {
+                      final healthStatus = _getHealthStatusForMember(member['memberId']);
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _MemberCard(
+                          member: member,
+                          healthStatus: healthStatus,
+                          onRemove: () => _removeMember(member['id'], member['memberName']),
+                        ),
+                      );
+                    }),
                 ],
               ),
             ),
@@ -557,74 +645,212 @@ class _SentRequestCard extends StatelessWidget {
   }
 }
 
-// Card thành viên
+// Card thành viên with health status - Requirements: 6.3, 6.4
 class _MemberCard extends StatelessWidget {
   final Map<String, dynamic> member;
+  final FamilyMemberHealth? healthStatus;
   final VoidCallback onRemove;
 
   const _MemberCard({
     required this.member,
+    this.healthStatus,
     required this.onRemove,
   });
 
+  Color _getRiskColor() {
+    if (healthStatus == null) return const Color(0xFF6B7280);
+    switch (healthStatus!.latestRiskLevel) {
+      case 'high':
+        return Colors.red;
+      case 'medium':
+        return Colors.orange;
+      case 'low':
+        return Colors.green;
+      default:
+        return const Color(0xFF6B7280);
+    }
+  }
+
+  Color _getRiskBgColor() {
+    if (healthStatus == null) return const Color(0xFFF3F4F6);
+    switch (healthStatus!.latestRiskLevel) {
+      case 'high':
+        return Colors.red.shade50;
+      case 'medium':
+        return Colors.orange.shade50;
+      case 'low':
+        return Colors.green.shade50;
+      default:
+        return const Color(0xFFF3F4F6);
+    }
+  }
+
+  String _formatLastUpdate() {
+    if (healthStatus?.lastUpdate == null) return '';
+    final now = DateTime.now();
+    final diff = now.difference(healthStatus!.lastUpdate!);
+    
+    if (diff.inMinutes < 1) return 'Vừa xong';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} phút trước';
+    if (diff.inHours < 24) return '${diff.inHours} giờ trước';
+    if (diff.inDays < 7) return '${diff.inDays} ngày trước';
+    return '${healthStatus!.lastUpdate!.day}/${healthStatus!.lastUpdate!.month}/${healthStatus!.lastUpdate!.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isHighRisk = healthStatus?.isHighRisk ?? false;
+    
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: isHighRisk ? Border.all(color: Colors.red.shade300, width: 2) : null,
         boxShadow: const [
           BoxShadow(color: Color(0x14000000), blurRadius: 6, offset: Offset(0, 2))
         ],
       ),
       padding: const EdgeInsets.all(12),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: const Color(0xFF135BEC).withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.person, color: Color(0xFF135BEC), size: 32),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  member['memberName'] ?? 'Không rõ',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              // Avatar with risk indicator
+              Stack(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF135BEC).withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.person, color: Color(0xFF135BEC), size: 32),
+                  ),
+                  if (isHighRisk)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(Icons.warning, color: Colors.white, size: 10),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      member['memberName'] ?? 'Không rõ',
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      member['relationship'] ?? 'Người thân',
+                      style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  member['relationship'] ?? 'Người thân',
-                  style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13),
-                ),
-              ],
-            ),
+              ),
+              IconButton(
+                onPressed: onRemove,
+                icon: const Icon(Icons.delete_outline, color: Colors.red, size: 22),
+              ),
+            ],
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFE7F6ED),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: const Text(
-              'Đã kết nối',
-              style: TextStyle(
-                color: Color(0xFF07883B),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+          
+          // Health status section - Requirements: 6.3
+          if (healthStatus != null) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: _getRiskBgColor(),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    healthStatus!.latestRiskLevel == 'high'
+                        ? Icons.warning_amber_rounded
+                        : healthStatus!.latestRiskLevel == 'medium'
+                            ? Icons.info_outline
+                            : Icons.check_circle_outline,
+                    color: _getRiskColor(),
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          healthStatus!.riskLevelVi,
+                          style: TextStyle(
+                            color: _getRiskColor(),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        if (healthStatus!.lastUpdate != null)
+                          Text(
+                            'Cập nhật: ${_formatLastUpdate()}',
+                            style: TextStyle(
+                              color: _getRiskColor().withOpacity(0.7),
+                              fontSize: 11,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (healthStatus!.latestRiskScore != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _getRiskColor().withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        '${healthStatus!.latestRiskScore}%',
+                        style: TextStyle(
+                          color: _getRiskColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-          ),
-          IconButton(
-            onPressed: onRemove,
-            icon: const Icon(Icons.delete, color: Colors.red),
-          ),
+          ] else ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF3F4F6),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.health_and_safety_outlined, color: Color(0xFF6B7280), size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Chưa có dữ liệu sức khỏe',
+                    style: TextStyle(color: Color(0xFF6B7280), fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

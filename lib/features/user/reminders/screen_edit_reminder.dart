@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/auth_service.dart';
-import '../../../services/prescription_service.dart';
+import '../../../services/reminder_service.dart';
 import '../../../services/notification_service.dart';
 
 class ScreenEditReminder extends StatefulWidget {

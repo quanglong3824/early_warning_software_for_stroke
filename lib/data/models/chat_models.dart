@@ -3,10 +3,13 @@ class ConversationModel {
   final String userId;
   final String doctorId;
   final String? doctorName;
+  final String? patientName;
+  final String? patientAvatar;
   final String? lastMessage;
   final int? lastMessageTime;
   final int userUnreadCount;
   final int doctorUnreadCount;
+  final bool isOnline;
   final int createdAt;
   final int updatedAt;
 
@@ -15,10 +18,13 @@ class ConversationModel {
     required this.userId,
     required this.doctorId,
     this.doctorName,
+    this.patientName,
+    this.patientAvatar,
     this.lastMessage,
     this.lastMessageTime,
     required this.userUnreadCount,
     required this.doctorUnreadCount,
+    this.isOnline = false,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -29,10 +35,13 @@ class ConversationModel {
       userId: json['userId'] ?? '',
       doctorId: json['doctorId'] ?? '',
       doctorName: json['doctorName'],
+      patientName: json['patientName'],
+      patientAvatar: json['patientAvatar'],
       lastMessage: json['lastMessage'],
       lastMessageTime: json['lastMessageTime'],
       userUnreadCount: json['userUnreadCount'] ?? 0,
       doctorUnreadCount: json['doctorUnreadCount'] ?? 0,
+      isOnline: json['isOnline'] ?? false,
       createdAt: json['createdAt'] ?? DateTime.now().millisecondsSinceEpoch,
       updatedAt: json['updatedAt'] ?? DateTime.now().millisecondsSinceEpoch,
     );
@@ -44,10 +53,13 @@ class ConversationModel {
       'userId': userId,
       'doctorId': doctorId,
       'doctorName': doctorName,
+      'patientName': patientName,
+      'patientAvatar': patientAvatar,
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
       'userUnreadCount': userUnreadCount,
       'doctorUnreadCount': doctorUnreadCount,
+      'isOnline': isOnline,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };

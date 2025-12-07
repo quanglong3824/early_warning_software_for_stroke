@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../widgets/app_drawer.dart';
 import '../../../widgets/app_bottom_nav.dart';
 import '../../../widgets/sos_floating_button.dart';
+import '../../../widgets/offline_indicator.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/family_service.dart';
 import '../../../services/user_dashboard_service.dart';
+import '../../../services/connectivity_service.dart';
 import '../../../mixins/account_status_check_mixin.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +33,16 @@ class _ScreenDashboardState extends State<ScreenDashboard>
   @override
   void initState() {
     super.initState();
+    _initializeConnectivity();
     _loadData();
+  }
+  
+  Future<void> _initializeConnectivity() async {
+    try {
+      await ConnectivityServiceSingleton.initialize();
+    } catch (e) {
+      // Already initialized or failed
+    }
   }
 
   Future<void> _loadData() async {
@@ -149,6 +160,7 @@ class _ScreenDashboardState extends State<ScreenDashboard>
         centerTitle: true,
         title: const Text('SEWS', style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold)),
         actions: [
+          const NetworkStatusIcon(),
           Stack(
             clipBehavior: Clip.none,
             children: [
@@ -189,7 +201,8 @@ class _ScreenDashboardState extends State<ScreenDashboard>
           )
         ],
       ),
-      body: _isLoading
+      body: OfflineBanner(
+        child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadData,
@@ -399,6 +412,7 @@ class _ScreenDashboardState extends State<ScreenDashboard>
                 ),
               ),
             ),
+      ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 0),
       floatingActionButton: const SOSFloatingButton(),
     ),

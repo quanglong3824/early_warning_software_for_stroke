@@ -108,8 +108,8 @@ class ScreenProfile extends StatelessWidget {
               items: [
                 _MenuItem(
                   icon: Icons.family_restroom,
-                  label: 'Người thân',
-                  onTap: () => Navigator.pushNamed(context, '/family'),
+                  label: 'Gia đình',
+                  onTap: () => Navigator.pushNamed(context, '/family-management'),
                 ),
                 _MenuItem(
                   icon: Icons.calendar_today,
@@ -117,14 +117,30 @@ class ScreenProfile extends StatelessWidget {
                   onTap: () => Navigator.pushNamed(context, '/appointments'),
                 ),
                 _MenuItem(
-                  icon: Icons.medication,
-                  label: 'Đơn thuốc',
-                  onTap: () => Navigator.pushNamed(context, '/prescriptions'),
+                  icon: Icons.notifications,
+                  label: 'Nhắc nhở thuốc',
+                  onTap: () => Navigator.pushNamed(context, '/reminders-list'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _MenuSection(
+              title: 'Khám phá',
+              items: [
+                _MenuItem(
+                  icon: Icons.library_books,
+                  label: 'Kiến thức sức khỏe',
+                  onTap: () => Navigator.pushNamed(context, '/knowledge'),
                 ),
                 _MenuItem(
-                  icon: Icons.notifications,
-                  label: 'Nhắc nhở',
-                  onTap: () => Navigator.pushNamed(context, '/reminders'),
+                  icon: Icons.forum,
+                  label: 'Cộng đồng',
+                  onTap: () => Navigator.pushNamed(context, '/forum'),
+                ),
+                _MenuItem(
+                  icon: Icons.health_and_safety,
+                  label: 'Phòng ngừa',
+                  onTap: () => Navigator.pushNamed(context, '/healthy-plan'),
                 ),
               ],
             ),
@@ -159,7 +175,7 @@ class ScreenProfile extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNav(currentIndex: 4),
+      bottomNavigationBar: const AppBottomNav(currentIndex: 3),
     );
   }
 }

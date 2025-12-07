@@ -156,6 +156,32 @@ class PrescriptionMedicationModel {
       quantity: quantity ?? this.quantity,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! PrescriptionMedicationModel) return false;
+    return medicationId == other.medicationId &&
+        medicationName == other.medicationName &&
+        dosage == other.dosage &&
+        frequency == other.frequency &&
+        duration == other.duration &&
+        instructions == other.instructions &&
+        price == other.price &&
+        quantity == other.quantity;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    medicationId,
+    medicationName,
+    dosage,
+    frequency,
+    duration,
+    instructions,
+    price,
+    quantity,
+  );
 }
 
 class PharmacyOrderModel {

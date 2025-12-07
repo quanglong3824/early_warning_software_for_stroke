@@ -1,3 +1,100 @@
+/// Model for family member health status
+/// Used for real-time family health monitoring
+class FamilyMemberHealth {
+  final String memberId;
+  final String name;
+  final String relationship;
+  final String? latestRiskLevel; // 'low', 'medium', 'high', or null
+  final DateTime? lastUpdate;
+  final int? latestRiskScore;
+  final String? predictionType; // 'stroke' or 'diabetes'
+  final Map<String, dynamic>? latestHealthRecord;
+
+  FamilyMemberHealth({
+    required this.memberId,
+    required this.name,
+    required this.relationship,
+    this.latestRiskLevel,
+    this.lastUpdate,
+    this.latestRiskScore,
+    this.predictionType,
+    this.latestHealthRecord,
+  });
+
+  factory FamilyMemberHealth.fromJson(Map<String, dynamic> json) {
+    return FamilyMemberHealth(
+      memberId: json['memberId'] ?? '',
+      name: json['name'] ?? '',
+      relationship: json['relationship'] ?? 'Người thân',
+      latestRiskLevel: json['latestRiskLevel'],
+      lastUpdate: json['lastUpdate'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(json['lastUpdate'] as int)
+          : null,
+      latestRiskScore: json['latestRiskScore'],
+      predictionType: json['predictionType'],
+      latestHealthRecord: json['latestHealthRecord'] != null
+          ? Map<String, dynamic>.from(json['latestHealthRecord'] as Map)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'memberId': memberId,
+      'name': name,
+      'relationship': relationship,
+      'latestRiskLevel': latestRiskLevel,
+      'lastUpdate': lastUpdate?.millisecondsSinceEpoch,
+      'latestRiskScore': latestRiskScore,
+      'predictionType': predictionType,
+      'latestHealthRecord': latestHealthRecord,
+    };
+  }
+
+  /// Check if this member has high risk
+  bool get isHighRisk => latestRiskLevel == 'high';
+
+  /// Check if this member has medium risk
+  bool get isMediumRisk => latestRiskLevel == 'medium';
+
+  /// Get risk level in Vietnamese
+  String get riskLevelVi {
+    switch (latestRiskLevel) {
+      case 'high':
+        return 'Nguy cơ cao';
+      case 'medium':
+        return 'Nguy cơ trung bình';
+      case 'low':
+        return 'Nguy cơ thấp';
+      default:
+        return 'Chưa có dữ liệu';
+    }
+  }
+
+  /// Copy with new values
+  FamilyMemberHealth copyWith({
+    String? memberId,
+    String? name,
+    String? relationship,
+    String? latestRiskLevel,
+    DateTime? lastUpdate,
+    int? latestRiskScore,
+    String? predictionType,
+    Map<String, dynamic>? latestHealthRecord,
+  }) {
+    return FamilyMemberHealth(
+      memberId: memberId ?? this.memberId,
+      name: name ?? this.name,
+      relationship: relationship ?? this.relationship,
+      latestRiskLevel: latestRiskLevel ?? this.latestRiskLevel,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      latestRiskScore: latestRiskScore ?? this.latestRiskScore,
+      predictionType: predictionType ?? this.predictionType,
+      latestHealthRecord: latestHealthRecord ?? this.latestHealthRecord,
+    );
+  }
+}
+
 class FamilyGroupModel {
   final String groupId;
   final String groupName;

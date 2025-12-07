@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/chat_models.dart';
-import 'dialogs/create_prescription_dialog.dart';
-import 'widgets/prescription_message_widget.dart';
 
 class ScreenDoctorChatDetail extends StatefulWidget {
   final String conversationId;
@@ -27,14 +27,17 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
   final _authService = AuthService();
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+  final _imagePicker = ImagePicker();
   
   String? _doctorId;
   String? _doctorName;
+  bool _isSendingMedia = false;
 
   @override
   void initState() {
     super.initState();
     _loadDoctor();
+    _markAsRead();
   }
 
   @override
@@ -53,6 +56,16 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
     });
   }
 
+
+  /// Mark conversation as read when opening
+  /// Requirements: 4.6
+  Future<void> _markAsRead() async {
+    final doctorId = await _authService.getUserId();
+    if (doctorId != null) {
+      await _chatService.markConversationAsRead(widget.conversationId, doctorId);
+    }
+  }
+
   Future<void> _sendMessage() async {
     if (_messageController.text.trim().isEmpty || _doctorId == null) return;
 
@@ -69,6 +82,85 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
     _scrollToBottom();
   }
 
+  /// Send image message
+  /// Requirements: 4.3, 4.5
+  Future<void> _sendImage() async {
+    if (_doctorId == null) return;
+
+    try {
+      final pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 80,
+      );
+
+      if (pickedFile == null) return;
+
+      setState(() => _isSendingMedia = true);
+
+      final file = File(pickedFile.path);
+      await _chatService.sendMediaMessage(
+        conversationId: widget.conversationId,
+        senderId: _doctorId!,
+        senderName: _doctorName,
+        file: file,
+        mediaType: 'image',
+      );
+
+      _scrollToBottom();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi gửi hình ảnh: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSendingMedia = false);
+      }
+    }
+  }
+
+  /// Take photo from camera
+  Future<void> _takePhoto() async {
+    if (_doctorId == null) return;
+
+    try {
+      final pickedFile = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 80,
+      );
+
+      if (pickedFile == null) return;
+
+      setState(() => _isSendingMedia = true);
+
+      final file = File(pickedFile.path);
+      await _chatService.sendMediaMessage(
+        conversationId: widget.conversationId,
+        senderId: _doctorId!,
+        senderName: _doctorName,
+        file: file,
+        mediaType: 'image',
+      );
+
+      _scrollToBottom();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi chụp ảnh: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSendingMedia = false);
+      }
+    }
+  }
+
   void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -82,28 +174,97 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
   }
 
   Future<void> _createPrescription() async {
-    if (_doctorId == null || _doctorName == null) return;
+    // Feature removed - prescription dialog no longer available
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tính năng đơn thuốc đã được tắt')),
+      );
+    }
+  }
 
-    final result = await showDialog<bool>(
+  void _showAttachmentOptions() {
+    showModalBottomSheet(
       context: context,
-      builder: (context) => CreatePrescriptionDialog(
-        conversationId: widget.conversationId,
-        userId: widget.userId,
-        patientName: widget.patientName,
-        doctorId: _doctorId!,
-        doctorName: _doctorName!,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.photo_library, color: Colors.blue),
+                ),
+                title: const Text('Chọn từ thư viện'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _sendImage();
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.camera_alt, color: Colors.green),
+                ),
+                title: const Text('Chụp ảnh'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _takePhoto();
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.medical_services, color: Colors.orange),
+                ),
+                title: const Text('Tạo đơn thuốc'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _createPrescription();
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
-
-    if (result == true) {
-      _scrollToBottom();
-    }
   }
 
   String _formatTime(int timestamp) {
     final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     return DateFormat('HH:mm').format(date);
   }
+
+  String _formatDate(int timestamp) {
+    final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    final now = DateTime.now();
+    final diff = now.difference(date);
+    
+    if (diff.inDays == 0) {
+      return 'Hôm nay';
+    } else if (diff.inDays == 1) {
+      return 'Hôm qua';
+    } else {
+      return DateFormat('dd/MM/yyyy').format(date);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +292,6 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: textPrimary),
           onPressed: () {
-            // Navigate back to doctor dashboard instead of pop
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             } else {
@@ -141,15 +301,41 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
         ),
         title: Row(
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: primary.withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Icon(Icons.person, color: primary, size: 20),
+            // Avatar with online status
+            Stack(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: primary.withOpacity(0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(Icons.person, color: primary, size: 20),
+                ),
+                // Online status indicator - real-time
+                StreamBuilder<bool>(
+                  stream: _chatService.getPatientOnlineStatus(widget.userId),
+                  builder: (context, snapshot) {
+                    final isOnline = snapshot.data ?? false;
+                    if (!isOnline) return const SizedBox.shrink();
+                    return Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -164,9 +350,19 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
                       fontSize: 16,
                     ),
                   ),
-                  const Text(
-                    'Bệnh nhân',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  // Online status text - real-time
+                  StreamBuilder<bool>(
+                    stream: _chatService.getPatientOnlineStatus(widget.userId),
+                    builder: (context, snapshot) {
+                      final isOnline = snapshot.data ?? false;
+                      return Text(
+                        isOnline ? 'Đang hoạt động' : 'Bệnh nhân',
+                        style: TextStyle(
+                          color: isOnline ? Colors.green : Colors.grey,
+                          fontSize: 12,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -187,6 +383,24 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
       ),
       body: Column(
         children: [
+          // Loading indicator for media upload
+          if (_isSendingMedia)
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: primary.withOpacity(0.1),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 8),
+                  Text('Đang gửi hình ảnh...'),
+                ],
+              ),
+            ),
           Expanded(
             child: StreamBuilder<List<MessageModel>>(
               stream: _chatService.getMessages(widget.conversationId),
@@ -218,6 +432,7 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
                   );
                 }
 
+                // Group messages by date
                 return ListView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16),
@@ -226,133 +441,303 @@ class _ScreenDoctorChatDetailState extends State<ScreenDoctorChatDetail> {
                     final message = messages[index];
                     final isMe = message.senderId == _doctorId;
                     
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Row(
-                        mainAxisAlignment: isMe
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (!isMe) ...[
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.15),
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.person, color: Colors.blue, size: 16),
-                            ),
-                            const SizedBox(width: 8),
-                          ],
-                          Flexible(
-                            child: message.type == 'prescription'
-                                ? PrescriptionMessageWidget(
-                                    message: message,
-                                    isDoctor: true,
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 10,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isMe ? primary : Colors.white,
-                                      borderRadius: BorderRadius.circular(16),
-                                      boxShadow: isMe
-                                          ? null
-                                          : [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.05),
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          message.message,
-                                          style: TextStyle(
-                                            color: isMe ? Colors.white : textPrimary,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          _formatTime(message.timestamp),
-                                          style: TextStyle(
-                                            color: isMe
-                                                ? Colors.white.withOpacity(0.7)
-                                                : Colors.grey,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                          ),
-                        ],
-                      ),
+                    // Show date separator
+                    Widget? dateSeparator;
+                    if (index == 0 || 
+                        _formatDate(messages[index - 1].timestamp) != _formatDate(message.timestamp)) {
+                      dateSeparator = _buildDateSeparator(message.timestamp);
+                    }
+                    
+                    return Column(
+                      children: [
+                        if (dateSeparator != null) dateSeparator,
+                        _buildMessageBubble(message, isMe, primary, textPrimary),
+                      ],
                     );
                   },
                 );
               },
             ),
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
+          _buildInputArea(bgLight, primary),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _buildDateSeparator(int timestamp) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          const Expanded(child: Divider()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              _formatDate(timestamp),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+              ),
             ),
-            padding: const EdgeInsets.all(12),
-            child: Row(
+          ),
+          const Expanded(child: Divider()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageBubble(
+    MessageModel message,
+    bool isMe,
+    Color primary,
+    Color textPrimary,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!isMe) ...[
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const Icon(Icons.person, color: Colors.blue, size: 16),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Flexible(
+            child: _buildMessageContent(message, isMe, primary, textPrimary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMessageContent(
+    MessageModel message,
+    bool isMe,
+    Color primary,
+    Color textPrimary,
+  ) {
+    // Prescription message
+    if (message.type == 'prescription') {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.green.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.green.withOpacity(0.3)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.medical_services, color: primary),
-                  onPressed: _createPrescription,
-                  tooltip: 'Tạo đơn thuốc',
-                ),
+                Icon(Icons.medical_services, color: Colors.green, size: 18),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: bgLight,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: TextField(
-                      controller: _messageController,
-                      decoration: const InputDecoration(
-                        hintText: 'Nhập tin nhắn...',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                      ),
-                      maxLines: null,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => _sendMessage(),
-                    ),
+                const Text('Đơn thuốc', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(message.message),
+            const SizedBox(height: 4),
+            Text(_formatTime(message.timestamp), style: const TextStyle(fontSize: 11, color: Colors.grey)),
+          ],
+        ),
+      );
+    }
+
+    // Image message
+    if (message.type == 'image') {
+      return Column(
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () => _showFullImage(message.message),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 200, maxHeight: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
                   ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  message.message,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      width: 150,
+                      height: 150,
+                      color: Colors.grey[200],
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 150,
+                      height: 150,
+                      color: Colors.grey[200],
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.send, color: Colors.white, size: 20),
-                    onPressed: _sendMessage,
-                  ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _formatTime(message.timestamp),
+            style: const TextStyle(color: Colors.grey, fontSize: 11),
+          ),
+        ],
+      );
+    }
+
+    // Text message
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: isMe ? primary : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: isMe
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
                 ),
               ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            message.message,
+            style: TextStyle(
+              color: isMe ? Colors.white : textPrimary,
+              fontSize: 15,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _formatTime(message.timestamp),
+                style: TextStyle(
+                  color: isMe ? Colors.white.withOpacity(0.7) : Colors.grey,
+                  fontSize: 11,
+                ),
+              ),
+              if (isMe) ...[
+                const SizedBox(width: 4),
+                Icon(
+                  message.isRead ? Icons.done_all : Icons.done,
+                  size: 14,
+                  color: message.isRead 
+                      ? Colors.lightBlueAccent 
+                      : Colors.white.withOpacity(0.7),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFullImage(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              child: Image.network(imageUrl),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputArea(Color bgLight, Color primary) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          // Attachment button
+          IconButton(
+            icon: const Icon(Icons.add_circle_outline, color: Colors.grey),
+            onPressed: _showAttachmentOptions,
+            tooltip: 'Đính kèm',
+          ),
+          const SizedBox(width: 4),
+          // Text input
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: bgLight,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: TextField(
+                controller: _messageController,
+                decoration: const InputDecoration(
+                  hintText: 'Nhập tin nhắn...',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                ),
+                maxLines: null,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) => _sendMessage(),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Send button
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: primary,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Colors.white, size: 20),
+              onPressed: _sendMessage,
             ),
           ),
         ],

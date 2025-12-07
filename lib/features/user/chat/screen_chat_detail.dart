@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import '../../../services/chat_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../data/models/chat_models.dart';
-import '../../doctor/communication/widgets/prescription_message_widget.dart';
 
 class ScreenChatDetail extends StatefulWidget {
   final String conversationId;
@@ -206,12 +205,7 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                             const SizedBox(width: 8),
                           ],
                           Flexible(
-                            child: message.type == 'prescription'
-                                ? PrescriptionMessageWidget(
-                                    message: message,
-                                    isDoctor: false,
-                                  )
-                                : Container(
+                            child: Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16,
                                       vertical: 10,
@@ -223,6 +217,15 @@ class _ScreenChatDetailState extends State<ScreenChatDetail> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        if (message.type == 'prescription')
+                                          Row(
+                                            children: [
+                                              Icon(Icons.medical_services, size: 16, color: isMe ? Colors.white70 : Colors.green),
+                                              const SizedBox(width: 4),
+                                              Text('Đơn thuốc', style: TextStyle(fontWeight: FontWeight.bold, color: isMe ? Colors.white : Colors.green)),
+                                            ],
+                                          ),
+                                        if (message.type == 'prescription') const SizedBox(height: 4),
                                         Text(
                                           message.message,
                                           style: TextStyle(

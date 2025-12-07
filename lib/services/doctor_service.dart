@@ -93,8 +93,9 @@ class DoctorService {
   /// Update doctor availability
   Future<bool> updateAvailability(String doctorId, bool isAvailable) async {
     try {
-      await _db.child('doctors').child(doctorId).update({
+      await _db.child('users').child(doctorId).update({
         'isAvailable': isAvailable,
+        'updatedAt': ServerValue.timestamp,
       });
       return true;
     } catch (e) {
@@ -114,7 +115,9 @@ class DoctorService {
     String? bio,
   }) async {
     try {
-      final updates = <String, dynamic>{};
+      final updates = <String, dynamic>{
+        'updatedAt': ServerValue.timestamp,
+      };
       if (name != null) updates['name'] = name;
       if (phone != null) updates['phone'] = phone;
       if (specialization != null) updates['specialization'] = specialization;
@@ -122,7 +125,7 @@ class DoctorService {
       if (department != null) updates['department'] = department;
       if (bio != null) updates['bio'] = bio;
 
-      await _db.child('doctors').child(doctorId).update(updates);
+      await _db.child('users').child(doctorId).update(updates);
       return true;
     } catch (e) {
       print('Error updating doctor profile: $e');

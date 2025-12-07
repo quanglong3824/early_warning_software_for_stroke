@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:firebase_database/firebase_database.dart';
-import '../../../services/appointment_service.dart';
+import 'dart:async';
+import '../../../services/patient_service.dart';
 import '../../../services/auth_service.dart';
-import '../../../data/models/appointment_model.dart';
 import '../../../widgets/doctor_bottom_nav.dart';
 
 class ScreenPatientList extends StatefulWidget {
@@ -14,14 +12,26 @@ class ScreenPatientList extends StatefulWidget {
 }
 
 class _ScreenPatientListState extends State<ScreenPatientList> {
-  final _appointmentService = AppointmentService();
+  final _patientService = PatientService();
   final _authService = AuthService();
+  final _searchController = TextEditingController();
+  
   String? _doctorId;
+  bool _isSearching = false;
+  List<PatientSummary> _searchResults = [];
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
     _loadDoctorId();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadDoctorId() async {
@@ -31,120 +41,315 @@ class _ScreenPatientListState extends State<ScreenPatientList> {
     }
   }
 
+  void _onSearchChanged(String query) {
+    _debounceTimer?.cancel();
+    
+    if (query.isEmpty) {
+      setState(() {
+        _isSearching = false;
+        _searchResults = [];
+      });
+      return;
+    }
+
+    setState(() => _isSearching = true);
+    
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      if (_doctorId == null) return;
+      
+      final results = await _patientService.searchPatients(_doctorId!, query);
+      if (mounted) {
+        setState(() {
+          _searchResults = results;
+          _isSearching = false;
+        });
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Danh sách Bệnh nhân'),
-        actions: [
-          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-          IconButton(icon: const Icon(Icons.filter_list), onPressed: () {}),
+      ),
+      body: Column(
+        children: [
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Tìm kiếm theo tên, SĐT, ID...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          _onSearchChanged('');
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
+              ),
+              onChanged: _onSearchChanged,
+            ),
+          ),
+          
+          // Patient list
+          Expanded(
+            child: _doctorId == null
+                ? const Center(child: CircularProgressIndicator())
+                : _buildPatientList(),
+          ),
         ],
       ),
-      body: _doctorId == null
-          ? const Center(child: CircularProgressIndicator())
-          : StreamBuilder<List<AppointmentModel>>(
-              stream: _appointmentService.getDoctorAppointments(_doctorId!),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text('Lỗi: ${snapshot.error}'));
-                }
-
-                final appointments = snapshot.data ?? [];
-                
-                // Extract unique patients
-                final Map<String, Map<String, dynamic>> uniquePatients = {};
-                for (var apt in appointments) {
-                  if (!uniquePatients.containsKey(apt.userId)) {
-                    uniquePatients[apt.userId] = {
-                      'userId': apt.userId,
-                      'name': 'Bệnh nhân', // Default, ideally fetch from User service
-                      // We can try to guess name if we had it in AppointmentModel, but we don't.
-                      // For now, we'll use a placeholder or fetch it if possible.
-                      // Actually, AppointmentService.getDoctorAppointments logic I added earlier 
-                      // tried to fetch user details but didn't store it in AppointmentModel 
-                      // because AppointmentModel doesn't have patientName.
-                      // Let's just use "Bệnh nhân" + ID for now or modify AppointmentModel.
-                      // Wait, I can't modify AppointmentModel easily without breaking things.
-                      // I'll just use "Bệnh nhân" for now, or maybe I can fetch user details here.
-                    };
-                  }
-                }
-
-                final patients = uniquePatients.values.toList();
-
-                if (patients.isEmpty) {
-                  return const Center(child: Text('Chưa có bệnh nhân nào'));
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: patients.length,
-                  itemBuilder: (context, index) {
-                    final patient = patients[index];
-                    return _PatientCard(
-                      userId: patient['userId'],
-                      // We will fetch the name inside the card
-                    );
-                  },
-                );
-              },
-            ),
       bottomNavigationBar: const DoctorBottomNav(currentIndex: 1),
+    );
+  }
+
+  Widget _buildPatientList() {
+    // If searching, show search results
+    if (_searchController.text.isNotEmpty) {
+      if (_isSearching) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      
+      if (_searchResults.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
+              const SizedBox(height: 16),
+              Text(
+                'Không tìm thấy bệnh nhân',
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      }
+      
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: _searchResults.length,
+        itemBuilder: (context, index) {
+          return _PatientCard(patient: _searchResults[index]);
+        },
+      );
+    }
+
+    // Show all patients from stream
+    return StreamBuilder<List<PatientSummary>>(
+      stream: _patientService.getDoctorPatients(_doctorId!),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                const SizedBox(height: 16),
+                Text('Lỗi: ${snapshot.error}'),
+              ],
+            ),
+          );
+        }
+
+        final patients = snapshot.data ?? [];
+
+        if (patients.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.people_outline, size: 64, color: Colors.grey[400]),
+                const SizedBox(height: 16),
+                Text(
+                  'Chưa có bệnh nhân nào',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: patients.length,
+          itemBuilder: (context, index) {
+            return _PatientCard(patient: patients[index]);
+          },
+        );
+      },
     );
   }
 }
 
-class _PatientCard extends StatelessWidget {
-  final String userId;
 
-  const _PatientCard({required this.userId});
+class _PatientCard extends StatelessWidget {
+  final PatientSummary patient;
+
+  const _PatientCard({required this.patient});
 
   @override
   Widget build(BuildContext context) {
-    final db = FirebaseDatabase.instance.ref();
-
-    return FutureBuilder<DataSnapshot>(
-      future: db.child('users').child(userId).get(),
-      builder: (context, snapshot) {
-        String patientName = 'Đang tải...';
-        String subtitle = 'ID: ${userId.substring(0, min(8, userId.length))}...';
-
-        if (snapshot.hasData && snapshot.data!.exists && snapshot.data!.value != null) {
-          final dynamic value = snapshot.data!.value;
-          if (value is Map) {
-             final data = Map<String, dynamic>.from(value);
-             patientName = data['name'] ?? 'Bệnh nhân';
-          }
-          // You can add more details here like phone, age, etc.
-        } else if (snapshot.hasError) {
-          patientName = 'Lỗi tải tên';
-        }
-
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.person)),
-            title: Text(patientName),
-            subtitle: Text(subtitle),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/doctor/patient-profile',
-                arguments: {
-                  'userId': userId,
-                  'patientName': patientName,
-                },
-              );
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/doctor/patient-profile',
+            arguments: {
+              'userId': patient.id,
+              'patientName': patient.name,
             },
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              // Avatar
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: _getStatusColor(patient.healthStatus).withOpacity(0.2),
+                backgroundImage: patient.avatarUrl != null
+                    ? NetworkImage(patient.avatarUrl!)
+                    : null,
+                child: patient.avatarUrl == null
+                    ? Icon(Icons.person, color: _getStatusColor(patient.healthStatus))
+                    : null,
+              ),
+              const SizedBox(width: 16),
+              
+              // Patient info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            patient.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        _buildStatusBadge(patient.healthStatus),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    if (patient.phone != null)
+                      Text(
+                        patient.phone!,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      ),
+                    const SizedBox(height: 4),
+                    _buildHealthInfo(patient),
+                  ],
+                ),
+              ),
+              
+              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
+  }
+
+  Widget _buildStatusBadge(String? status) {
+    final color = _getStatusColor(status);
+    final text = _getStatusText(status);
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.5)),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHealthInfo(PatientSummary patient) {
+    final record = patient.latestHealthRecord;
+    if (record == null) {
+      return Text(
+        'Chưa có dữ liệu sức khỏe',
+        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+      );
+    }
+
+    final List<String> info = [];
+    if (record.systolicBP != null && record.diastolicBP != null) {
+      info.add('HA: ${record.systolicBP}/${record.diastolicBP}');
+    }
+    if (record.heartRate != null) {
+      info.add('Nhịp tim: ${record.heartRate}');
+    }
+
+    if (info.isEmpty) {
+      return Text(
+        'Chưa có dữ liệu sức khỏe',
+        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+      );
+    }
+
+    return Text(
+      info.join(' • '),
+      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+    );
+  }
+
+  Color _getStatusColor(String? status) {
+    switch (status) {
+      case 'high_risk':
+        return Colors.red;
+      case 'warning':
+        return Colors.orange;
+      case 'stable':
+      default:
+        return Colors.green;
+    }
+  }
+
+  String _getStatusText(String? status) {
+    switch (status) {
+      case 'high_risk':
+        return 'Nguy cơ cao';
+      case 'warning':
+        return 'Cảnh báo';
+      case 'stable':
+      default:
+        return 'Ổn định';
+    }
   }
 }

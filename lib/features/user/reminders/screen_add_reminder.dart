@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/auth_service.dart';
-import '../../../services/prescription_service.dart';
+import '../../../services/reminder_service.dart';
 import '../../../services/notification_service.dart';
 
 class ScreenAddReminder extends StatefulWidget {
@@ -86,7 +86,7 @@ class _ScreenAddReminderState extends State<ScreenAddReminder> {
           body: 'Hãy uống ${_titleController.text.trim()} ${_dosageController.text.trim()}',
           hour: _selectedTime.hour,
           minute: _selectedTime.minute,
-          payload: reminderId,
+          payload: {'type': 'reminder', 'reminderId': reminderId},
         );
 
         if (!mounted) return;

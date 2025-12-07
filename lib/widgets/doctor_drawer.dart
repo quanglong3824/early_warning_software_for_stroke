@@ -79,25 +79,25 @@ class DoctorDrawer extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
                 _section('CHÍNH', [
-                  _item(context, 'Dashboard', Icons.dashboard_rounded, () => Navigator.pushReplacementNamed(context, '/doctor/dashboard')),
-                  _item(context, 'Bệnh nhân', Icons.people_rounded, () => Navigator.pushReplacementNamed(context, '/doctor/patients')),
-                  _item(context, 'Lịch hẹn', Icons.calendar_today_rounded, () => Navigator.pushReplacementNamed(context, '/doctor/appointments')),
-                  _item(context, 'Tin nhắn', Icons.chat_bubble_rounded, () => Navigator.pushReplacementNamed(context, '/doctor/chat')),
+                  _item(context, 'Dashboard', Icons.dashboard_rounded, '/doctor/dashboard', true),
+                  _item(context, 'Bệnh nhân', Icons.people_rounded, '/doctor/patients', false),
+                  _item(context, 'Lịch hẹn', Icons.calendar_today_rounded, '/doctor/appointments', false),
+                  _item(context, 'Tin nhắn', Icons.chat_bubble_rounded, '/doctor/chat', false),
+                  _item(context, 'Thông báo', Icons.notifications_rounded, '/doctor/notifications', false),
                 ]),
 
                 _section('KHẨN CẤP', [
-                  _item(context, 'Hàng đợi SOS', Icons.emergency, () => Navigator.pushNamed(context, '/doctor/sos-queue')),
+                  _item(context, 'Hàng đợi SOS', Icons.emergency, '/doctor/sos-queue', false),
                 ]),
 
                 _section('CÔNG VIỆC', [
-                  _item(context, 'Tạo đơn thuốc', Icons.medication, () => Navigator.pushNamed(context, '/doctor/create-prescription')),
-                  _item(context, 'Cuộc gọi Video', Icons.videocam, () => Navigator.pushNamed(context, '/doctor/video-call')),
-                  _item(context, 'Đánh giá', Icons.star, () => Navigator.pushNamed(context, '/doctor/reviews')),
+                  _item(context, 'Lịch làm việc', Icons.schedule, '/doctor/schedule', false),
+                  _item(context, 'Đánh giá', Icons.star, '/doctor/reviews', false),
                 ]),
 
                 _section('CÀI ĐẶT', [
-                  _item(context, 'Cài đặt tài khoản', Icons.settings, () => Navigator.pushNamed(context, '/doctor/settings')),
-                  _item(context, 'Trợ giúp', Icons.help, () {}),
+                  _item(context, 'Cài đặt tài khoản', Icons.settings, '/doctor/settings', false),
+                  _item(context, 'Trợ giúp', Icons.help, '', false),
                 ]),
               ],
             ),
@@ -187,7 +187,7 @@ class DoctorDrawer extends StatelessWidget {
     );
   }
 
-  Widget _item(BuildContext context, String label, IconData icon, VoidCallback onTap) {
+  Widget _item(BuildContext context, String label, IconData icon, String route, bool isDashboard) {
     const primary = Color(0xFF135BEC);
     const textPrimary = Color(0xFF111318);
     const textMuted = Color(0xFF6B7280);
@@ -199,7 +199,18 @@ class DoctorDrawer extends StatelessWidget {
         child: InkWell(
           onTap: () {
             Navigator.of(context).pop();
-            onTap();
+            if (route.isEmpty) return;
+            
+            // For dashboard, use replacement to clear stack
+            // For other screens, keep dashboard in stack for back navigation
+            if (isDashboard) {
+              Navigator.of(context).pushReplacementNamed(route);
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                route,
+                (r) => r.settings.name == '/doctor/dashboard',
+              );
+            }
           },
           borderRadius: BorderRadius.circular(12),
           child: Container(

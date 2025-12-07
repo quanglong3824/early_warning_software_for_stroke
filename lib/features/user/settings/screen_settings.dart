@@ -144,7 +144,14 @@ class _ScreenSettingsState extends State<ScreenSettings> {
 
             _sectionTitle('Thông báo'),
             _card([
-              _tile(icon: Icons.notifications_active, label: 'Cảnh báo sớm'),
+              ListTile(
+                leading: _iconBox(Icons.notifications),
+                title: const Text('Cài đặt thông báo'),
+                trailing: const Icon(Icons.chevron_right, color: Colors.black45),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/settings/notifications');
+                },
+              ),
               _divider(),
               ListTile(
                 leading: _iconBox(Icons.medication),
@@ -154,8 +161,6 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                   Navigator.of(context).pushNamed('/reminders-list');
                 },
               ),
-              _divider(),
-              _tile(icon: Icons.vibration, label: 'Âm thanh và rung'),
             ]),
 
             _sectionTitle('Cài đặt chung'),
