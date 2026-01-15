@@ -139,6 +139,15 @@ abstract class IHealthChartService {
 class HealthChartService implements IHealthChartService {
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
   
+  /// Helper to safely convert Firebase data to Map<String, dynamic>
+  Map<String, dynamic> _safeMap(dynamic value) {
+    if (value == null) return {};
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), val));
+    }
+    return {};
+  }
+  
   @override
   Future<List<ChartDataPoint>> getBloodPressureData(
     String userId,
@@ -162,10 +171,10 @@ class HealthChartService implements IHealthChartService {
     if (!snapshot.exists) return [];
     
     final records = <ChartDataPoint>[];
-    final data = Map<String, dynamic>.from(snapshot.value as Map);
+    final data = _safeMap(snapshot.value);
     
     data.forEach((key, value) {
-      final record = Map<String, dynamic>.from(value as Map);
+      final record = _safeMap(value);
       // Support both 'recordedAt' and 'createdAt' timestamp fields
       final timestamp = record['recordedAt'] as int? ?? record['createdAt'] as int?;
       // Support both 'systolicBP' and 'systolic' field names
@@ -211,10 +220,10 @@ class HealthChartService implements IHealthChartService {
     if (!snapshot.exists) return [];
     
     final records = <BloodPressureDataPoint>[];
-    final data = Map<String, dynamic>.from(snapshot.value as Map);
+    final data = _safeMap(snapshot.value);
     
     data.forEach((key, value) {
-      final record = Map<String, dynamic>.from(value as Map);
+      final record = _safeMap(value);
       final timestamp = record['recordedAt'] as int? ?? record['createdAt'] as int?;
       final systolic = record['systolicBP'] ?? record['systolic'];
       final diastolic = record['diastolicBP'] ?? record['diastolic'];
@@ -243,49 +252,42 @@ class HealthChartService implements IHealthChartService {
     String userId,
     String predictionType,
   ) async {
-    final path = predictionType == 'stroke' 
-        ? 'stroke_predictions' 
-        : 'diabetes_predictions';
-    
-    // Try user-specific path first
-    var snapshot = await _database
-        .child(path)
-        .child(userId)
+    // Use 'predictions' table which contains all prediction types
+    final snapshot = await _database
+        .child('predictions')
+        .orderByChild('userId')
+        .equalTo(userId)
         .get();
-    
-    // Fallback to query by userId field
-    if (!snapshot.exists) {
-      snapshot = await _database
-          .child(path)
-          .orderByChild('userId')
-          .equalTo(userId)
-          .get();
-    }
     
     if (!snapshot.exists) return [];
     
     final records = <ChartDataPoint>[];
-    final data = Map<String, dynamic>.from(snapshot.value as Map);
+    final data = _safeMap(snapshot.value);
     
     data.forEach((key, value) {
-      final record = Map<String, dynamic>.from(value as Map);
-      final timestamp = record['createdAt'] as int? ?? record['timestamp'] as int?;
-      // Support multiple field names for risk score
-      final riskScore = record['riskScore'] ?? record['probability'] ?? record['risk_percentage'];
+      final record = _safeMap(value);
+      final type = record['type'] as String?;
       
-      if (timestamp != null && riskScore != null) {
-        final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-        // Convert risk score to percentage if needed (0-1 to 0-100)
-        double scoreValue = (riskScore as num).toDouble();
-        if (scoreValue <= 1.0) {
-          scoreValue = scoreValue * 100;
-        }
+      // Filter by requested type (stroke/diabetes)
+      if (type == predictionType) {
+        final timestamp = record['createdAt'] as int? ?? record['timestamp'] as int?;
+        // Support multiple field names for risk score
+        final riskScore = record['riskScore'] ?? record['probability'] ?? record['risk_percentage'];
         
-        records.add(ChartDataPoint(
-          date: date,
-          value: scoreValue,
-          label: predictionType == 'stroke' ? 'Đột quỵ' : 'Tiểu đường',
-        ));
+        if (timestamp != null && riskScore != null) {
+          final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+          // Convert risk score to percentage if needed (0-1 to 0-100)
+          double scoreValue = (riskScore as num).toDouble();
+          if (scoreValue <= 1.0) {
+            scoreValue = scoreValue * 100;
+          }
+          
+          records.add(ChartDataPoint(
+            date: date,
+            value: scoreValue,
+            label: predictionType == 'stroke' ? 'Đột quỵ' : 'Tiểu đường',
+          ));
+        }
       }
     });
     
@@ -318,13 +320,13 @@ class HealthChartService implements IHealthChartService {
     }
     
     if (healthSnapshot.exists) {
-      final data = Map<String, dynamic>.from(healthSnapshot.value as Map);
+      final data = _safeMap(healthSnapshot.value);
       // Get the most recent record
       Map<String, dynamic>? latestRecord;
       int latestTimestamp = 0;
       
       data.forEach((key, value) {
-        final record = Map<String, dynamic>.from(value as Map);
+        final record = _safeMap(value);
         final timestamp = record['recordedAt'] as int? ?? record['createdAt'] as int? ?? 0;
         if (timestamp > latestTimestamp) {
           latestTimestamp = timestamp;
@@ -376,48 +378,41 @@ class HealthChartService implements IHealthChartService {
     // Get latest predictions
     String? strokeRisk, diabetesRisk;
     
-    var strokeSnapshot = await _database
-        .child('stroke_predictions')
-        .child(userId)
-        .orderByChild('createdAt')
-        .limitToLast(1)
+    // Query last 10 predictions to find the latest of each type
+    // (Limiting to 10 for efficiency, assuming user has somewhat recent data)
+    final predictionsSnapshot = await _database
+        .child('predictions')
+        .orderByChild('userId')
+        .equalTo(userId)
+        .limitToLast(10)
         .get();
-    
-    if (!strokeSnapshot.exists) {
-      strokeSnapshot = await _database
-          .child('stroke_predictions')
-          .orderByChild('userId')
-          .equalTo(userId)
-          .limitToLast(1)
-          .get();
-    }
-    
-    if (strokeSnapshot.exists) {
-      final data = Map<String, dynamic>.from(strokeSnapshot.value as Map);
-      final latest = Map<String, dynamic>.from(data.values.first as Map);
-      strokeRisk = latest['riskLevel'] as String? ?? latest['risk_level'] as String?;
-    }
-    
-    var diabetesSnapshot = await _database
-        .child('diabetes_predictions')
-        .child(userId)
-        .orderByChild('createdAt')
-        .limitToLast(1)
-        .get();
-    
-    if (!diabetesSnapshot.exists) {
-      diabetesSnapshot = await _database
-          .child('diabetes_predictions')
-          .orderByChild('userId')
-          .equalTo(userId)
-          .limitToLast(1)
-          .get();
-    }
-    
-    if (diabetesSnapshot.exists) {
-      final data = Map<String, dynamic>.from(diabetesSnapshot.value as Map);
-      final latest = Map<String, dynamic>.from(data.values.first as Map);
-      diabetesRisk = latest['riskLevel'] as String? ?? latest['risk_level'] as String?;
+        
+    if (predictionsSnapshot.exists) {
+      final data = _safeMap(predictionsSnapshot.value);
+      final predictions = <Map<String, dynamic>>[];
+      
+      data.forEach((key, value) {
+        predictions.add(_safeMap(value));
+      });
+      
+      // Sort to get latest
+      predictions.sort((a, b) {
+        final aTime = a['createdAt'] as int? ?? 0;
+        final bTime = b['createdAt'] as int? ?? 0;
+        return aTime.compareTo(bTime);
+      });
+      
+      // Find latest stroke prediction
+      try {
+        final stroke = predictions.lastWhere((p) => p['type'] == 'stroke');
+        strokeRisk = stroke['riskLevel'] as String? ?? stroke['risk_level'] as String?;
+      } catch (_) {}
+      
+      // Find latest diabetes prediction
+      try {
+        final diabetes = predictions.lastWhere((p) => p['type'] == 'diabetes');
+        diabetesRisk = diabetes['riskLevel'] as String? ?? diabetes['risk_level'] as String?;
+      } catch (_) {}
     }
     
     return HealthSummary(

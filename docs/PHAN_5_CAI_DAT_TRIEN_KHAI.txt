@@ -1,0 +1,387 @@
+PHẦN 5: CÀI ĐẶT VÀ TRIỂN KHAI
+
+
+5.1. Yêu cầu hệ thống
+
+5.1.1. Yêu cầu phần cứng
+
+A. Máy phát triển (Development)
+
+CPU: Intel Core i5 trở lên hoặc Apple M1/M2
+RAM: Tối thiểu 8GB, khuyến nghị 16GB
+Ổ cứng: Tối thiểu 20GB trống (SSD khuyến nghị)
+Màn hình: Độ phân giải tối thiểu 1280x800
+
+B. Thiết bị chạy ứng dụng (Android)
+
+CPU: ARM64 hoặc x86_64
+RAM: Tối thiểu 2GB
+Bộ nhớ: Tối thiểu 200MB trống
+Màn hình: Tối thiểu 4.5 inch
+
+5.1.2. Yêu cầu phần mềm
+
+A. Môi trường phát triển
+
+Hệ điều hành: Windows 10/11, macOS 10.15+, hoặc Linux
+Flutter SDK: 3.5.4 trở lên
+Dart SDK: 3.5.4 trở lên
+Android Studio: 2023.1 trở lên (cho Android emulator)
+Visual Studio Code: Latest version (khuyến nghị)
+Git: 2.0 trở lên
+Python: 3.8 trở lên (cho AI API)
+
+B. Thiết bị Android
+
+Android: API 23 (Android 6.0 Marshmallow) trở lên
+Google Play Services: Đã cài đặt
+Kết nối mạng: WiFi hoặc 4G/5G
+
+C. Trình duyệt Web
+
+Google Chrome: 90 trở lên (khuyến nghị)
+Firefox: 88 trở lên
+Safari: 14 trở lên
+Microsoft Edge: 90 trở lên
+
+5.1.3. Yêu cầu tài khoản
+
+Firebase Account: Để truy cập Firebase Console
+Google Cloud Account: Cho Google Sign-In
+GitHub Account: Để clone repository
+
+
+5.2. Hướng dẫn cài đặt môi trường phát triển
+
+5.2.1. Cài đặt Flutter SDK
+
+Bước 1: Tải Flutter SDK
+Truy cập: https://docs.flutter.dev/get-started/install
+Chọn hệ điều hành phù hợp
+Tải file zip và giải nén
+
+Bước 2: Cấu hình PATH
+Windows: Thêm flutter/bin vào System Environment Variables
+macOS/Linux: Thêm vào ~/.bashrc hoặc ~/.zshrc
+  export PATH="$PATH:[PATH_TO_FLUTTER]/flutter/bin"
+
+Bước 3: Kiểm tra cài đặt
+Chạy lệnh: flutter doctor
+Đảm bảo tất cả các mục đều có dấu tick xanh
+
+5.2.2. Cài đặt Android Studio
+
+Bước 1: Tải và cài đặt
+Truy cập: https://developer.android.com/studio
+Tải và cài đặt Android Studio
+
+Bước 2: Cài đặt Android SDK
+Mở Android Studio
+Vào Settings > Appearance & Behavior > System Settings > Android SDK
+Cài đặt Android SDK Platform 33 (Android 13)
+Cài đặt Android SDK Build-Tools
+Cài đặt Android Emulator
+
+Bước 3: Tạo Android Emulator
+Vào Tools > Device Manager
+Tạo Virtual Device mới
+Chọn Pixel 6 hoặc tương đương
+Chọn API 33 system image
+
+5.2.3. Cài đặt Visual Studio Code
+
+Bước 1: Tải và cài đặt VS Code
+Truy cập: https://code.visualstudio.com
+Tải và cài đặt
+
+Bước 2: Cài đặt Extensions
+Flutter extension
+Dart extension
+Firebase extension (tùy chọn)
+
+5.2.4. Cài đặt Python (cho AI API)
+
+Bước 1: Tải và cài đặt Python
+Truy cập: https://www.python.org/downloads/
+Tải Python 3.8 trở lên
+Cài đặt và thêm vào PATH
+
+Bước 2: Kiểm tra cài đặt
+Chạy lệnh: python --version
+Chạy lệnh: pip --version
+
+5.2.5. Clone và cài đặt dự án
+
+Bước 1: Clone repository
+git clone https://github.com/quanglong3824/early_warning_software_for_stroke.git
+cd early_warning_software_for_stroke
+
+Bước 2: Cài đặt Flutter dependencies
+flutter pub get
+
+Bước 3: Cài đặt Python dependencies (cho AI API)
+cd assets/models
+pip install -r requirements.txt
+cd ../..
+
+Bước 4: Kiểm tra cài đặt
+flutter doctor
+flutter devices
+
+
+5.3. Hướng dẫn build và triển khai
+
+5.3.1. Chạy ứng dụng trong môi trường Development
+
+A. Chạy trên Android Emulator
+
+Bước 1: Khởi động emulator
+Mở Android Studio > Device Manager > Start emulator
+
+Bước 2: Chạy ứng dụng
+flutter run
+
+Hoặc chạy với hot reload:
+flutter run --hot
+
+B. Chạy trên thiết bị Android thật
+
+Bước 1: Bật Developer Options trên điện thoại
+Vào Settings > About Phone
+Nhấn 7 lần vào Build Number
+Vào Developer Options > Bật USB Debugging
+
+Bước 2: Kết nối và chạy
+Kết nối điện thoại qua USB
+Chạy: flutter devices (kiểm tra thiết bị)
+Chạy: flutter run
+
+C. Chạy trên Web (Chrome)
+
+flutter run -d chrome
+
+D. Chạy đồng thời Flutter và AI API
+
+Sử dụng script start.sh:
+./start.sh
+
+Script này sẽ:
+  Khởi động Flask API server (port 5000)
+  Khởi động Flutter web app
+  Hiển thị logs với màu sắc
+
+5.3.2. Build APK Release
+
+A. Build APK
+
+Bước 1: Build APK release
+flutter build apk --release
+
+Bước 2: Tìm file APK
+File APK nằm tại: build/app/outputs/flutter-apk/app-release.apk
+
+B. Build APK với signing key
+
+Bước 1: Tạo keystore (nếu chưa có)
+keytool -genkey -v -keystore ~/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+Bước 2: Cấu hình key.properties
+Tạo file android/key.properties:
+  storePassword=<password>
+  keyPassword=<password>
+  keyAlias=upload
+  storeFile=<path-to-keystore>
+
+Bước 3: Build signed APK
+flutter build apk --release
+
+C. Build App Bundle (cho Google Play)
+
+flutter build appbundle --release
+
+File AAB nằm tại: build/app/outputs/bundle/release/app-release.aab
+
+5.3.3. Build Web Release
+
+Bước 1: Build web
+flutter build web --release
+
+Bước 2: Tìm output
+Files nằm tại: build/web/
+
+Bước 3: Deploy lên hosting
+Upload thư mục build/web/ lên web server
+Có thể sử dụng Firebase Hosting, Netlify, Vercel...
+
+5.3.4. Triển khai AI API Server
+
+A. Chạy local
+
+cd assets/models
+python app.py
+
+Server chạy tại: http://localhost:5000
+
+B. Deploy lên cloud (ví dụ Heroku)
+
+Bước 1: Tạo Procfile
+web: python app.py
+
+Bước 2: Deploy
+heroku create sews-ai-api
+git push heroku main
+
+C. Deploy lên VPS
+
+Bước 1: Cài đặt dependencies
+pip install -r requirements.txt
+
+Bước 2: Chạy với gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+
+5.4. Cấu hình Firebase
+
+5.4.1. Tạo Firebase Project
+
+Bước 1: Truy cập Firebase Console
+Vào: https://console.firebase.google.com
+Đăng nhập với Google Account
+
+Bước 2: Tạo project mới
+Click "Add project"
+Nhập tên project: warning-software-stroke
+Bật/tắt Google Analytics tùy ý
+Click "Create project"
+
+5.4.2. Cấu hình Firebase cho Android
+
+Bước 1: Thêm Android app
+Trong Firebase Console, click "Add app" > Android
+Package name: com.example.early_warning_software_for_stroke
+App nickname: SEWS Android
+SHA-1 certificate (cho Google Sign-In):
+  cd android
+  ./gradlew signingReport
+
+Bước 2: Tải google-services.json
+Tải file google-services.json
+Đặt vào thư mục: android/app/google-services.json
+
+Bước 3: Cấu hình build.gradle
+File android/build.gradle đã được cấu hình sẵn
+
+5.4.3. Cấu hình Firebase cho Web
+
+Bước 1: Thêm Web app
+Trong Firebase Console, click "Add app" > Web
+App nickname: SEWS Web
+
+Bước 2: Cấu hình firebase_options.dart
+File lib/firebase_options.dart đã được cấu hình sẵn với:
+  apiKey
+  authDomain
+  databaseURL
+  projectId
+  storageBucket
+  messagingSenderId
+  appId
+
+5.4.4. Cấu hình Firebase Services
+
+A. Authentication
+
+Bước 1: Bật Email/Password
+Vào Authentication > Sign-in method
+Bật Email/Password provider
+
+Bước 2: Bật Google Sign-In
+Bật Google provider
+Cấu hình OAuth consent screen
+
+B. Realtime Database
+
+Bước 1: Tạo database
+Vào Realtime Database > Create Database
+Chọn location gần nhất
+Chọn "Start in test mode" (sẽ cấu hình rules sau)
+
+Bước 2: Cấu hình Security Rules
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+    "doctors": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() == 'admin'"
+    },
+    "appointments": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "sos": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
+
+C. Cloud Storage
+
+Bước 1: Tạo storage bucket
+Vào Storage > Get started
+Chọn location
+Cấu hình rules
+
+Bước 2: Security Rules
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+D. Cloud Messaging
+
+Bước 1: Lấy Server Key
+Vào Project Settings > Cloud Messaging
+Copy Server Key để sử dụng cho push notifications
+
+5.4.5. Tài khoản test
+
+Hệ thống có sẵn các tài khoản test:
+
+User:
+  Email: user@test.com
+  Password: 123456
+
+Doctor:
+  Email: doctor@test.com
+  Password: 123456
+
+Admin:
+  Email: admin@test.com
+  Password: 123456
+
+
+5.5. Tổng kết cài đặt
+
+Checklist cài đặt:
+
+[ ] Flutter SDK 3.5.4+ đã cài đặt
+[ ] Android Studio và emulator đã cài đặt
+[ ] VS Code với Flutter extension đã cài đặt
+[ ] Python 3.8+ đã cài đặt
+[ ] Repository đã clone
+[ ] flutter pub get thành công
+[ ] pip install -r requirements.txt thành công
+[ ] Firebase project đã tạo
+[ ] google-services.json đã cấu hình
+[ ] firebase_options.dart đã cấu hình
+[ ] flutter run thành công

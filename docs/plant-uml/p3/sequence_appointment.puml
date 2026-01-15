@@ -1,0 +1,67 @@
+@startuml Sequence_Appointment
+title Biểu đồ tuần tự - Đặt lịch hẹn khám
+
+actor "Người dùng" as User
+participant "ScreenDoctorDetail" as DoctorScreen
+participant "DoctorScheduleService" as ScheduleService
+participant "AppointmentService" as AppointmentService
+participant "Firebase DB" as DB
+participant "NotificationService" as Notify
+actor "Bác sĩ" as Doctor
+
+User -> DoctorScreen: Xem chi tiết bác sĩ
+activate DoctorScreen
+
+DoctorScreen -> ScheduleService: getAvailableSlots(doctorId, date)
+activate ScheduleService
+ScheduleService -> DB: Query schedule
+activate DB
+DB --> ScheduleService: List<Slot>
+deactivate DB
+ScheduleService --> DoctorScreen: Available slots
+deactivate ScheduleService
+
+DoctorScreen --> User: Hiển thị slot trống
+User -> DoctorScreen: Chọn slot + nhập lý do
+
+DoctorScreen -> AppointmentService: createAppointment(data)
+activate AppointmentService
+
+AppointmentService -> DB: Write appointment (status=pending)
+activate DB
+DB --> AppointmentService: appointmentId
+deactivate DB
+
+AppointmentService -> Notify: notifyDoctor(doctorId)
+activate Notify
+Notify -> Doctor: Push notification "Có lịch hẹn mới"
+Notify --> AppointmentService: Sent
+deactivate Notify
+
+AppointmentService --> DoctorScreen: appointmentId
+deactivate AppointmentService
+
+DoctorScreen --> User: Hiển thị "Đặt lịch thành công, chờ xác nhận"
+deactivate DoctorScreen
+
+== Bác sĩ duyệt lịch hẹn ==
+
+Doctor -> Doctor: Xem danh sách lịch hẹn
+Doctor -> AppointmentService: updateStatus(appointmentId, "confirmed")
+activate AppointmentService
+
+AppointmentService -> DB: Update status = confirmed
+activate DB
+DB --> AppointmentService: Success
+deactivate DB
+
+AppointmentService -> Notify: notifyPatient(userId)
+activate Notify
+Notify -> User: Push notification "Lịch hẹn đã được xác nhận"
+Notify --> AppointmentService: Sent
+deactivate Notify
+
+AppointmentService --> Doctor: Success
+deactivate AppointmentService
+
+@enduml

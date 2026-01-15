@@ -8,11 +8,24 @@ class UserDashboardService {
 
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
+  /// Helper to safely convert Firebase data to Map<String, dynamic>
+  Map<String, dynamic> _safeMap(dynamic value) {
+    if (value == null) return {};
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), val));
+    }
+    return {};
+  }
+
   /// Lấy thống kê dashboard
   Future<Map<String, dynamic>> getDashboardStats(String userId) async {
     try {
       // Lấy predictions của user
-      final predictionsSnapshot = await _database.child('predictions').get();
+      final predictionsSnapshot = await _database
+          .child('predictions')
+          .orderByChild('userId')
+          .equalTo(userId)
+          .get();
       
       int totalPredictions = 0;
       int highRiskCount = 0;
@@ -29,44 +42,40 @@ class UserDashboardService {
       int latestDiabetesTime = 0;
 
       if (predictionsSnapshot.exists) {
-        final data = Map<String, dynamic>.from(predictionsSnapshot.value as Map);
+        final data = _safeMap(predictionsSnapshot.value);
         
         data.forEach((key, value) {
-          final prediction = Map<String, dynamic>.from(value as Map);
-          final predUserId = prediction['userId'] as String?;
+          final prediction = _safeMap(value);
+          totalPredictions++;
           
-          if (predUserId == userId) {
-            totalPredictions++;
-            
-            final riskLevel = prediction['riskLevel'] as String?;
-            if (riskLevel == 'high') highRiskCount++;
-            if (riskLevel == 'medium') mediumRiskCount++;
-            if (riskLevel == 'low') lowRiskCount++;
-            
-            final type = prediction['type'] as String?;
-            final createdAt = prediction['createdAt'] as int? ?? 0;
-            
-            if (type == 'stroke') {
-              strokeCount++;
-              if (createdAt > latestStrokeTime) {
-                latestStrokeTime = createdAt;
-                latestStrokePrediction = prediction;
-              }
+          final riskLevel = prediction['riskLevel'] as String?;
+          if (riskLevel == 'high') highRiskCount++;
+          if (riskLevel == 'medium') mediumRiskCount++;
+          if (riskLevel == 'low') lowRiskCount++;
+          
+          final type = prediction['type'] as String?;
+          final createdAt = prediction['createdAt'] as int? ?? 0;
+          
+          if (type == 'stroke') {
+            strokeCount++;
+            if (createdAt > latestStrokeTime) {
+              latestStrokeTime = createdAt;
+              latestStrokePrediction = prediction;
             }
-            
-            if (type == 'diabetes') {
-              diabetesCount++;
-              if (createdAt > latestDiabetesTime) {
-                latestDiabetesTime = createdAt;
-                latestDiabetesPrediction = prediction;
-              }
+          }
+          
+          if (type == 'diabetes') {
+            diabetesCount++;
+            if (createdAt > latestDiabetesTime) {
+              latestDiabetesTime = createdAt;
+              latestDiabetesPrediction = prediction;
             }
-            
-            // Tìm prediction mới nhất (tổng thể)
-            if (createdAt > latestTime) {
-              latestTime = createdAt;
-              latestPrediction = prediction;
-            }
+          }
+          
+          // Tìm prediction mới nhất (tổng thể)
+          if (createdAt > latestTime) {
+            latestTime = createdAt;
+            latestPrediction = prediction;
           }
         });
       }
@@ -79,7 +88,7 @@ class UserDashboardService {
           .get();
       
       if (familySnapshot.exists) {
-        final familyData = Map<String, dynamic>.from(familySnapshot.value as Map);
+        final familyData = _safeMap(familySnapshot.value);
         familyMembersCount = familyData.length;
       }
 
@@ -88,11 +97,11 @@ class UserDashboardService {
       final appointmentsSnapshot = await _database.child('appointments').get();
       
       if (appointmentsSnapshot.exists) {
-        final data = Map<String, dynamic>.from(appointmentsSnapshot.value as Map);
+        final data = _safeMap(appointmentsSnapshot.value);
         final now = DateTime.now().millisecondsSinceEpoch;
         
         data.forEach((key, value) {
-          final appointment = Map<String, dynamic>.from(value as Map);
+          final appointment = _safeMap(value);
           final apptUserId = appointment['userId'] as String?;
           final status = appointment['status'] as String?;
           final appointmentTime = appointment['appointmentTime'] as int? ?? 0;
@@ -149,17 +158,17 @@ class UserDashboardService {
       }
 
       final members = <Map<String, dynamic>>[];
-      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      final data = _safeMap(snapshot.value);
 
       // Lấy thông tin chi tiết của từng member
       for (var entry in data.entries) {
-        final memberData = Map<String, dynamic>.from(entry.value as Map);
+        final memberData = _safeMap(entry.value);
         final memberId = memberData['memberId'] as String?;
         
         if (memberId != null) {
           final userSnapshot = await _database.child('users').child(memberId).get();
           if (userSnapshot.exists) {
-            final userData = Map<String, dynamic>.from(userSnapshot.value as Map);
+            final userData = _safeMap(userSnapshot.value);
             members.add({
               'id': memberId,
               'name': userData['name'] ?? 'Unknown',
@@ -188,11 +197,11 @@ class UserDashboardService {
       }
 
       final appointments = <Map<String, dynamic>>[];
-      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      final data = _safeMap(snapshot.value);
       final now = DateTime.now().millisecondsSinceEpoch;
 
       for (var entry in data.entries) {
-        final appointment = Map<String, dynamic>.from(entry.value as Map);
+        final appointment = _safeMap(entry.value);
         final apptUserId = appointment['userId'] as String?;
         final status = appointment['status'] as String?;
         final appointmentTime = appointment['appointmentTime'] as int? ?? 0;
@@ -209,7 +218,7 @@ class UserDashboardService {
             try {
               final doctorSnapshot = await _database.child('users').child(doctorId).get();
               if (doctorSnapshot.exists) {
-                final doctorData = Map<String, dynamic>.from(doctorSnapshot.value as Map);
+                final doctorData = _safeMap(doctorSnapshot.value);
                 doctorName = doctorData['name'] as String? ?? 'Bác sĩ';
               }
             } catch (e) {

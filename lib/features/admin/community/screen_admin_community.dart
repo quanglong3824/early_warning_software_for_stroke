@@ -369,7 +369,14 @@ class _ScreenAdminCommunityState extends State<ScreenAdminCommunity> {
                               IconButton(
                                 icon: const Icon(Icons.visibility, size: 20),
                                 onPressed: () {
-                                  // TODO: Navigate to topic detail
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/community/detail',
+                                    arguments: {
+                                      'topicId': topic['id'],
+                                      'title': topic['title'],
+                                    },
+                                  );
                                 },
                               ),
                               IconButton(

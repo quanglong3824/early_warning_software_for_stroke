@@ -1,0 +1,209 @@
+PHẦN 1: TỔNG QUAN DỰ ÁN
+
+
+1.1. Giới thiệu đề tài
+
+1.1.1. Tên đề tài
+
+SEWS - Stroke Early Warning System (Hệ thống Cảnh báo Sớm Đột quỵ)
+
+1.1.2. Bối cảnh và lý do chọn đề tài
+
+Đột quỵ não là một trong những nguyên nhân gây tử vong và tàn phế hàng đầu trên thế giới. Theo thống kê của Tổ chức Y tế Thế giới (WHO):
+
+Mỗi năm có khoảng 15 triệu người trên thế giới bị đột quỵ. Trong đó 5 triệu người tử vong và 5 triệu người bị tàn phế vĩnh viễn. Tại Việt Nam, tỷ lệ đột quỵ đang gia tăng nhanh chóng, đặc biệt ở nhóm người trẻ tuổi.
+
+Thời gian vàng trong điều trị đột quỵ là 3-4.5 giờ đầu tiên. Việc phát hiện sớm các dấu hiệu và yếu tố nguy cơ đột quỵ có thể giảm thiểu tỷ lệ tử vong, hạn chế di chứng sau đột quỵ, và nâng cao chất lượng cuộc sống cho bệnh nhân.
+
+Với sự phát triển của công nghệ AI/Machine Learning và thiết bị di động, việc xây dựng một hệ thống cảnh báo sớm đột quỵ là hoàn toàn khả thi và cần thiết.
+
+1.1.3. Mô tả tổng quan
+
+SEWS (Stroke Early Warning System) là ứng dụng di động được phát triển trên nền tảng Flutter, tích hợp trí tuệ nhân tạo để:
+
+Dự đoán nguy cơ đột quỵ sử dụng mô hình Random Forest với preprocessor.
+Dự đoán nguy cơ tiểu đường type 2 dựa trên các yếu tố nguy cơ.
+Theo dõi sức khỏe liên tục với biểu đồ trực quan (huyết áp, đường huyết, BMI).
+Kết nối người dùng với bác sĩ để tư vấn và đặt lịch khám.
+Hỗ trợ khẩn cấp với tính năng SOS gửi vị trí GPS.
+Quản lý sức khỏe gia đình theo dõi người thân.
+
+
+1.2. Mục tiêu dự án
+
+1.2.1. Mục tiêu tổng quát
+
+Xây dựng một hệ thống phần mềm hoàn chỉnh hỗ trợ cảnh báo sớm nguy cơ đột quỵ, kết nối người dùng với đội ngũ y tế, và quản lý sức khỏe toàn diện.
+
+1.2.2. Mục tiêu cụ thể
+
+(1) Dự đoán nguy cơ đột quỵ: Sử dụng mô hình AI (Random Forest) để phân tích 14 features và dự đoán nguy cơ đột quỵ.
+
+(2) Dự đoán nguy cơ tiểu đường: Thuật toán đánh giá nguy cơ tiểu đường type 2 dựa trên 6 yếu tố nguy cơ.
+
+(3) Theo dõi sức khỏe: Ghi nhận và hiển thị các chỉ số sức khỏe (huyết áp, đường huyết, BMI) với biểu đồ fl_chart.
+
+(4) Kết nối y tế: Cho phép người dùng đặt lịch hẹn, chat trực tiếp với bác sĩ.
+
+(5) Hỗ trợ khẩn cấp: Cung cấp tính năng SOS gửi yêu cầu cấp cứu kèm vị trí GPS.
+
+(6) Quản lý gia đình: Cho phép theo dõi sức khỏe các thành viên trong gia đình.
+
+(7) Nhắc nhở thuốc: Hệ thống nhắc nhở uống thuốc đúng giờ với local notifications.
+
+(8) Cung cấp kiến thức: Chia sẻ bài viết, kiến thức về sức khỏe và phòng ngừa đột quỵ.
+
+(9) Xây dựng cộng đồng: Diễn đàn để người dùng chia sẻ kinh nghiệm.
+
+(10) Hỗ trợ offline: Cache dữ liệu với Hive để sử dụng khi không có mạng.
+
+
+1.3. Phạm vi dự án
+
+1.3.1. Phạm vi chức năng
+
+Hệ thống bao gồm 3 module chính phục vụ 3 đối tượng người dùng:
+
+A. Module Người dùng (User) - 54 screens, 23 thư mục chức năng
+
+Xác thực: Đăng ký, đăng nhập (Email, Google), quên mật khẩu, onboarding.
+Dự đoán AI: Dự đoán nguy cơ đột quỵ, tiểu đường với form nhập liệu và hiển thị kết quả.
+Theo dõi sức khỏe: Biểu đồ huyết áp, đường huyết, BMI, lịch sử sức khỏe.
+Bác sĩ: Danh sách bác sĩ, chi tiết bác sĩ, đánh giá bác sĩ.
+Lịch hẹn: Đặt lịch, xem lịch hẹn, báo cáo lịch hẹn.
+Chat: Danh sách chat, chi tiết chat, chọn bác sĩ chat.
+SOS khẩn cấp: Gửi SOS, theo dõi trạng thái SOS.
+Gia đình: Quản lý gia đình, nhóm gia đình, mời thành viên.
+Nhắc nhở: Danh sách nhắc nhở, thêm/sửa nhắc nhở.
+Kiến thức: Danh sách bài viết, chi tiết bài viết.
+Cộng đồng: Diễn đàn, chi tiết chủ đề.
+Cài đặt: Cài đặt chung, đổi mật khẩu, thông báo.
+Pháp lý: Điều khoản dịch vụ, chính sách bảo mật.
+
+B. Module Bác sĩ (Doctor) - 17 screens, 11 thư mục chức năng
+
+Dashboard: Thống kê ca trực, tổng quan hoạt động.
+Bệnh nhân: Danh sách bệnh nhân, hồ sơ bệnh nhân.
+Lịch hẹn: Quản lý lịch hẹn, chi tiết yêu cầu lịch hẹn.
+SOS: Hàng đợi SOS, chi tiết ca SOS.
+Chat: Danh sách chat, chi tiết chat, chọn bệnh nhân chat.
+Đánh giá: Xem đánh giá từ bệnh nhân.
+Lịch làm việc: Quản lý slot khám.
+Thuốc: Thêm đơn thuốc cho bệnh nhân.
+Cài đặt: Cài đặt bác sĩ.
+Thông báo: Thông báo cho bác sĩ.
+
+C. Module Quản trị viên (Admin) - 20 screens, 14 thư mục chức năng
+
+Dashboard: Thống kê tổng quan hệ thống (9 mục quản lý).
+Quản lý Users: CRUD người dùng.
+Quản lý Bác sĩ: CRUD bác sĩ.
+Quản lý Bệnh nhân: CRUD bệnh nhân.
+Quản lý SOS: Giám sát ca khẩn cấp.
+Quản lý Dự đoán: Xem lịch sử dự đoán.
+Quản lý Lịch hẹn: Giám sát lịch hẹn.
+Quản lý Kiến thức: CRUD bài viết.
+Quản lý Cộng đồng: Quản lý diễn đàn.
+
+1.3.2. Phạm vi kỹ thuật
+
+A. Cấu trúc dự án
+
+Thư mục lib/features/: 91 files - Màn hình UI (User: 54, Doctor: 17, Admin: 20)
+Thư mục lib/services/: 34 files - Business logic và API services
+Thư mục lib/data/models/: 14 files - Data models
+Thư mục lib/widgets/: 7 files - Shared widgets
+Thư mục lib/utils/: 4 files - Utilities
+Thư mục test/services/: 13 files - Unit tests
+Thư mục assets/models/: 10 files - AI model và Flask API
+
+B. Công nghệ sử dụng
+
+Framework: Flutter 3.5.4+
+Ngôn ngữ: Dart 3.5.4+
+State Management: Provider 6.1.1
+Authentication: Firebase Auth 6.1.2
+Database: Firebase Realtime Database 12.0.4
+Storage: Firebase Storage 13.0.4
+Push Notification: Firebase Messaging 16.0.4
+Local Notification: flutter_local_notifications 17.0.0
+AI/ML API: Flask + scikit-learn + joblib (Python 3.8+)
+AI Model: Random Forest Classifier (moHinhDotQuy_final.pkl)
+Offline Cache: Hive 2.2.3
+Charts: fl_chart 0.69.0
+Location: Geolocator 10.1.0 + Geocoding 2.1.1
+Image: image_picker 1.0.7, cached_network_image 3.3.1
+Network: connectivity_plus 6.0.5, http 1.1.0
+
+1.3.3. Phạm vi triển khai
+
+Nền tảng: Android (API 23+), Web
+Firebase Project: warning-software-stroke
+Ngôn ngữ giao diện: Tiếng Việt
+Phiên bản: 1.0.0+1
+File APK: release/SEWS_v1.0.0.apk (67.3 MB)
+
+
+1.4. Đối tượng sử dụng
+
+1.4.1. Người dùng (User)
+
+Đặc điểm:
+Người có nguy cơ đột quỵ hoặc muốn theo dõi sức khỏe.
+Người thân của bệnh nhân đột quỵ.
+Người quan tâm đến sức khỏe tim mạch.
+Độ tuổi: Từ 18 tuổi trở lên.
+
+Nhu cầu:
+Đánh giá nguy cơ đột quỵ, tiểu đường cá nhân.
+Theo dõi các chỉ số sức khỏe theo thời gian.
+Kết nối với bác sĩ khi cần tư vấn.
+Nhận hỗ trợ khẩn cấp khi có dấu hiệu bất thường.
+Quản lý sức khỏe cho cả gia đình.
+
+1.4.2. Bác sĩ (Doctor)
+
+Đặc điểm:
+Bác sĩ chuyên khoa tim mạch, thần kinh.
+Bác sĩ đa khoa.
+Nhân viên y tế có chứng chỉ hành nghề.
+
+Nhu cầu:
+Quản lý danh sách bệnh nhân hiệu quả.
+Theo dõi tình trạng sức khỏe bệnh nhân từ xa.
+Xử lý ca khẩn cấp SOS nhanh chóng.
+Tư vấn bệnh nhân trực tuyến qua chat.
+Quản lý lịch làm việc và slot khám.
+
+1.4.3. Quản trị viên (Admin)
+
+Đặc điểm:
+Quản lý hệ thống y tế.
+Nhân viên IT của cơ sở y tế.
+
+Nhu cầu:
+Giám sát toàn bộ hoạt động hệ thống.
+Quản lý người dùng, bác sĩ, bệnh nhân.
+Quản lý nội dung (bài viết kiến thức, diễn đàn).
+Theo dõi và xử lý các ca SOS.
+Xem thống kê và báo cáo.
+
+
+1.5. Tổng kết
+
+Thống kê dự án:
+Tổng số screens: 91 màn hình
+Tổng số services: 34 services
+Tổng số models: 14 models
+Tổng số test files: 16 files (13 service tests + 3 backend tests)
+Dependencies: 25+ packages
+
+Tóm tắt:
+Tên dự án: SEWS - Stroke Early Warning System
+Loại ứng dụng: Cross-platform Mobile App
+Framework: Flutter 3.5.4+
+Nền tảng: Android, Web
+Số module: 3 (User, Doctor, Admin)
+Backend: Firebase (Auth, Realtime DB, Storage, Messaging)
+AI/ML: Flask API + Random Forest Model
+Phiên bản: 1.0.0+1

@@ -1,0 +1,460 @@
+PHẦN 4: CÔNG NGHỆ SỬ DỤNG
+
+
+4.1. Frontend - Flutter Framework
+
+4.1.1. Giới thiệu Flutter
+
+Flutter là framework phát triển ứng dụng đa nền tảng (cross-platform) của Google, cho phép xây dựng ứng dụng native cho mobile, web và desktop từ một codebase duy nhất.
+
+Đặc điểm chính:
+Ngôn ngữ lập trình: Dart
+Kiến trúc: Widget-based UI
+Rendering engine: Skia graphics engine
+Hot Reload: Cập nhật UI ngay lập tức khi thay đổi code
+
+4.1.2. Phiên bản sử dụng
+
+Flutter SDK: 3.5.4+
+Dart SDK: 3.5.4+
+Minimum Android SDK: API 23 (Android 6.0)
+
+4.1.3. Lý do chọn Flutter
+
+A. Cross-platform Development
+Một codebase cho cả Android và Web.
+Giảm thời gian và chi phí phát triển.
+Đảm bảo tính nhất quán UI/UX trên các nền tảng.
+
+B. Hiệu năng cao
+Compile trực tiếp sang native code (ARM, x86).
+Không cần bridge như React Native.
+60fps smooth animations.
+
+C. Hot Reload
+Thay đổi code và xem kết quả ngay lập tức.
+Tăng tốc độ phát triển đáng kể.
+Giữ nguyên state khi reload.
+
+D. Widget Library phong phú
+Material Design và Cupertino widgets có sẵn.
+Dễ dàng customize và tạo custom widgets.
+Hỗ trợ responsive design.
+
+E. Cộng đồng lớn
+Hơn 150,000 packages trên pub.dev.
+Documentation đầy đủ.
+Active community support.
+
+4.1.4. State Management - Provider
+
+Dự án sử dụng Provider pattern cho state management.
+
+Lý do chọn Provider:
+Đơn giản, dễ học và sử dụng.
+Được Google recommend cho Flutter.
+Hiệu năng tốt với ChangeNotifier.
+Tích hợp tốt với Flutter widget tree.
+
+Cách sử dụng trong dự án:
+AppDataProvider: Quản lý dữ liệu toàn ứng dụng.
+ChangeNotifierProvider: Wrap MaterialApp để cung cấp state.
+Consumer/context.watch: Lắng nghe thay đổi state.
+
+4.1.5. Cấu trúc thư mục Flutter
+
+lib/
+├── main.dart                 # Entry point
+├── firebase_options.dart     # Firebase configuration
+├── data/
+│   ├── models/              # 14 data models
+│   └── providers/           # State providers
+├── features/
+│   ├── user/                # 54 screens
+│   ├── doctor/              # 17 screens
+│   └── admin/               # 20 screens
+├── services/                # 34 business logic services
+├── widgets/                 # 7 shared widgets
+├── utils/                   # 4 utility classes
+└── mixins/                  # Reusable mixins
+
+
+4.2. Backend - Firebase Services
+
+4.2.1. Giới thiệu Firebase
+
+Firebase là nền tảng Backend-as-a-Service (BaaS) của Google, cung cấp các dịch vụ backend sẵn có mà không cần xây dựng server riêng.
+
+4.2.2. Các dịch vụ Firebase sử dụng
+
+A. Firebase Authentication (firebase_auth: 6.1.2)
+
+Chức năng: Xác thực người dùng.
+Phương thức hỗ trợ:
+  Email/Password authentication
+  Google Sign-In
+  Password reset via email
+Tính năng:
+  JWT token tự động refresh
+  Session management
+  User state persistence
+
+B. Firebase Realtime Database (firebase_database: 12.0.4)
+
+Chức năng: Cơ sở dữ liệu NoSQL realtime.
+Đặc điểm:
+  Dữ liệu lưu dạng JSON tree
+  Realtime synchronization
+  Offline persistence
+  Low latency (< 100ms)
+Sử dụng cho:
+  Users, Doctors, Appointments
+  Health Records, Predictions
+  Chat messages (realtime)
+  SOS cases
+
+C. Firebase Cloud Storage (firebase_storage: 13.0.4)
+
+Chức năng: Lưu trữ file.
+Sử dụng cho:
+  Avatar người dùng
+  Hình ảnh trong chat
+  Hình ảnh bài viết kiến thức
+Tính năng:
+  Upload/Download với progress
+  Security rules
+  CDN distribution
+
+D. Firebase Cloud Messaging (firebase_messaging: 16.0.4)
+
+Chức năng: Push notification.
+Sử dụng cho:
+  Thông báo lịch hẹn
+  Thông báo SOS
+  Thông báo tin nhắn mới
+  Nhắc nhở uống thuốc
+Tính năng:
+  Background notifications
+  Data messages
+  Topic subscription
+
+4.2.3. Firebase Security Rules
+
+Dự án sử dụng Firebase Security Rules để bảo vệ dữ liệu:
+
+Nguyên tắc:
+Chỉ user đã xác thực mới có thể đọc/ghi dữ liệu.
+User chỉ có thể truy cập dữ liệu của chính mình.
+Doctor có thể truy cập dữ liệu bệnh nhân liên quan.
+Admin có quyền truy cập toàn bộ.
+
+4.2.4. Firebase Project Configuration
+
+Project ID: warning-software-stroke
+Android App ID: 1:484558690842:android:0145c3822607f9f05f4fa3
+Web App ID: 1:484558690842:web:c8c4dad2ebc53d9b5f4fa3
+
+
+4.3. AI/Machine Learning - Flask API
+
+4.3.1. Giới thiệu
+
+Hệ thống AI dự đoán nguy cơ đột quỵ được xây dựng với:
+Backend: Flask (Python web framework)
+ML Model: Random Forest Classifier
+Data Processing: scikit-learn, pandas, numpy
+
+4.3.2. Kiến trúc AI Service
+
+assets/models/
+├── app.py                    # Flask API server
+├── moHinhDotQuy_final.pkl   # Trained Random Forest model
+├── preprocessor.pkl          # Data preprocessor
+├── model_metadata.json       # Model information
+├── requirements.txt          # Python dependencies
+├── analyze_model.py          # Model analysis script
+└── export_model_info.py      # Export model info
+
+4.3.3. Flask API Server
+
+A. Endpoints
+
+GET /health
+Mô tả: Health check endpoint.
+Response: { status, model_loaded, preprocessor_loaded }
+
+POST /predict
+Mô tả: Dự đoán nguy cơ đột quỵ.
+Request body:
+  age: int (tuổi)
+  gender: string ("male" / "female")
+  heightCm: float (chiều cao cm)
+  weightKg: float (cân nặng kg)
+  systolicBP: int (huyết áp tâm thu)
+  diastolicBP: int (huyết áp tâm trương)
+  cholesterol: int (cholesterol mg/dL)
+  glucose: int (glucose mg/dL)
+  hypertension: boolean (tiền sử tăng huyết áp)
+  heartDisease: boolean (tiền sử bệnh tim)
+  smoking: boolean (hút thuốc)
+  workType: string ("sedentary" / "moderate" / "active")
+
+Response:
+  success: boolean
+  riskScore: int (0-100)
+  riskLevel: string ("low" / "medium" / "high")
+  riskLevelVi: string (tiếng Việt)
+  strokeProbability: float (0.0-1.0)
+  bmi: string
+  bmiCategory: string
+  bpCategory: string
+  cholesterolCategory: string
+  predictionMethod: string ("AI" / "Rule-based")
+
+B. Xử lý dữ liệu
+
+Feature Engineering:
+  Tính BMI từ chiều cao và cân nặng.
+  Encode gender (male=1, female=0).
+  Encode work_type (sedentary/moderate/active).
+  Encode smoking_status.
+  Tính nhomTuoi (nhóm tuổi 0-3).
+  Tính nhomBMI (nhóm BMI 0-4).
+  Tính nhomGlucose (nhóm glucose 0-2).
+  Tính diemNguyCo (điểm nguy cơ).
+
+4.3.4. Random Forest Model
+
+A. Thông tin model
+
+File: moHinhDotQuy_final.pkl
+Algorithm: Random Forest Classifier
+Features: 14 features
+Output: Probability [no_stroke, stroke]
+
+B. 14 Features đầu vào
+
+gender: Giới tính
+age: Tuổi
+hypertension: Tăng huyết áp (0/1)
+heart_disease: Bệnh tim (0/1)
+ever_married: Đã kết hôn (Yes/No)
+work_type: Loại công việc
+Residence_type: Nơi ở (Urban/Rural)
+avg_glucose_level: Đường huyết trung bình
+bmi: Chỉ số BMI
+smoking_status: Tình trạng hút thuốc
+nhomTuoi: Nhóm tuổi (0-3)
+nhomBMI: Nhóm BMI (0-4)
+nhomGlucose: Nhóm glucose (0-2)
+diemNguyCo: Điểm nguy cơ tổng hợp
+
+C. Phân loại kết quả
+
+Nguy cơ thấp (Low): riskScore < 35
+Nguy cơ trung bình (Medium): 35 <= riskScore < 65
+Nguy cơ cao (High): riskScore >= 65
+
+4.3.5. Fallback Rule-based Algorithm
+
+Khi model không load được, hệ thống sử dụng thuật toán rule-based:
+
+Điểm theo tuổi:
+  >= 75 tuổi: +25 điểm
+  >= 65 tuổi: +20 điểm
+  >= 55 tuổi: +15 điểm
+  >= 45 tuổi: +10 điểm
+  >= 35 tuổi: +5 điểm
+
+Điểm theo giới tính:
+  Nam: +3 điểm
+
+Điểm theo BMI:
+  >= 30 (béo phì): +10 điểm
+  >= 25 (thừa cân): +6 điểm
+  >= 23: +3 điểm
+
+Điểm theo huyết áp:
+  >= 180/110: +20 điểm
+  >= 160/100: +15 điểm
+  >= 140/90: +10 điểm
+  >= 130/85: +5 điểm
+
+Điểm theo cholesterol:
+  >= 240: +10 điểm
+  >= 200: +6 điểm
+  >= 180: +3 điểm
+
+Điểm theo glucose:
+  >= 126: +8 điểm
+  >= 100: +5 điểm
+
+Điểm theo tiền sử:
+  Tăng huyết áp: +10 điểm
+  Bệnh tim: +12 điểm
+  Hút thuốc: +10 điểm
+
+Điểm theo công việc:
+  Ít vận động: +5 điểm
+  Vận động vừa: +2 điểm
+
+4.3.6. Dự đoán tiểu đường
+
+Ngoài dự đoán đột quỵ, hệ thống còn có DiabetesPredictionService dự đoán nguy cơ tiểu đường type 2 với thuật toán rule-based:
+
+Điểm theo tuổi (0-20):
+  >= 45 tuổi: +20 điểm
+  >= 35 tuổi: +10 điểm
+  >= 25 tuổi: +5 điểm
+
+Điểm theo BMI (0-25):
+  >= 30: +25 điểm
+  >= 25: +15 điểm
+  >= 23: +8 điểm
+
+Điểm theo đường huyết lúc đói (0-30):
+  >= 126 mg/dL: +30 điểm
+  >= 100 mg/dL: +20 điểm
+  >= 90 mg/dL: +10 điểm
+
+Điểm theo huyết áp (0-10):
+  >= 140 mmHg: +10 điểm
+  >= 130 mmHg: +5 điểm
+
+Điểm theo tiền sử gia đình (0-10):
+  Có tiền sử: +10 điểm
+
+Điểm theo mức độ hoạt động (0-5):
+  Ít vận động: +5 điểm
+  Vận động vừa: +2 điểm
+
+
+4.4. Các thư viện và công cụ hỗ trợ
+
+4.4.1. Flutter Packages
+
+A. Firebase Packages
+
+firebase_core: 4.2.1 - Core Firebase SDK
+firebase_auth: 6.1.2 - Authentication
+firebase_database: 12.0.4 - Realtime Database
+firebase_storage: 13.0.4 - Cloud Storage
+firebase_messaging: 16.0.4 - Cloud Messaging
+cloud_firestore: 6.1.0 - Firestore (backup)
+
+B. Authentication
+
+google_sign_in: 6.2.2 - Google Sign-In
+crypto: 3.0.3 - Password hashing (SHA-256)
+
+C. State Management
+
+provider: 6.1.1 - State management
+shared_preferences: 2.2.2 - Local key-value storage
+
+D. UI/UX
+
+cupertino_icons: 1.0.8 - iOS style icons
+fl_chart: 0.69.0 - Charts và biểu đồ
+intl: 0.19.0 - Internationalization, date formatting
+cached_network_image: 3.3.1 - Image caching
+flutter_image_compress: 2.1.0 - Image compression
+
+E. Notifications
+
+flutter_local_notifications: 17.0.0 - Local notifications
+timezone: 0.9.2 - Timezone handling
+
+F. Location
+
+geolocator: 10.1.0 - GPS location
+geocoding: 2.1.1 - Reverse geocoding
+
+G. Networking
+
+http: 1.1.0 - HTTP client
+connectivity_plus: 6.0.5 - Network monitoring
+
+H. Storage
+
+hive: 2.2.3 - Offline cache database
+hive_flutter: 1.1.0 - Hive Flutter integration
+
+I. Utilities
+
+url_launcher: 6.2.2 - Open URLs
+permission_handler: 11.0.1 - Permission management
+image_picker: 1.0.7 - Pick images from gallery/camera
+
+4.4.2. Dev Dependencies
+
+flutter_test: SDK - Unit testing
+flutter_lints: 4.0.0 - Linting rules
+flutter_launcher_icons: 0.13.1 - App icon generation
+hive_generator: 2.0.1 - Hive code generation
+build_runner: 2.4.13 - Code generation
+glados: 1.1.1 - Property-based testing
+
+4.4.3. Python Packages (AI Service)
+
+flask: Web framework
+flask-cors: CORS support
+joblib: Model serialization
+numpy: Numerical computing
+pandas: Data manipulation
+scikit-learn: Machine learning
+
+4.4.4. Công cụ phát triển
+
+A. IDE
+Visual Studio Code với Flutter extension
+Android Studio (cho Android emulator)
+
+B. Version Control
+Git
+GitHub repository
+
+C. Testing
+Flutter Test framework
+Postman (API testing)
+
+D. Design
+Figma (UI/UX design)
+PlantUML (UML diagrams)
+
+E. Documentation
+Markdown
+PlantUML
+
+
+4.5. Tổng kết công nghệ
+
+Bảng tổng hợp công nghệ:
+
+Frontend:
+  Framework: Flutter 3.5.4+
+  Language: Dart 3.5.4+
+  State: Provider 6.1.1
+  Charts: fl_chart 0.69.0
+
+Backend:
+  Platform: Firebase
+  Auth: Firebase Auth 6.1.2
+  Database: Realtime DB 12.0.4
+  Storage: Cloud Storage 13.0.4
+  Messaging: FCM 16.0.4
+
+AI/ML:
+  Server: Flask (Python)
+  Model: Random Forest
+  Libraries: scikit-learn, pandas, numpy
+
+Offline:
+  Cache: Hive 2.2.3
+  Network: connectivity_plus 6.0.5
+
+Location:
+  GPS: Geolocator 10.1.0
+  Geocoding: geocoding 2.1.1
+
+Tổng số packages: 25+ Flutter packages, 6+ Python packages

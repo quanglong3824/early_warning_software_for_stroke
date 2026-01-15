@@ -1,0 +1,464 @@
+PHẦN 6: HƯỚNG DẪN SỬ DỤNG
+
+
+6.1. Hướng dẫn cho người dùng (User)
+
+6.1.1. Đăng ký và đăng nhập
+
+A. Đăng ký tài khoản mới
+
+Bước 1: Mở ứng dụng SEWS
+Bước 2: Tại màn hình đăng nhập, nhấn "Đăng ký"
+Bước 3: Nhập thông tin:
+  Họ và tên
+  Email
+  Mật khẩu (tối thiểu 6 ký tự)
+  Xác nhận mật khẩu
+Bước 4: Nhấn "Đăng ký"
+Bước 5: Đăng nhập với tài khoản vừa tạo
+
+B. Đăng nhập bằng Email
+
+Bước 1: Nhập email đã đăng ký
+Bước 2: Nhập mật khẩu
+Bước 3: Nhấn "Đăng nhập"
+
+C. Đăng nhập bằng Google
+
+Bước 1: Nhấn nút "Đăng nhập với Google"
+Bước 2: Chọn tài khoản Google
+Bước 3: Xác nhận quyền truy cập
+Bước 4: Tự động đăng nhập thành công
+
+D. Quên mật khẩu
+
+Bước 1: Tại màn hình đăng nhập, nhấn "Quên mật khẩu"
+Bước 2: Nhập email đã đăng ký
+Bước 3: Nhấn "Gửi email đặt lại mật khẩu"
+Bước 4: Kiểm tra email và làm theo hướng dẫn
+
+6.1.2. Sử dụng Dashboard
+
+Sau khi đăng nhập, màn hình Dashboard hiển thị:
+
+A. Thông tin tổng quan
+Lời chào với tên người dùng
+Số thông báo chưa đọc
+Kết quả dự đoán gần nhất (nếu có)
+
+B. Quick Actions
+Dự đoán đột quỵ: Nhấn để dự đoán nguy cơ
+Dự đoán tiểu đường: Nhấn để dự đoán nguy cơ
+Đặt lịch hẹn: Nhấn để đặt lịch với bác sĩ
+Xem sức khỏe: Nhấn để xem biểu đồ sức khỏe
+
+C. Thành viên gia đình
+Danh sách thành viên gia đình đang theo dõi
+Nhấn để xem chi tiết sức khỏe
+
+D. Lịch hẹn sắp tới
+Danh sách lịch hẹn gần nhất
+Nhấn để xem chi tiết
+
+6.1.3. Dự đoán nguy cơ đột quỵ
+
+Bước 1: Từ Dashboard, nhấn "Dự đoán đột quỵ" hoặc vào tab Prediction Hub
+Bước 2: Chọn "Dự đoán nguy cơ đột quỵ"
+Bước 3: Nhập thông tin sức khỏe:
+  Tuổi
+  Giới tính
+  Chiều cao (cm)
+  Cân nặng (kg)
+  Huyết áp tâm thu (mmHg)
+  Huyết áp tâm trương (mmHg)
+  Cholesterol (mg/dL)
+  Glucose (mg/dL)
+  Tiền sử tăng huyết áp (Có/Không)
+  Tiền sử bệnh tim (Có/Không)
+  Hút thuốc (Có/Không)
+  Loại công việc (Ít vận động/Vừa/Nhiều)
+Bước 4: Nhấn "Dự đoán"
+Bước 5: Xem kết quả:
+  Điểm nguy cơ (0-100)
+  Mức độ nguy cơ (Thấp/Trung bình/Cao)
+  Phân loại BMI
+  Phân loại huyết áp
+  Khuyến nghị
+
+6.1.4. Dự đoán nguy cơ tiểu đường
+
+Bước 1: Vào Prediction Hub
+Bước 2: Chọn "Dự đoán nguy cơ tiểu đường"
+Bước 3: Nhập thông tin:
+  Tuổi
+  Giới tính
+  Chiều cao (cm)
+  Cân nặng (kg)
+  Đường huyết lúc đói (mg/dL)
+  Huyết áp tâm thu (mmHg)
+  Tiền sử gia đình bị tiểu đường (Có/Không)
+  Mức độ hoạt động (Ít/Vừa/Nhiều)
+Bước 4: Nhấn "Dự đoán"
+Bước 5: Xem kết quả và khuyến nghị
+
+6.1.5. Theo dõi sức khỏe
+
+A. Nhập chỉ số sức khỏe
+
+Bước 1: Vào tab Health Hub
+Bước 2: Nhấn nút "+" hoặc "Thêm bản ghi"
+Bước 3: Nhập các chỉ số:
+  Huyết áp tâm thu
+  Huyết áp tâm trương
+  Nhịp tim
+  Đường huyết
+  Cân nặng
+  Ghi chú (tùy chọn)
+Bước 4: Nhấn "Lưu"
+
+B. Xem biểu đồ sức khỏe
+
+Bước 1: Vào Health Hub
+Bước 2: Chọn loại biểu đồ:
+  Huyết áp
+  Đường huyết
+  BMI
+Bước 3: Chọn khoảng thời gian:
+  7 ngày
+  30 ngày
+  90 ngày
+Bước 4: Xem biểu đồ và xu hướng
+
+6.1.6. Đặt lịch hẹn với bác sĩ
+
+Bước 1: Vào tab Doctors Hub
+Bước 2: Xem danh sách bác sĩ
+Bước 3: Nhấn vào bác sĩ muốn đặt lịch
+Bước 4: Xem thông tin chi tiết bác sĩ
+Bước 5: Nhấn "Đặt lịch hẹn"
+Bước 6: Chọn ngày và giờ từ các slot trống
+Bước 7: Nhập lý do khám
+Bước 8: Nhấn "Xác nhận đặt lịch"
+Bước 9: Chờ bác sĩ xác nhận (sẽ nhận thông báo)
+
+6.1.7. Chat với bác sĩ
+
+Bước 1: Vào mục Chat từ menu
+Bước 2: Chọn cuộc hội thoại có sẵn hoặc tạo mới
+Bước 3: Nếu tạo mới, chọn bác sĩ muốn chat
+Bước 4: Nhập tin nhắn và gửi
+Bước 5: Có thể gửi kèm hình ảnh bằng cách nhấn icon camera
+
+6.1.8. Gửi yêu cầu SOS khẩn cấp
+
+Bước 1: Nhấn nút SOS đỏ (luôn hiển thị ở góc màn hình)
+Bước 2: Xác nhận gửi yêu cầu SOS
+Bước 3: Ứng dụng tự động:
+  Lấy vị trí GPS hiện tại
+  Gửi thông báo đến bác sĩ trực
+Bước 4: Chờ bác sĩ tiếp nhận
+Bước 5: Theo dõi trạng thái trên màn hình SOS Status
+
+Lưu ý: Chỉ sử dụng SOS trong trường hợp khẩn cấp thực sự.
+
+6.1.9. Quản lý gia đình
+
+A. Tạo nhóm gia đình
+
+Bước 1: Vào mục Gia đình từ menu
+Bước 2: Nhấn "Tạo nhóm mới"
+Bước 3: Nhập tên nhóm
+Bước 4: Nhấn "Tạo"
+
+B. Mời thành viên
+
+Bước 1: Vào nhóm gia đình
+Bước 2: Nhấn "Mời thành viên"
+Bước 3: Nhập email người muốn mời
+Bước 4: Nhấn "Gửi lời mời"
+
+C. Theo dõi sức khỏe người thân
+
+Bước 1: Vào nhóm gia đình
+Bước 2: Chọn thành viên muốn xem
+Bước 3: Xem các chỉ số sức khỏe của họ
+
+6.1.10. Nhắc nhở uống thuốc
+
+A. Tạo nhắc nhở
+
+Bước 1: Vào mục Nhắc nhở từ menu
+Bước 2: Nhấn "Thêm nhắc nhở"
+Bước 3: Nhập thông tin:
+  Tên thuốc
+  Liều lượng
+  Thời gian nhắc
+  Tần suất (hàng ngày/hàng tuần)
+Bước 4: Nhấn "Lưu"
+
+B. Quản lý nhắc nhở
+
+Xem danh sách nhắc nhở
+Bật/tắt nhắc nhở
+Sửa hoặc xóa nhắc nhở
+
+
+6.2. Hướng dẫn cho bác sĩ (Doctor)
+
+6.2.1. Đăng nhập
+
+Bước 1: Mở ứng dụng SEWS
+Bước 2: Tại màn hình đăng nhập, nhấn "Đăng nhập Bác sĩ"
+Bước 3: Nhập email và mật khẩu bác sĩ
+Bước 4: Nhấn "Đăng nhập"
+
+6.2.2. Dashboard bác sĩ
+
+Màn hình Dashboard hiển thị:
+Số ca SOS đang chờ
+Số lịch hẹn hôm nay
+Số bệnh nhân mới
+Thông báo gần đây
+
+6.2.3. Quản lý bệnh nhân
+
+A. Xem danh sách bệnh nhân
+
+Bước 1: Vào tab Patients
+Bước 2: Xem danh sách bệnh nhân đã từng khám
+Bước 3: Sử dụng thanh tìm kiếm để tìm bệnh nhân
+
+B. Xem hồ sơ bệnh nhân
+
+Bước 1: Nhấn vào bệnh nhân trong danh sách
+Bước 2: Xem thông tin:
+  Thông tin cá nhân
+  Lịch sử khám
+  Lịch sử dự đoán
+  Biểu đồ sức khỏe
+
+C. Kê đơn thuốc
+
+Bước 1: Trong hồ sơ bệnh nhân, nhấn "Kê đơn"
+Bước 2: Thêm các loại thuốc
+Bước 3: Nhập liều lượng và hướng dẫn
+Bước 4: Nhấn "Gửi đơn thuốc"
+
+6.2.4. Quản lý lịch hẹn
+
+A. Xem lịch hẹn
+
+Bước 1: Vào tab Appointments
+Bước 2: Xem danh sách lịch hẹn theo trạng thái:
+  Chờ duyệt
+  Đã xác nhận
+  Hoàn thành
+  Đã hủy
+
+B. Duyệt lịch hẹn
+
+Bước 1: Nhấn vào lịch hẹn "Chờ duyệt"
+Bước 2: Xem thông tin chi tiết
+Bước 3: Nhấn "Xác nhận" hoặc "Từ chối"
+Bước 4: Nếu từ chối, nhập lý do
+
+C. Hoàn thành lịch hẹn
+
+Bước 1: Sau khi khám xong, mở lịch hẹn
+Bước 2: Nhấn "Hoàn thành"
+Bước 3: Nhập ghi chú (tùy chọn)
+
+6.2.5. Xử lý ca SOS
+
+A. Xem hàng đợi SOS
+
+Bước 1: Vào mục SOS Queue
+Bước 2: Xem danh sách ca SOS đang chờ
+Bước 3: Ca được sắp xếp theo độ ưu tiên (thời gian chờ)
+
+B. Nhận ca SOS
+
+Bước 1: Nhấn vào ca SOS
+Bước 2: Xem thông tin:
+  Tên bệnh nhân
+  Vị trí (bản đồ)
+  Thời gian gửi
+Bước 3: Nhấn "Nhận ca"
+Bước 4: Liên hệ bệnh nhân qua chat hoặc điện thoại
+
+C. Hoàn thành ca SOS
+
+Bước 1: Sau khi xử lý xong, mở ca SOS
+Bước 2: Nhấn "Hoàn thành"
+Bước 3: Nhập ghi chú xử lý
+
+6.2.6. Chat với bệnh nhân
+
+Bước 1: Vào tab Chat
+Bước 2: Xem danh sách cuộc hội thoại
+Bước 3: Nhấn vào cuộc hội thoại để trả lời
+Bước 4: Có thể tạo chat mới bằng cách chọn bệnh nhân
+
+6.2.7. Quản lý lịch làm việc
+
+A. Xem lịch làm việc
+
+Bước 1: Vào mục Schedule từ menu
+Bước 2: Xem lịch theo tuần
+Bước 3: Các slot đã đặt được highlight
+
+B. Tạo slot khám
+
+Bước 1: Nhấn vào ngày muốn tạo slot
+Bước 2: Nhấn "Thêm slot"
+Bước 3: Nhập:
+  Giờ bắt đầu
+  Giờ kết thúc
+  Số bệnh nhân tối đa
+Bước 4: Nhấn "Lưu"
+
+C. Xóa slot
+
+Bước 1: Nhấn vào slot muốn xóa
+Bước 2: Nhấn "Xóa"
+Bước 3: Xác nhận xóa
+
+
+6.3. Hướng dẫn cho quản trị viên (Admin)
+
+6.3.1. Đăng nhập Admin
+
+Bước 1: Truy cập ứng dụng web hoặc thêm /admin vào URL
+Bước 2: Nhập email và mật khẩu admin
+Bước 3: Nhấn "Đăng nhập"
+
+6.3.2. Dashboard Admin
+
+Màn hình Dashboard hiển thị:
+Tổng số người dùng
+Tổng số bác sĩ
+Tổng số bệnh nhân
+Số ca SOS hôm nay
+Số lịch hẹn hôm nay
+Biểu đồ thống kê
+
+6.3.3. Quản lý Users
+
+A. Xem danh sách
+
+Bước 1: Chọn "Quản lý Users" từ sidebar
+Bước 2: Xem danh sách tất cả users
+Bước 3: Sử dụng bộ lọc và tìm kiếm
+
+B. Thêm user mới
+
+Bước 1: Nhấn "Thêm User"
+Bước 2: Nhập thông tin user
+Bước 3: Nhấn "Lưu"
+
+C. Sửa thông tin user
+
+Bước 1: Nhấn vào user trong danh sách
+Bước 2: Nhấn "Sửa"
+Bước 3: Cập nhật thông tin
+Bước 4: Nhấn "Lưu"
+
+D. Khóa/Mở khóa user
+
+Bước 1: Nhấn vào user
+Bước 2: Nhấn "Khóa" hoặc "Mở khóa"
+Bước 3: Xác nhận
+
+6.3.4. Quản lý Bác sĩ
+
+A. Xem danh sách bác sĩ
+
+Bước 1: Chọn "Quản lý Bác sĩ" từ sidebar
+Bước 2: Xem danh sách với thông tin:
+  Tên, chuyên khoa
+  Bệnh viện
+  Trạng thái xác minh
+  Đánh giá
+
+B. Thêm bác sĩ mới
+
+Bước 1: Nhấn "Thêm Bác sĩ"
+Bước 2: Nhập thông tin:
+  Họ tên
+  Email
+  Chuyên khoa
+  Bệnh viện
+  Số giấy phép hành nghề
+  Số năm kinh nghiệm
+Bước 3: Nhấn "Lưu"
+
+C. Duyệt bác sĩ
+
+Bước 1: Xem danh sách bác sĩ chưa xác minh
+Bước 2: Kiểm tra thông tin và chứng chỉ
+Bước 3: Nhấn "Duyệt" hoặc "Từ chối"
+
+6.3.5. Quản lý SOS
+
+Bước 1: Chọn "Quản lý SOS" từ sidebar
+Bước 2: Xem danh sách tất cả ca SOS
+Bước 3: Lọc theo trạng thái:
+  Đang chờ
+  Đang xử lý
+  Hoàn thành
+Bước 4: Có thể phân công bác sĩ cho ca SOS
+
+6.3.6. Quản lý Kiến thức
+
+A. Xem danh sách bài viết
+
+Bước 1: Chọn "Quản lý Kiến thức" từ sidebar
+Bước 2: Xem danh sách bài viết
+
+B. Thêm bài viết mới
+
+Bước 1: Nhấn "Thêm bài viết"
+Bước 2: Nhập:
+  Tiêu đề
+  Nội dung
+  Danh mục
+  Hình ảnh
+Bước 3: Nhấn "Xuất bản" hoặc "Lưu nháp"
+
+C. Sửa/Xóa bài viết
+
+Bước 1: Nhấn vào bài viết
+Bước 2: Nhấn "Sửa" hoặc "Xóa"
+Bước 3: Xác nhận
+
+6.3.7. Quản lý Cộng đồng
+
+Bước 1: Chọn "Quản lý Cộng đồng" từ sidebar
+Bước 2: Xem danh sách bài đăng diễn đàn
+Bước 3: Duyệt hoặc xóa bài đăng vi phạm
+
+
+6.4. Tổng kết hướng dẫn
+
+Tính năng chính theo vai trò:
+
+User (Người dùng):
+  Dự đoán nguy cơ đột quỵ và tiểu đường
+  Theo dõi sức khỏe với biểu đồ
+  Đặt lịch hẹn và chat với bác sĩ
+  Gửi SOS khẩn cấp
+  Quản lý gia đình
+  Nhắc nhở uống thuốc
+
+Doctor (Bác sĩ):
+  Quản lý bệnh nhân
+  Duyệt và quản lý lịch hẹn
+  Xử lý ca SOS
+  Chat tư vấn
+  Quản lý lịch làm việc
+
+Admin (Quản trị viên):
+  Quản lý users, bác sĩ, bệnh nhân
+  Giám sát SOS
+  Quản lý nội dung
+  Xem thống kê

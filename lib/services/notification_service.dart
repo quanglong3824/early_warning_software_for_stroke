@@ -77,7 +77,8 @@ class NotificationService {
 
     // Initialize timezone
     tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
+    // Use device local timezone by default, do not force specific location
+    // tz.setLocalLocation(tz.getLocation('Asia/Ho_Chi_Minh'));
 
     // Initialize local notifications
     await _initializeLocalNotifications();

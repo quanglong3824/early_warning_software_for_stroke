@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../../services/sos_service.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/location_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScreenSOS extends StatefulWidget {
   const ScreenSOS({super.key});
@@ -288,14 +289,29 @@ class _ScreenSOSState extends State<ScreenSOS> with SingleTickerProviderStateMix
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  '☎️ Hoặc gọi 115',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: textMuted,
+                  TextButton.icon(
+                    onPressed: () async {
+                      final Uri launchUri = Uri(scheme: 'tel', path: '115');
+                      try {
+                        await launchUrl(launchUri);
+                      } catch (e) {
+                         if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Không thể thực hiện cuộc gọi')),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.phone, color: Colors.blue),
+                    label: const Text(
+                      'Hoặc gọi 115',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

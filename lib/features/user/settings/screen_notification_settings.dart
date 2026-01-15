@@ -304,19 +304,38 @@ class _ScreenNotificationSettingsState extends State<ScreenNotificationSettings>
 
             const SizedBox(height: 24),
             
-            // Test notification button
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: _hasPermission ? _sendTestNotification : null,
-                icon: const Icon(Icons.send),
-                label: const Text('Gửi thông báo thử'),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _hasPermission ? _sendTestNotification : null,
+                      icon: const Icon(Icons.send),
+                      label: const Text('Thử ngay'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _hasPermission ? _sendScheduledTestNotification : null,
+                      icon: const Icon(Icons.timer),
+                      label: const Text('Hẹn 5s'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             
@@ -409,6 +428,26 @@ class _ScreenNotificationSettingsState extends State<ScreenNotificationSettings>
         const SnackBar(
           content: Text('Đã gửi thông báo thử'),
           backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
+  Future<void> _sendScheduledTestNotification() async {
+    final now = DateTime.now().add(const Duration(seconds: 5));
+    
+    await _notificationService.scheduleLocalNotification(
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: 'Hẹn giờ thành công',
+      body: 'Thông báo này xuất hiện sau 5 giây.',
+      scheduledTime: now,
+    );
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Đã hẹn thông báo trong 5 giây....'),
+          backgroundColor: Colors.blue,
         ),
       );
     }

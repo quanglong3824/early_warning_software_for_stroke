@@ -1,0 +1,94 @@
+@startuml UseCase_User
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Người dùng" as User
+
+rectangle "Module User - SEWS" {
+    package "Xác thực" {
+        usecase "Đăng ký tài khoản" as UC1
+        usecase "Đăng nhập Email" as UC2
+        usecase "Đăng nhập Google" as UC3
+        usecase "Quên mật khẩu" as UC4
+        usecase "Đổi mật khẩu" as UC5
+    }
+    
+    package "Dự đoán AI" {
+        usecase "Dự đoán nguy cơ đột quỵ" as UC6
+        usecase "Dự đoán nguy cơ tiểu đường" as UC7
+        usecase "Xem kết quả dự đoán" as UC8
+        usecase "Xem lịch sử dự đoán" as UC9
+    }
+    
+    package "Theo dõi sức khỏe" {
+        usecase "Nhập chỉ số sức khỏe" as UC10
+        usecase "Xem biểu đồ huyết áp" as UC11
+        usecase "Xem biểu đồ đường huyết" as UC12
+        usecase "Xem biểu đồ BMI" as UC13
+        usecase "Xem lịch sử sức khỏe" as UC14
+    }
+    
+    package "Kết nối bác sĩ" {
+        usecase "Xem danh sách bác sĩ" as UC15
+        usecase "Xem chi tiết bác sĩ" as UC16
+        usecase "Đặt lịch hẹn" as UC17
+        usecase "Chat với bác sĩ" as UC18
+        usecase "Đánh giá bác sĩ" as UC19
+    }
+    
+    package "SOS khẩn cấp" {
+        usecase "Gửi yêu cầu SOS" as UC20
+        usecase "Theo dõi trạng thái SOS" as UC21
+    }
+    
+    package "Quản lý gia đình" {
+        usecase "Tạo nhóm gia đình" as UC22
+        usecase "Mời thành viên" as UC23
+        usecase "Theo dõi sức khỏe người thân" as UC24
+    }
+    
+    package "Nhắc nhở thuốc" {
+        usecase "Tạo nhắc nhở" as UC25
+        usecase "Sửa nhắc nhở" as UC26
+        usecase "Xóa nhắc nhở" as UC27
+    }
+    
+    package "Kiến thức & Cộng đồng" {
+        usecase "Đọc bài viết sức khỏe" as UC28
+        usecase "Tham gia diễn đàn" as UC29
+        usecase "Đăng bài viết" as UC30
+    }
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+User --> UC17
+User --> UC18
+User --> UC19
+User --> UC20
+User --> UC21
+User --> UC22
+User --> UC23
+User --> UC24
+User --> UC25
+User --> UC26
+User --> UC27
+User --> UC28
+User --> UC29
+User --> UC30
+
+@enduml

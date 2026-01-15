@@ -4,6 +4,7 @@ import '../data/models/appointment_model.dart';
 import '../data/models/user_model.dart';
 import '../data/models/health_record_model.dart';
 import '../services/auth_service.dart';
+import '../services/enhanced_notification_service.dart';
 
 /// Model chi tiết lịch hẹn với thông tin bệnh nhân đầy đủ
 class AppointmentDetailModel {
@@ -455,7 +456,28 @@ class AppointmentService {
         'updatedAt': now,
       });
 
-      // TODO: Gửi notification cho bệnh nhân
+      // Gửi notification cho bệnh nhân
+      try {
+        final snapshot = await _db.child('appointments').child(appointmentId).get();
+        if (snapshot.exists) {
+          final data = Map<String, dynamic>.from(snapshot.value as Map);
+          final userId = data['userId'] as String?;
+          
+          if (userId != null) {
+            final notificationService = EnhancedNotificationService();
+            await notificationService.createNotification(
+              userId: userId,
+              title: 'Lịch hẹn bị từ chối',
+              message: 'Bác sĩ đã từ chối lịch hẹn của bạn. Lý do: $reason',
+              type: 'appointment_rejected',
+              data: {'appointmentId': appointmentId},
+            );
+          }
+        }
+      } catch (e) {
+        print('Error sending rejection notification: $e');
+      }
+      
       return true;
     } catch (e) {
       print('Error rejecting appointment: $e');

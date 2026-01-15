@@ -1,0 +1,468 @@
+PHẦN 3: THIẾT KẾ HỆ THỐNG
+
+
+3.1. Kiến trúc hệ thống
+
+3.1.1. Tổng quan kiến trúc
+
+Hệ thống SEWS được thiết kế theo kiến trúc phân lớp (Layered Architecture) kết hợp với mô hình Client-Server. Kiến trúc bao gồm 5 lớp chính:
+
+File PlantUML: docs/plant-uml/p3/architecture.puml
+
+A. Client Layer (Lớp Client)
+
+Flutter Mobile App: Ứng dụng Android native, hỗ trợ API 23+.
+Flutter Web App: Ứng dụng web chạy trên Chrome và các trình duyệt hiện đại.
+
+B. Presentation Layer (Lớp trình bày)
+
+Screens: 91 màn hình UI được tổ chức theo module (User, Doctor, Admin).
+Widgets: 7 shared widgets tái sử dụng (AppDrawer, AppBottomNav, SOSFloatingButton, OfflineIndicator...).
+Provider: State management sử dụng Provider pattern để quản lý trạng thái ứng dụng.
+
+C. Business Logic Layer (Lớp nghiệp vụ)
+
+Services: 34 service classes xử lý logic nghiệp vụ.
+Models: 14 data models định nghĩa cấu trúc dữ liệu.
+Utils: 4 utility classes hỗ trợ (NavigationUtils, DateUtils...).
+
+D. Data Layer (Lớp dữ liệu)
+
+Firebase Auth: Xác thực người dùng với email/password và Google Sign-In.
+Firebase Realtime Database: Cơ sở dữ liệu NoSQL realtime.
+Firebase Storage: Lưu trữ file (hình ảnh, tài liệu).
+Firebase Cloud Messaging: Push notification.
+Hive: Local database cho offline caching.
+
+E. AI/ML Layer (Lớp AI/ML)
+
+Flask API Server: REST API server chạy trên Python.
+Random Forest Model: Model dự đoán đột quỵ (moHinhDotQuy_final.pkl).
+Preprocessor: Tiền xử lý dữ liệu (preprocessor.pkl).
+
+3.1.2. Luồng dữ liệu
+
+Luồng dữ liệu trong hệ thống đi theo hướng:
+
+User Interface -> Provider -> Service -> Firebase/API -> Response -> Provider -> UI Update
+
+Đối với tính năng dự đoán AI:
+
+User Input -> StrokePredictionService -> Flask API -> Random Forest Model -> Prediction Result -> Firebase (lưu lịch sử) -> UI Display
+
+3.1.3. Giao tiếp giữa các thành phần
+
+Client - Firebase: Sử dụng Firebase SDK với realtime listeners.
+Client - Flask API: HTTP REST API với JSON payload.
+Offline Sync: Hive cache + ConnectivityService để đồng bộ khi có mạng.
+
+
+3.2. Thiết kế cơ sở dữ liệu
+
+3.2.1. Mô hình dữ liệu
+
+File PlantUML: docs/plant-uml/p3/database_schema.puml
+
+Hệ thống sử dụng Firebase Realtime Database với cấu trúc NoSQL. Dữ liệu được tổ chức thành các node chính:
+
+A. Node users
+
+Lưu thông tin người dùng (bệnh nhân).
+Các trường: uid, name, email, phone, photoURL, role, gender, dateOfBirth, address, createdAt, status.
+
+B. Node doctors
+
+Lưu thông tin bác sĩ.
+Các trường: doctorId, name, email, phone, photoURL, specialization, hospital, department, licenseNumber, yearsOfExperience, bio, isVerified, isAvailable, createdAt.
+
+C. Node doctorStats
+
+Thống kê của bác sĩ.
+Các trường: totalPatients, totalAppointments, completedAppointments, averageRating, totalReviews, updatedAt.
+
+D. Node appointments
+
+Lưu lịch hẹn khám.
+Các trường: appointmentId, userId, doctorId, doctorName, patientName, appointmentTime, location, reason, status, createdBy, createdAt, confirmedAt, cancelReason, notes.
+Status: pending, confirmed, cancelled, completed, rejected, rescheduled.
+
+E. Node healthRecords
+
+Lưu chỉ số sức khỏe theo user.
+Cấu trúc: healthRecords/{userId}/{recordId}.
+Các trường: id, userId, recordedAt, systolicBP, diastolicBP, heartRate, bloodSugar, weight, height, notes, createdAt.
+
+F. Node predictions
+
+Lưu lịch sử dự đoán theo user.
+Cấu trúc: predictions/{userId}/{predictionId}.
+Các trường: id, userId, type (stroke/diabetes), riskScore, riskLevel, inputData, createdAt.
+
+G. Node conversations
+
+Lưu cuộc hội thoại chat.
+Các trường: conversationId, userId, doctorId, doctorName, patientName, lastMessage, lastMessageTime, userUnreadCount, doctorUnreadCount, createdAt, updatedAt.
+
+H. Node messages
+
+Lưu tin nhắn theo conversation.
+Cấu trúc: messages/{conversationId}/{messageId}.
+Các trường: messageId, conversationId, senderId, senderName, message, type (text/image), createdAt, isRead.
+
+I. Node sos
+
+Lưu ca SOS khẩn cấp.
+Các trường: id, patientId, patientName, status, userLocation (latitude, longitude, address), createdAt, acknowledgedAt, acknowledgedBy, completedAt, notes.
+Status: pending, acknowledged, completed.
+
+J. Node familyGroups
+
+Lưu nhóm gia đình.
+Các trường: groupId, name, createdBy, createdAt, members.
+
+K. Node reminders
+
+Lưu nhắc nhở thuốc theo user.
+Cấu trúc: reminders/{userId}/{reminderId}.
+Các trường: id, userId, title, description, time, frequency, isActive, createdAt.
+
+L. Node knowledge
+
+Lưu bài viết kiến thức.
+Các trường: id, title, content, category, imageUrl, author, isPublished, createdAt, updatedAt.
+
+M. Node forum
+
+Lưu bài đăng diễn đàn.
+Các trường: id, userId, userName, title, content, category, likesCount, commentsCount, isApproved, createdAt.
+Sub-node comments: userId, userName, content, createdAt.
+
+N. Node doctorSchedules
+
+Lưu lịch làm việc bác sĩ.
+Cấu trúc: doctorSchedules/{doctorId}/{date}/{slotId}.
+Các trường: startTime, endTime, maxPatients, bookedCount, isAvailable.
+
+O. Node reviews
+
+Lưu đánh giá bác sĩ.
+Cấu trúc: reviews/{doctorId}/{reviewId}.
+Các trường: userId, userName, rating, comment, createdAt.
+
+3.2.2. Cấu trúc Firebase Realtime Database
+
+Cấu trúc JSON tổng quan:
+
+{
+  "users": { ... },
+  "doctors": { ... },
+  "doctorStats": { ... },
+  "appointments": { ... },
+  "healthRecords": {
+    "{userId}": {
+      "{recordId}": { ... }
+    }
+  },
+  "predictions": {
+    "{userId}": {
+      "{predictionId}": { ... }
+    }
+  },
+  "conversations": { ... },
+  "messages": {
+    "{conversationId}": {
+      "{messageId}": { ... }
+    }
+  },
+  "sos": { ... },
+  "familyGroups": { ... },
+  "reminders": {
+    "{userId}": {
+      "{reminderId}": { ... }
+    }
+  },
+  "knowledge": { ... },
+  "forum": { ... },
+  "doctorSchedules": {
+    "{doctorId}": {
+      "{date}": {
+        "{slotId}": { ... }
+      }
+    }
+  },
+  "reviews": {
+    "{doctorId}": {
+      "{reviewId}": { ... }
+    }
+  }
+}
+
+
+3.3. Thiết kế giao diện (UI/UX)
+
+3.3.1. Nguyên tắc thiết kế
+
+A. Material Design 3
+
+Sử dụng Material Design 3 của Google.
+Màu chủ đạo: #135BEC (xanh dương).
+Màu nền: #F6F6F8 (xám nhạt).
+Màu văn bản chính: #111318.
+Màu văn bản phụ: #6B7280.
+
+B. Responsive Design
+
+Giao diện tự động điều chỉnh theo kích thước màn hình.
+Hỗ trợ cả mobile (portrait) và web (landscape).
+Sử dụng MediaQuery để detect screen size.
+
+C. Accessibility
+
+Font size có thể điều chỉnh.
+Contrast ratio đủ cao cho người dùng lớn tuổi.
+Hỗ trợ đầy đủ tiếng Việt Unicode.
+
+3.3.2. Cấu trúc màn hình
+
+A. Module User (54 screens)
+
+Splash Screen: Màn hình khởi động với logo SEWS.
+Onboarding: 4 trang giới thiệu tính năng.
+Authentication: Login, Register, Forgot Password.
+Dashboard: Trang chủ với thống kê và quick actions.
+Health Hub: Biểu đồ sức khỏe, nhập chỉ số.
+Prediction Hub: Dự đoán đột quỵ, tiểu đường.
+Doctors Hub: Danh sách bác sĩ, đặt lịch.
+Profile: Thông tin cá nhân, cài đặt.
+
+B. Module Doctor (17 screens)
+
+Doctor Dashboard: Thống kê ca trực.
+Patient List: Danh sách bệnh nhân.
+Appointment Management: Quản lý lịch hẹn.
+SOS Queue: Hàng đợi ca khẩn cấp.
+Doctor Chat: Chat với bệnh nhân.
+Schedule Management: Quản lý lịch làm việc.
+
+C. Module Admin (20 screens)
+
+Admin Dashboard: Thống kê tổng quan.
+User Management: CRUD users.
+Doctor Management: CRUD doctors.
+Patient Management: Xem bệnh nhân.
+SOS Management: Giám sát SOS.
+Knowledge Management: CRUD bài viết.
+Community Management: Quản lý diễn đàn.
+
+3.3.3. Navigation Pattern
+
+A. User Navigation
+
+Bottom Navigation Bar với 4 tab: Home, Health, Doctors, Profile.
+Drawer Menu cho các tính năng phụ: Forum, Knowledge, Settings.
+SOS Floating Button luôn hiển thị.
+
+B. Doctor Navigation
+
+Bottom Navigation Bar với 4 tab: Dashboard, Patients, Appointments, Chat.
+Drawer Menu cho: Schedule, Reviews, Settings.
+
+C. Admin Navigation
+
+Sidebar Navigation với 9 mục quản lý.
+Header với refresh và notifications.
+
+
+3.4. Biểu đồ lớp (Class Diagram)
+
+3.4.1. Class Diagram - Data Models
+
+File PlantUML: docs/plant-uml/p3/class_diagram_models.puml
+
+Các class model chính:
+
+A. UserModel
+Thuộc tính: id, name, email, phone, avatarUrl, role, createdAt, address, gender, dateOfBirth.
+Phương thức: fromJson(), toJson().
+
+B. DoctorModel
+Thuộc tính: doctorId, name, email, phone, photoURL, specialization, hospital, department, licenseNumber, yearsOfExperience, bio, isVerified, isAvailable, createdAt.
+Phương thức: fromJson(), toJson().
+
+C. DoctorStatsModel
+Thuộc tính: doctorId, totalPatients, totalAppointments, completedAppointments, cancelledAppointments, totalConsultations, totalPrescriptions, averageRating, totalReviews, updatedAt.
+Phương thức: fromJson(), toJson().
+
+D. AppointmentModel
+Thuộc tính: appointmentId, userId, doctorId, doctorName, patientName, appointmentTime, location, reason, status, createdBy, createdAt, cancelReason, rejectReason, notes.
+Phương thức: fromJson(), toJson(), isUpcoming, canCancel, canReschedule.
+
+E. HealthRecordModel
+Thuộc tính: id, userId, recordedAt, systolicBP, diastolicBP, heartRate, bloodSugar, weight, height, temperature, notes, createdAt.
+Phương thức: fromJson(), toJson(), bloodPressure, getBPStatus(), getHeartRateStatus().
+
+F. PredictionResultModel
+Thuộc tính: id, userId, type, riskScore, riskLevel, inputData, createdAt.
+Phương thức: fromJson(), toJson().
+
+G. ConversationModel
+Thuộc tính: conversationId, userId, doctorId, doctorName, patientName, lastMessage, lastMessageTime, userUnreadCount, doctorUnreadCount, isOnline, createdAt, updatedAt.
+Phương thức: fromJson(), toJson().
+
+H. MessageModel
+Thuộc tính: messageId, conversationId, senderId, senderName, message, type, prescriptionId, timestamp, isRead.
+Phương thức: fromJson(), toJson().
+
+I. SOSCaseModel
+Thuộc tính: sosId, patientId, patientName, status, latitude, longitude, address, createdAt, acknowledgedAt, acknowledgedBy, notes, priority, waitTimeMinutes.
+Phương thức: fromJson(), toJson().
+
+3.4.2. Class Diagram - Services Layer
+
+File PlantUML: docs/plant-uml/p3/class_diagram_services.puml
+
+Các service class chính:
+
+A. AuthService
+Chức năng: Xác thực người dùng.
+Phương thức: login(), register(), loginWithGoogle(), logout(), resetPassword(), getUserId(), getUserName(), getUserRole().
+
+B. StrokePredictionService
+Chức năng: Dự đoán nguy cơ đột quỵ.
+Phương thức: predictStrokeRisk(), savePredictionResult(), getPredictionHistory().
+
+C. DiabetesPredictionService
+Chức năng: Dự đoán nguy cơ tiểu đường.
+Phương thức: calculateBMI(), predictDiabetesRisk(), savePredictionResult().
+
+D. HealthRecordService
+Chức năng: Quản lý chỉ số sức khỏe.
+Phương thức: addHealthRecord(), getHealthRecords(), getLatestRecord(), deleteRecord().
+
+E. HealthChartService
+Chức năng: Lấy dữ liệu cho biểu đồ.
+Phương thức: getBloodPressureData(), getBloodSugarData(), getBMIData().
+
+F. AppointmentService
+Chức năng: Quản lý lịch hẹn.
+Phương thức: createAppointment(), getAppointments(), getDoctorAppointments(), updateStatus(), cancelAppointment().
+
+G. DoctorService
+Chức năng: Quản lý thông tin bác sĩ.
+Phương thức: getDoctors(), getDoctorById(), searchDoctors(), getDoctorsBySpecialty().
+
+H. DoctorScheduleService
+Chức năng: Quản lý lịch làm việc bác sĩ.
+Phương thức: getSchedule(), createSlot(), updateSlot(), deleteSlot(), getAvailableSlots().
+
+I. ChatService
+Chức năng: Quản lý chat.
+Phương thức: getConversations(), getMessages(), sendMessage(), createConversation(), markAsRead().
+
+J. SOSService
+Chức năng: Quản lý SOS khẩn cấp.
+Phương thức: createSOS(), getSOSStatus(), getSOSQueue(), acknowledgeSOS(), completeSOS().
+
+K. NotificationService
+Chức năng: Quản lý thông báo.
+Phương thức: initialize(), showNotification(), scheduleNotification(), cancelNotification().
+
+L. FamilyService
+Chức năng: Quản lý gia đình.
+Phương thức: createGroup(), inviteMember(), getGroupMembers(), getMemberHealth().
+
+M. OfflineCacheService
+Chức năng: Cache offline với Hive.
+Phương thức: initialize(), cacheData(), getCachedData(), clearCache().
+
+N. ConnectivityService
+Chức năng: Kiểm tra kết nối mạng.
+Phương thức: initialize(), isOnline(), onConnectivityChanged.
+
+
+3.5. Biểu đồ tuần tự (Sequence Diagram)
+
+3.5.1. Biểu đồ tuần tự - Dự đoán nguy cơ đột quỵ
+
+File PlantUML: docs/plant-uml/p3/sequence_stroke_prediction.puml
+
+Mô tả luồng:
+(1) Người dùng nhập thông tin sức khỏe vào form.
+(2) ScreenStrokeForm validate dữ liệu.
+(3) Gọi StrokePredictionService.predictStrokeRisk().
+(4) Service gửi POST request đến Flask API /predict.
+(5) Flask API validate input, tính BMI, encode categorical variables.
+(6) Flask API gọi Random Forest Model predict_proba().
+(7) Model trả về xác suất [no_stroke, stroke].
+(8) Flask API tính risk score, xác định risk level.
+(9) Flask API trả về JSON response.
+(10) Service lưu kết quả vào Firebase.
+(11) Hiển thị kết quả trên ScreenStrokeResult.
+
+3.5.2. Biểu đồ tuần tự - Gửi yêu cầu SOS khẩn cấp
+
+File PlantUML: docs/plant-uml/p3/sequence_sos.puml
+
+Mô tả luồng:
+(1) Người dùng nhấn nút SOS.
+(2) LocationService lấy vị trí GPS hiện tại.
+(3) Reverse geocoding để lấy địa chỉ.
+(4) SOSService tạo ca SOS trong Firebase.
+(5) NotificationService gửi push notification đến tất cả bác sĩ.
+(6) Hiển thị màn hình chờ ScreenSOSStatus.
+(7) Bác sĩ nhận ca: acknowledgeSOS().
+(8) Cập nhật status = acknowledged, thông báo đến bệnh nhân.
+(9) Bác sĩ hoàn thành: completeSOS().
+(10) Cập nhật status = completed, thông báo đến bệnh nhân.
+
+3.5.3. Biểu đồ tuần tự - Đặt lịch hẹn khám
+
+File PlantUML: docs/plant-uml/p3/sequence_appointment.puml
+
+Mô tả luồng:
+(1) Người dùng xem chi tiết bác sĩ.
+(2) DoctorScheduleService lấy danh sách slot trống.
+(3) Hiển thị các slot có thể đặt.
+(4) Người dùng chọn slot và nhập lý do khám.
+(5) AppointmentService tạo appointment với status = pending.
+(6) NotificationService gửi thông báo đến bác sĩ.
+(7) Hiển thị "Đặt lịch thành công, chờ xác nhận".
+(8) Bác sĩ duyệt: updateStatus(confirmed).
+(9) Thông báo đến bệnh nhân "Lịch hẹn đã được xác nhận".
+
+3.5.4. Biểu đồ tuần tự - Chat với bác sĩ
+
+File PlantUML: docs/plant-uml/p3/sequence_chat.puml
+
+Mô tả luồng:
+(1) Người dùng mở màn hình chat.
+(2) ChatService listen messages từ Firebase Realtime DB.
+(3) Hiển thị danh sách tin nhắn.
+(4) Người dùng gửi tin nhắn.
+(5) ChatService push message vào Firebase.
+(6) Cập nhật conversation.lastMessage.
+(7) NotificationService gửi push notification đến bác sĩ.
+(8) Firebase tự động sync đến tất cả clients.
+(9) Bác sĩ trả lời, tin nhắn được sync realtime.
+(10) Hiển thị tin nhắn mới cho người dùng.
+
+
+3.6. Tổng kết thiết kế
+
+Thống kê:
+
+Số lớp Model: 14 classes
+Số lớp Service: 34 classes
+Số node Firebase: 15 nodes chính
+Số biểu đồ PlantUML: 8 files
+
+Các file PlantUML đã tạo:
+
+docs/plant-uml/p3/architecture.puml - Kiến trúc hệ thống
+docs/plant-uml/p3/database_schema.puml - Cấu trúc database
+docs/plant-uml/p3/class_diagram_models.puml - Class diagram models
+docs/plant-uml/p3/class_diagram_services.puml - Class diagram services
+docs/plant-uml/p3/sequence_stroke_prediction.puml - Sequence dự đoán đột quỵ
+docs/plant-uml/p3/sequence_sos.puml - Sequence SOS
+docs/plant-uml/p3/sequence_appointment.puml - Sequence đặt lịch
+docs/plant-uml/p3/sequence_chat.puml - Sequence chat

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/stroke_prediction_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScreenStrokeResult extends StatelessWidget {
   const ScreenStrokeResult({super.key});
@@ -165,11 +166,20 @@ class ScreenStrokeResult extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 56),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              onPressed: () {
-                // TODO: Implement emergency call
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Chức năng gọi cấp cứu đang được phát triển')),
+              onPressed: () async {
+                final Uri launchUri = Uri(
+                  scheme: 'tel',
+                  path: '115',
                 );
+                try {
+                  await launchUrl(launchUri);
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Không thể thực hiện cuộc gọi')),
+                    );
+                  }
+                }
               },
               icon: const Icon(Icons.call),
               label: const Text('Gọi cấp cứu (115)', style: TextStyle(fontWeight: FontWeight.bold)),

@@ -1,0 +1,60 @@
+@startuml Architecture
+skinparam componentStyle rectangle
+
+title Kiến trúc hệ thống SEWS
+
+package "Client Layer" {
+    [Flutter Mobile App\n(Android)] as MobileApp
+    [Flutter Web App\n(Chrome)] as WebApp
+}
+
+package "Presentation Layer" {
+    [Screens\n(91 screens)] as Screens
+    [Widgets\n(7 shared widgets)] as Widgets
+    [Provider\n(State Management)] as Provider
+}
+
+package "Business Logic Layer" {
+    [Services\n(34 services)] as Services
+    [Models\n(14 models)] as Models
+    [Utils\n(4 utilities)] as Utils
+}
+
+package "Data Layer" {
+    [Firebase Auth] as Auth
+    [Firebase Realtime DB] as RealtimeDB
+    [Firebase Storage] as Storage
+    [Firebase Messaging] as FCM
+    [Hive\n(Offline Cache)] as Hive
+}
+
+package "AI/ML Layer" {
+    [Flask API Server] as FlaskAPI
+    [Random Forest Model\n(moHinhDotQuy_final.pkl)] as AIModel
+    [Preprocessor\n(preprocessor.pkl)] as Preprocessor
+}
+
+cloud "External Services" {
+    [Google Sign-In] as Google
+    [Geolocator API] as Geo
+}
+
+MobileApp --> Screens
+WebApp --> Screens
+Screens --> Widgets
+Screens --> Provider
+Provider --> Services
+Services --> Models
+Services --> Utils
+Services --> Auth
+Services --> RealtimeDB
+Services --> Storage
+Services --> FCM
+Services --> Hive
+Services --> FlaskAPI
+FlaskAPI --> AIModel
+FlaskAPI --> Preprocessor
+Auth --> Google
+Services --> Geo
+
+@enduml

@@ -1,0 +1,179 @@
+@startuml Class_Diagram_Models
+skinparam classAttributeIconSize 0
+
+title Class Diagram - Data Models
+
+class UserModel {
+    +String id
+    +String name
+    +String? email
+    +String? phone
+    +String? avatarUrl
+    +String role
+    +DateTime createdAt
+    +String? address
+    +String? gender
+    +DateTime? dateOfBirth
+    --
+    +fromJson(Map<String, dynamic>): UserModel
+    +toJson(): Map<String, dynamic>
+}
+
+class DoctorModel {
+    +String doctorId
+    +String name
+    +String? email
+    +String? phone
+    +String? photoURL
+    +String? specialization
+    +String? hospital
+    +String? department
+    +String? licenseNumber
+    +int? yearsOfExperience
+    +String? bio
+    +bool isVerified
+    +bool isAvailable
+    +int createdAt
+    --
+    +fromJson(Map<String, dynamic>): DoctorModel
+    +toJson(): Map<String, dynamic>
+}
+
+class DoctorStatsModel {
+    +String doctorId
+    +int totalPatients
+    +int totalAppointments
+    +int completedAppointments
+    +int cancelledAppointments
+    +int totalConsultations
+    +int totalPrescriptions
+    +double averageRating
+    +int totalReviews
+    +int updatedAt
+    --
+    +fromJson(Map<String, dynamic>): DoctorStatsModel
+    +toJson(): Map<String, dynamic>
+}
+
+class AppointmentModel {
+    +String appointmentId
+    +String userId
+    +String doctorId
+    +String? doctorName
+    +String? patientName
+    +int appointmentTime
+    +String location
+    +String reason
+    +String status
+    +String createdBy
+    +int createdAt
+    +String? cancelReason
+    +String? rejectReason
+    +String? notes
+    --
+    +fromJson(Map<String, dynamic>): AppointmentModel
+    +toJson(): Map<String, dynamic>
+    +isUpcoming: bool
+    +canCancel: bool
+}
+
+class HealthRecordModel {
+    +String id
+    +String userId
+    +int recordedAt
+    +int? systolicBP
+    +int? diastolicBP
+    +int? heartRate
+    +double? bloodSugar
+    +double? weight
+    +double? height
+    +double? temperature
+    +String? notes
+    +int createdAt
+    --
+    +fromJson(Map<String, dynamic>): HealthRecordModel
+    +toJson(): Map<String, dynamic>
+    +bloodPressure: String
+    +getBPStatus(): String
+    +getHeartRateStatus(): String
+}
+
+class PredictionResultModel {
+    +String id
+    +String userId
+    +String type
+    +double riskScore
+    +String riskLevel
+    +Map<String, dynamic> inputData
+    +DateTime createdAt
+    --
+    +fromJson(Map<String, dynamic>): PredictionResultModel
+    +toJson(): Map<String, dynamic>
+}
+
+class ConversationModel {
+    +String conversationId
+    +String userId
+    +String doctorId
+    +String? doctorName
+    +String? patientName
+    +String? lastMessage
+    +int? lastMessageTime
+    +int userUnreadCount
+    +int doctorUnreadCount
+    +bool isOnline
+    +int createdAt
+    +int updatedAt
+    --
+    +fromJson(Map<String, dynamic>): ConversationModel
+    +toJson(): Map<String, dynamic>
+}
+
+class MessageModel {
+    +String messageId
+    +String conversationId
+    +String senderId
+    +String? senderName
+    +String message
+    +String type
+    +String? prescriptionId
+    +int timestamp
+    +bool isRead
+    --
+    +fromJson(Map<String, dynamic>): MessageModel
+    +toJson(): Map<String, dynamic>
+}
+
+class SOSCaseModel {
+    +String sosId
+    +String patientId
+    +String patientName
+    +String status
+    +double latitude
+    +double longitude
+    +String address
+    +DateTime createdAt
+    +DateTime? acknowledgedAt
+    +String? acknowledgedBy
+    +String? notes
+    +int priority
+    +int waitTimeMinutes
+    --
+    +fromJson(Map<String, dynamic>): SOSCaseModel
+    +toJson(): Map<String, dynamic>
+}
+
+UserModel "1" -- "0..*" HealthRecordModel : has
+UserModel "1" -- "0..*" PredictionResultModel : has
+UserModel "1" -- "0..*" AppointmentModel : books
+UserModel "1" -- "0..*" ConversationModel : participates
+UserModel "1" -- "0..*" SOSCaseModel : creates
+
+DoctorModel "1" -- "1" DoctorStatsModel : has
+DoctorModel "1" -- "0..*" AppointmentModel : receives
+DoctorModel "1" -- "0..*" ConversationModel : participates
+DoctorModel "1" -- "0..*" SOSCaseModel : handles
+
+ConversationModel "1" -- "0..*" MessageModel : contains
+
+@enduml

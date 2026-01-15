@@ -198,8 +198,8 @@ class SOSService {
 
   /// Auto-progress SOS status (simulate emergency response)
   void _startAutoProgression(String sosId) {
-    // After 30s: pending → acknowledged
-    Future.delayed(const Duration(seconds: 30), () async {
+    // After 5s: pending → acknowledged (Demo speed)
+    Future.delayed(const Duration(seconds: 5), () async {
       try {
         final sos = await getSOSRequest(sosId);
         if (sos != null && sos['status'] == 'pending') {
@@ -211,8 +211,8 @@ class SOSService {
       }
     });
 
-    // After 2 minutes: acknowledged → dispatched
-    Future.delayed(const Duration(minutes: 2), () async {
+    // After 10s: acknowledged → dispatched (Demo speed - total 10s)
+    Future.delayed(const Duration(seconds: 10), () async {
       try {
         final sos = await getSOSRequest(sosId);
         if (sos != null && sos['status'] == 'acknowledged') {
@@ -224,8 +224,8 @@ class SOSService {
       }
     });
 
-    // After 10 minutes: dispatched → resolved
-    Future.delayed(const Duration(minutes: 10), () async {
+    // After 30s: dispatched → resolved (Demo speed - total 30s)
+    Future.delayed(const Duration(seconds: 30), () async {
       try {
         final sos = await getSOSRequest(sosId);
         if (sos != null && sos['status'] == 'dispatched') {

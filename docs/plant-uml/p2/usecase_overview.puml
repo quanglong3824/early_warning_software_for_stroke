@@ -1,0 +1,86 @@
+@startuml UseCase_Overview
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Người dùng" as User
+actor "Bác sĩ" as Doctor
+actor "Quản trị viên" as Admin
+
+rectangle "Hệ thống SEWS - Stroke Early Warning System" {
+    package "Xác thực" {
+        usecase "Đăng ký" as UC_Auth1
+        usecase "Đăng nhập" as UC_Auth2
+        usecase "Quên mật khẩu" as UC_Auth3
+    }
+    
+    package "Dự đoán AI" {
+        usecase "Dự đoán đột quỵ" as UC_AI1
+        usecase "Dự đoán tiểu đường" as UC_AI2
+    }
+    
+    package "Theo dõi sức khỏe" {
+        usecase "Nhập chỉ số sức khỏe" as UC_Health1
+        usecase "Xem biểu đồ" as UC_Health2
+    }
+    
+    package "Kết nối y tế" {
+        usecase "Đặt lịch hẹn" as UC_Med1
+        usecase "Chat tư vấn" as UC_Med2
+        usecase "Quản lý lịch hẹn" as UC_Med3
+    }
+    
+    package "SOS khẩn cấp" {
+        usecase "Gửi SOS" as UC_SOS1
+        usecase "Xử lý SOS" as UC_SOS2
+        usecase "Giám sát SOS" as UC_SOS3
+    }
+    
+    package "Quản lý gia đình" {
+        usecase "Quản lý nhóm gia đình" as UC_Family1
+    }
+    
+    package "Nhắc nhở thuốc" {
+        usecase "Quản lý nhắc nhở" as UC_Remind1
+    }
+    
+    package "Kiến thức & Cộng đồng" {
+        usecase "Đọc bài viết" as UC_Know1
+        usecase "Tham gia diễn đàn" as UC_Know2
+        usecase "Quản lý nội dung" as UC_Know3
+    }
+    
+    package "Quản trị hệ thống" {
+        usecase "Quản lý users" as UC_Admin1
+        usecase "Quản lý bác sĩ" as UC_Admin2
+        usecase "Thống kê báo cáo" as UC_Admin3
+    }
+}
+
+User --> UC_Auth1
+User --> UC_Auth2
+User --> UC_Auth3
+User --> UC_AI1
+User --> UC_AI2
+User --> UC_Health1
+User --> UC_Health2
+User --> UC_Med1
+User --> UC_Med2
+User --> UC_SOS1
+User --> UC_Family1
+User --> UC_Remind1
+User --> UC_Know1
+User --> UC_Know2
+
+Doctor --> UC_Auth2
+Doctor --> UC_Med2
+Doctor --> UC_Med3
+Doctor --> UC_SOS2
+
+Admin --> UC_Auth2
+Admin --> UC_SOS3
+Admin --> UC_Know3
+Admin --> UC_Admin1
+Admin --> UC_Admin2
+Admin --> UC_Admin3
+
+@enduml

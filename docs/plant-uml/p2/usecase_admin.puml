@@ -1,0 +1,102 @@
+@startuml UseCase_Admin
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Quản trị viên" as Admin
+
+rectangle "Module Admin - SEWS" {
+    package "Xác thực" {
+        usecase "Đăng nhập Admin" as UC1
+        usecase "Quên mật khẩu" as UC2
+    }
+    
+    package "Dashboard" {
+        usecase "Xem thống kê tổng quan" as UC3
+        usecase "Xem biểu đồ thống kê" as UC4
+    }
+    
+    package "Quản lý Users" {
+        usecase "Xem danh sách users" as UC5
+        usecase "Thêm user" as UC6
+        usecase "Sửa thông tin user" as UC7
+        usecase "Xóa user" as UC8
+        usecase "Khóa/Mở khóa user" as UC9
+    }
+    
+    package "Quản lý Bác sĩ" {
+        usecase "Xem danh sách bác sĩ" as UC10
+        usecase "Thêm bác sĩ" as UC11
+        usecase "Sửa thông tin bác sĩ" as UC12
+        usecase "Xóa bác sĩ" as UC13
+        usecase "Duyệt bác sĩ" as UC14
+    }
+    
+    package "Quản lý Bệnh nhân" {
+        usecase "Xem danh sách bệnh nhân" as UC15
+        usecase "Xem chi tiết bệnh nhân" as UC16
+        usecase "Xem lịch sử sức khỏe" as UC17
+    }
+    
+    package "Quản lý SOS" {
+        usecase "Xem danh sách ca SOS" as UC18
+        usecase "Giám sát ca SOS" as UC19
+        usecase "Phân công bác sĩ" as UC20
+    }
+    
+    package "Quản lý Dự đoán" {
+        usecase "Xem lịch sử dự đoán" as UC21
+        usecase "Thống kê dự đoán" as UC22
+    }
+    
+    package "Quản lý Lịch hẹn" {
+        usecase "Xem danh sách lịch hẹn" as UC23
+        usecase "Giám sát lịch hẹn" as UC24
+    }
+    
+    package "Quản lý Kiến thức" {
+        usecase "Xem danh sách bài viết" as UC25
+        usecase "Thêm bài viết" as UC26
+        usecase "Sửa bài viết" as UC27
+        usecase "Xóa bài viết" as UC28
+    }
+    
+    package "Quản lý Cộng đồng" {
+        usecase "Xem danh sách bài đăng" as UC29
+        usecase "Duyệt bài đăng" as UC30
+        usecase "Xóa bài đăng" as UC31
+    }
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+Admin --> UC6
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+Admin --> UC21
+Admin --> UC22
+Admin --> UC23
+Admin --> UC24
+Admin --> UC25
+Admin --> UC26
+Admin --> UC27
+Admin --> UC28
+Admin --> UC29
+Admin --> UC30
+Admin --> UC31
+
+@enduml

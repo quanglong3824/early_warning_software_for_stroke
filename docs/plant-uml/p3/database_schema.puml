@@ -1,0 +1,232 @@
+@startuml Database_Schema
+title Cấu trúc Firebase Realtime Database
+
+object "users" as users {
+    {userId}
+    ├── uid: string
+    ├── name: string
+    ├── email: string
+    ├── phone: string
+    ├── photoURL: string
+    ├── role: "user" | "doctor" | "admin"
+    ├── gender: string
+    ├── dateOfBirth: timestamp
+    ├── address: string
+    ├── createdAt: timestamp
+    └── status: "active" | "blocked"
+}
+
+object "doctors" as doctors {
+    {doctorId}
+    ├── doctorId: string
+    ├── name: string
+    ├── email: string
+    ├── phone: string
+    ├── photoURL: string
+    ├── specialization: string
+    ├── hospital: string
+    ├── department: string
+    ├── licenseNumber: string
+    ├── yearsOfExperience: int
+    ├── bio: string
+    ├── isVerified: boolean
+    ├── isAvailable: boolean
+    └── createdAt: timestamp
+}
+
+object "doctorStats" as doctorStats {
+    {doctorId}
+    ├── totalPatients: int
+    ├── totalAppointments: int
+    ├── completedAppointments: int
+    ├── averageRating: double
+    ├── totalReviews: int
+    └── updatedAt: timestamp
+}
+
+object "appointments" as appointments {
+    {appointmentId}
+    ├── appointmentId: string
+    ├── userId: string
+    ├── doctorId: string
+    ├── doctorName: string
+    ├── patientName: string
+    ├── appointmentTime: timestamp
+    ├── location: string
+    ├── reason: string
+    ├── status: string
+    ├── createdBy: string
+    ├── createdAt: timestamp
+    ├── confirmedAt: timestamp
+    ├── cancelReason: string
+    └── notes: string
+}
+
+object "healthRecords" as healthRecords {
+    {userId}
+    └── {recordId}
+        ├── id: string
+        ├── userId: string
+        ├── recordedAt: timestamp
+        ├── systolicBP: int
+        ├── diastolicBP: int
+        ├── heartRate: int
+        ├── bloodSugar: double
+        ├── weight: double
+        ├── height: double
+        ├── notes: string
+        └── createdAt: timestamp
+}
+
+object "predictions" as predictions {
+    {userId}
+    └── {predictionId}
+        ├── id: string
+        ├── userId: string
+        ├── type: "stroke" | "diabetes"
+        ├── riskScore: double
+        ├── riskLevel: string
+        ├── inputData: object
+        └── createdAt: timestamp
+}
+
+object "conversations" as conversations {
+    {conversationId}
+    ├── conversationId: string
+    ├── userId: string
+    ├── doctorId: string
+    ├── doctorName: string
+    ├── patientName: string
+    ├── lastMessage: string
+    ├── lastMessageTime: timestamp
+    ├── userUnreadCount: int
+    ├── doctorUnreadCount: int
+    ├── createdAt: timestamp
+    └── updatedAt: timestamp
+}
+
+object "messages" as messages {
+    {conversationId}
+    └── {messageId}
+        ├── messageId: string
+        ├── conversationId: string
+        ├── senderId: string
+        ├── senderName: string
+        ├── message: string
+        ├── type: "text" | "image"
+        ├── createdAt: timestamp
+        └── isRead: boolean
+}
+
+object "sos" as sos {
+    {sosId}
+    ├── id: string
+    ├── patientId: string
+    ├── patientName: string
+    ├── status: "pending" | "acknowledged" | "completed"
+    ├── userLocation
+    │   ├── latitude: double
+    │   ├── longitude: double
+    │   └── address: string
+    ├── createdAt: timestamp
+    ├── acknowledgedAt: timestamp
+    ├── acknowledgedBy: string
+    ├── completedAt: timestamp
+    └── notes: string
+}
+
+object "familyGroups" as familyGroups {
+    {groupId}
+    ├── groupId: string
+    ├── name: string
+    ├── createdBy: string
+    ├── createdAt: timestamp
+    └── members
+        └── {userId}: role
+}
+
+object "reminders" as reminders {
+    {userId}
+    └── {reminderId}
+        ├── id: string
+        ├── userId: string
+        ├── title: string
+        ├── description: string
+        ├── time: string
+        ├── frequency: string
+        ├── isActive: boolean
+        └── createdAt: timestamp
+}
+
+object "knowledge" as knowledge {
+    {articleId}
+    ├── id: string
+    ├── title: string
+    ├── content: string
+    ├── category: string
+    ├── imageUrl: string
+    ├── author: string
+    ├── isPublished: boolean
+    ├── createdAt: timestamp
+    └── updatedAt: timestamp
+}
+
+object "forum" as forum {
+    {threadId}
+    ├── id: string
+    ├── userId: string
+    ├── userName: string
+    ├── title: string
+    ├── content: string
+    ├── category: string
+    ├── likesCount: int
+    ├── commentsCount: int
+    ├── isApproved: boolean
+    ├── createdAt: timestamp
+    └── comments
+        └── {commentId}
+            ├── userId: string
+            ├── userName: string
+            ├── content: string
+            └── createdAt: timestamp
+}
+
+object "doctorSchedules" as schedules {
+    {doctorId}
+    └── {date}
+        └── {slotId}
+            ├── startTime: string
+            ├── endTime: string
+            ├── maxPatients: int
+            ├── bookedCount: int
+            └── isAvailable: boolean
+}
+
+object "reviews" as reviews {
+    {doctorId}
+    └── {reviewId}
+        ├── userId: string
+        ├── userName: string
+        ├── rating: int
+        ├── comment: string
+        └── createdAt: timestamp
+}
+
+users -- healthRecords
+users -- predictions
+users -- appointments
+users -- conversations
+users -- sos
+users -- reminders
+
+doctors -- doctorStats
+doctors -- appointments
+doctors -- conversations
+doctors -- schedules
+doctors -- reviews
+doctors -- sos
+
+conversations -- messages
+familyGroups -- users
+
+@enduml

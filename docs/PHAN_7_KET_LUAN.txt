@@ -1,0 +1,228 @@
+PHẦN 8: KẾT LUẬN
+
+
+8.1. Kết quả đạt được
+
+8.1.1. Về mặt chức năng
+
+Dự án SEWS đã hoàn thành đầy đủ các mục tiêu đề ra:
+
+A. Dự đoán nguy cơ đột quỵ
+
+Xây dựng thành công mô hình AI Random Forest với 14 features.
+Tích hợp Flask API server để xử lý dự đoán.
+Độ chính xác dự đoán đạt mức tin cậy.
+Có fallback rule-based khi model không khả dụng.
+
+B. Dự đoán nguy cơ tiểu đường
+
+Phát triển thuật toán rule-based đánh giá 6 yếu tố nguy cơ.
+Cung cấp kết quả và khuyến nghị chi tiết.
+
+C. Theo dõi sức khỏe
+
+Cho phép người dùng nhập và lưu trữ chỉ số sức khỏe.
+Hiển thị biểu đồ trực quan với fl_chart.
+Hỗ trợ xem theo nhiều khoảng thời gian (7/30/90 ngày).
+
+D. Kết nối y tế
+
+Hệ thống đặt lịch hẹn hoàn chỉnh với workflow duyệt.
+Chat realtime giữa bệnh nhân và bác sĩ.
+Quản lý lịch làm việc cho bác sĩ.
+
+E. Hỗ trợ khẩn cấp SOS
+
+Gửi yêu cầu SOS với vị trí GPS tự động.
+Hàng đợi SOS cho bác sĩ với độ ưu tiên.
+Thông báo realtime đến bác sĩ trực.
+
+F. Quản lý gia đình
+
+Tạo nhóm gia đình và mời thành viên.
+Theo dõi sức khỏe người thân.
+
+G. Nhắc nhở thuốc
+
+Hệ thống nhắc nhở với local notifications.
+Hỗ trợ nhiều tần suất nhắc nhở.
+
+H. Kiến thức và Cộng đồng
+
+Bài viết kiến thức về sức khỏe.
+Diễn đàn chia sẻ kinh nghiệm.
+
+8.1.2. Về mặt kỹ thuật
+
+A. Kiến trúc hệ thống
+
+Kiến trúc phân lớp rõ ràng (5 layers).
+Tách biệt UI, Business Logic, Data Layer.
+Dễ bảo trì và mở rộng.
+
+B. Công nghệ
+
+Flutter 3.5.4+ cho cross-platform development.
+Firebase cho backend services (Auth, Database, Storage, Messaging).
+Flask + scikit-learn cho AI/ML.
+Provider cho state management.
+Hive cho offline caching.
+
+C. Chất lượng code
+
+91 màn hình UI được tổ chức theo module.
+34 service classes với single responsibility.
+14 data models với serialization.
+16 file unit tests với 119 test cases.
+
+D. Hiệu năng
+
+Thời gian tải màn hình < 2 giây.
+Thời gian dự đoán AI < 3 giây.
+Memory usage < 150MB.
+Hỗ trợ offline mode.
+
+8.1.3. Về mặt sản phẩm
+
+Ứng dụng hoàn chỉnh: File APK 67.3MB sẵn sàng cài đặt.
+Đa nền tảng: Hỗ trợ Android và Web.
+Giao diện thân thiện: Material Design 3, tiếng Việt.
+3 vai trò người dùng: User, Doctor, Admin.
+
+
+8.2. Hạn chế
+
+8.2.1. Hạn chế về chức năng
+
+A. Dự đoán AI
+
+Model chỉ dựa trên dữ liệu đầu vào từ người dùng, chưa tích hợp thiết bị y tế.
+Chưa có tính năng học liên tục (continuous learning) từ dữ liệu mới.
+Dự đoán tiểu đường sử dụng rule-based, chưa có model ML.
+
+B. Kết nối y tế
+
+Chưa hỗ trợ video call với bác sĩ.
+Chưa tích hợp thanh toán trực tuyến.
+Chưa có tính năng đặt lịch khám tại nhiều cơ sở y tế.
+
+C. Theo dõi sức khỏe
+
+Chưa tích hợp với thiết bị đeo (smartwatch, fitness band).
+Chưa có tính năng nhập dữ liệu từ file (CSV, PDF).
+
+8.2.2. Hạn chế về kỹ thuật
+
+A. Nền tảng
+
+Chưa hỗ trợ iOS (cần Apple Developer Account).
+Web app chưa tối ưu cho mobile browser.
+
+B. Bảo mật
+
+Chưa có xác thực 2 yếu tố (2FA) riêng.
+Chưa mã hóa end-to-end cho chat.
+
+C. Hiệu năng
+
+Chưa có CDN cho static assets.
+AI API chưa được deploy lên cloud production.
+
+8.2.3. Hạn chế về triển khai
+
+Chưa publish lên Google Play Store.
+Chưa có hệ thống CI/CD tự động.
+Chưa có monitoring và logging production.
+
+
+8.3. Hướng phát triển
+
+8.3.1. Ngắn hạn (3-6 tháng)
+
+A. Cải thiện AI/ML
+
+Thu thập thêm dữ liệu để train model.
+Phát triển model ML cho dự đoán tiểu đường.
+Thêm dự đoán các bệnh tim mạch khác.
+Deploy AI API lên cloud (AWS, GCP, Azure).
+
+B. Mở rộng nền tảng
+
+Phát triển phiên bản iOS.
+Tối ưu Progressive Web App (PWA).
+Publish lên Google Play Store và App Store.
+
+C. Tính năng mới
+
+Tích hợp video call (WebRTC).
+Thêm tính năng thanh toán (VNPay, Momo).
+Hỗ trợ đa ngôn ngữ (Anh, Việt).
+
+8.3.2. Trung hạn (6-12 tháng)
+
+A. Tích hợp IoT
+
+Kết nối với thiết bị đo huyết áp Bluetooth.
+Tích hợp smartwatch (Apple Watch, Wear OS).
+Đồng bộ dữ liệu từ Google Fit, Apple Health.
+
+B. Nâng cao AI
+
+Phát triển chatbot AI tư vấn sức khỏe.
+Phân tích xu hướng sức khỏe với ML.
+Cảnh báo sớm dựa trên pattern recognition.
+
+C. Mở rộng hệ sinh thái
+
+Tích hợp với hệ thống bệnh viện (HIS).
+API cho third-party developers.
+White-label solution cho các cơ sở y tế.
+
+8.3.3. Dài hạn (1-2 năm)
+
+A. AI nâng cao
+
+Computer vision để phân tích hình ảnh y tế.
+NLP để phân tích triệu chứng từ mô tả.
+Personalized health recommendations.
+
+B. Mở rộng thị trường
+
+Mở rộng sang các nước Đông Nam Á.
+Hợp tác với bảo hiểm y tế.
+Chương trình sức khỏe doanh nghiệp.
+
+C. Nghiên cứu và phát triển
+
+Hợp tác với các viện nghiên cứu y tế.
+Publish nghiên cứu về hiệu quả dự đoán.
+Phát triển các model AI mới.
+
+
+8.4. Kết luận chung
+
+Dự án SEWS - Stroke Early Warning System đã hoàn thành các mục tiêu đề ra, xây dựng được một hệ thống phần mềm hoàn chỉnh hỗ trợ cảnh báo sớm nguy cơ đột quỵ.
+
+Điểm nổi bật:
+
+(1) Tích hợp AI/ML: Sử dụng mô hình Random Forest để dự đoán nguy cơ đột quỵ với độ chính xác cao.
+
+(2) Cross-platform: Một codebase Flutter cho cả Android và Web, tiết kiệm thời gian và chi phí phát triển.
+
+(3) Realtime features: Chat, SOS, notifications hoạt động realtime với Firebase.
+
+(4) Offline support: Ứng dụng vẫn hoạt động khi không có mạng nhờ Hive caching.
+
+(5) Đa vai trò: Hỗ trợ 3 loại người dùng (User, Doctor, Admin) với các chức năng phù hợp.
+
+(6) UI/UX thân thiện: Giao diện Material Design 3, hỗ trợ tiếng Việt, dễ sử dụng cho người lớn tuổi.
+
+Ý nghĩa thực tiễn:
+
+Dự án góp phần nâng cao nhận thức về phòng ngừa đột quỵ trong cộng đồng. Với tính năng dự đoán nguy cơ và theo dõi sức khỏe, người dùng có thể chủ động phát hiện sớm các dấu hiệu nguy hiểm và kịp thời liên hệ với bác sĩ.
+
+Tính năng SOS khẩn cấp đặc biệt quan trọng, giúp rút ngắn thời gian phản ứng trong "thời gian vàng" điều trị đột quỵ (3-4.5 giờ đầu tiên).
+
+Lời cảm ơn:
+
+Xin chân thành cảm ơn thầy/cô hướng dẫn đã tận tình chỉ bảo trong suốt quá trình thực hiện đồ án. Cảm ơn các bạn trong nhóm đã cùng nhau nỗ lực hoàn thành dự án này.

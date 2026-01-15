@@ -1,0 +1,152 @@
+@startuml Class_Diagram_Services
+skinparam classAttributeIconSize 0
+
+title Class Diagram - Services Layer
+
+class AuthService {
+    -DatabaseReference _database
+    -FirebaseAuth _auth
+    --
+    +login(email, password): Future<bool>
+    +register(name, email, password): Future<bool>
+    +loginWithGoogle(): Future<bool>
+    +logout(): Future<void>
+    +resetPassword(email): Future<bool>
+    +getUserId(): Future<String?>
+    +getUserName(): Future<String>
+    +getUserRole(): Future<String>
+}
+
+class StrokePredictionService {
+    -String _baseUrl
+    --
+    +predictStrokeRisk(data): Future<Map>
+    +savePredictionResult(userId, result): Future<void>
+    +getPredictionHistory(userId): Future<List>
+}
+
+class DiabetesPredictionService {
+    -DatabaseReference _database
+    --
+    +calculateBMI(height, weight): double
+    +predictDiabetesRisk(data): Map<String, dynamic>
+    +savePredictionResult(userId, result): Future<void>
+}
+
+class HealthRecordService {
+    -DatabaseReference _database
+    --
+    +addHealthRecord(userId, data): Future<void>
+    +getHealthRecords(userId): Future<List>
+    +getLatestRecord(userId): Future<HealthRecordModel?>
+    +deleteRecord(userId, recordId): Future<void>
+}
+
+class HealthChartService {
+    -DatabaseReference _database
+    --
+    +getBloodPressureData(userId, days): Future<List>
+    +getBloodSugarData(userId, days): Future<List>
+    +getBMIData(userId, days): Future<List>
+}
+
+class AppointmentService {
+    -DatabaseReference _database
+    --
+    +createAppointment(data): Future<String>
+    +getAppointments(userId): Future<List>
+    +getDoctorAppointments(doctorId): Future<List>
+    +updateStatus(appointmentId, status): Future<void>
+    +cancelAppointment(appointmentId, reason): Future<void>
+}
+
+class DoctorService {
+    -DatabaseReference _database
+    --
+    +getDoctors(): Future<List<DoctorModel>>
+    +getDoctorById(doctorId): Future<DoctorModel?>
+    +searchDoctors(query): Future<List>
+    +getDoctorsBySpecialty(specialty): Future<List>
+}
+
+class DoctorScheduleService {
+    -DatabaseReference _database
+    --
+    +getSchedule(doctorId, date): Future<List>
+    +createSlot(doctorId, data): Future<void>
+    +updateSlot(slotId, data): Future<void>
+    +deleteSlot(slotId): Future<void>
+    +getAvailableSlots(doctorId, date): Future<List>
+}
+
+class ChatService {
+    -DatabaseReference _database
+    --
+    +getConversations(userId): Stream<List>
+    +getMessages(conversationId): Stream<List>
+    +sendMessage(conversationId, data): Future<void>
+    +createConversation(userId, doctorId): Future<String>
+    +markAsRead(conversationId, userId): Future<void>
+}
+
+class SOSService {
+    -DatabaseReference _database
+    -LocationService _locationService
+    --
+    +createSOS(userId): Future<String>
+    +getSOSStatus(sosId): Stream<Map>
+    +getSOSQueue(): Stream<List>
+    +acknowledgeSOS(sosId, doctorId): Future<void>
+    +completeSOS(sosId, notes): Future<void>
+}
+
+class NotificationService {
+    -FlutterLocalNotificationsPlugin _local
+    -FirebaseMessaging _fcm
+    --
+    +initialize(): Future<void>
+    +showNotification(title, body): Future<void>
+    +scheduleNotification(id, title, body, time): Future<void>
+    +cancelNotification(id): Future<void>
+}
+
+class FamilyService {
+    -DatabaseReference _database
+    --
+    +createGroup(name, userId): Future<String>
+    +inviteMember(groupId, email): Future<void>
+    +getGroupMembers(groupId): Future<List>
+    +getMemberHealth(memberId): Future<Map>
+}
+
+class OfflineCacheService {
+    -Box _box
+    --
+    +initialize(): Future<void>
+    +cacheData(key, data): Future<void>
+    +getCachedData(key): dynamic
+    +clearCache(): Future<void>
+}
+
+class ConnectivityService {
+    -Connectivity _connectivity
+    --
+    +initialize(): Future<void>
+    +isOnline(): Future<bool>
+    +onConnectivityChanged: Stream<bool>
+}
+
+AuthService --> StrokePredictionService : uses
+AuthService --> HealthRecordService : uses
+AuthService --> AppointmentService : uses
+AuthService --> ChatService : uses
+AuthService --> SOSService : uses
+AuthService --> FamilyService : uses
+
+StrokePredictionService --> OfflineCacheService : caches
+HealthRecordService --> OfflineCacheService : caches
+AppointmentService --> NotificationService : notifies
+SOSService --> NotificationService : notifies
+ChatService --> NotificationService : notifies
+
+@enduml

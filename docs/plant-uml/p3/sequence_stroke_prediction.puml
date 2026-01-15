@@ -1,0 +1,51 @@
+@startuml Sequence_Stroke_Prediction
+title Biểu đồ tuần tự - Dự đoán nguy cơ đột quỵ
+
+actor "Người dùng" as User
+participant "ScreenStrokeForm" as Form
+participant "StrokePredictionService" as Service
+participant "Flask API" as API
+participant "Random Forest Model" as Model
+participant "Firebase DB" as DB
+
+User -> Form: Nhập thông tin sức khỏe
+activate Form
+
+Form -> Form: Validate dữ liệu
+Form -> Service: predictStrokeRisk(data)
+activate Service
+
+Service -> API: POST /predict
+activate API
+
+API -> API: Validate input
+API -> API: Calculate BMI
+API -> API: Encode categorical variables
+API -> API: Create feature vector
+
+API -> Model: predict_proba(features)
+activate Model
+Model --> API: [prob_no_stroke, prob_stroke]
+deactivate Model
+
+API -> API: Calculate risk score
+API -> API: Determine risk level
+API -> API: Get BMI category
+API -> API: Get BP category
+
+API --> Service: JSON response
+deactivate API
+
+Service -> DB: Save prediction result
+activate DB
+DB --> Service: Success
+deactivate DB
+
+Service --> Form: PredictionResult
+deactivate Service
+
+Form -> Form: Navigate to ScreenStrokeResult
+Form --> User: Hiển thị kết quả dự đoán
+deactivate Form
+
+@enduml

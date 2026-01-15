@@ -1,0 +1,645 @@
+PHẦN 2: PHÂN TÍCH YÊU CẦU
+
+
+2.1. Yêu cầu chức năng
+
+2.1.1. Chức năng người dùng (User)
+
+A. Nhóm chức năng Xác thực
+
+(UC1) Đăng ký tài khoản
+Mô tả: Người dùng tạo tài khoản mới với email và mật khẩu.
+Đầu vào: Họ tên, email, mật khẩu, xác nhận mật khẩu.
+Đầu ra: Tài khoản được tạo, chuyển đến màn hình đăng nhập.
+Điều kiện: Email chưa tồn tại trong hệ thống, mật khẩu tối thiểu 6 ký tự.
+
+(UC2) Đăng nhập Email
+Mô tả: Người dùng đăng nhập bằng email và mật khẩu đã đăng ký.
+Đầu vào: Email, mật khẩu.
+Đầu ra: Đăng nhập thành công, chuyển đến Dashboard.
+Điều kiện: Tài khoản tồn tại và không bị khóa.
+
+(UC3) Đăng nhập Google
+Mô tả: Người dùng đăng nhập bằng tài khoản Google.
+Đầu vào: Tài khoản Google.
+Đầu ra: Đăng nhập thành công, tự động tạo tài khoản nếu chưa có.
+
+(UC4) Quên mật khẩu
+Mô tả: Người dùng yêu cầu đặt lại mật khẩu qua email.
+Đầu vào: Email đã đăng ký.
+Đầu ra: Email chứa link đặt lại mật khẩu.
+
+(UC5) Đổi mật khẩu
+Mô tả: Người dùng thay đổi mật khẩu hiện tại.
+Đầu vào: Mật khẩu cũ, mật khẩu mới, xác nhận mật khẩu mới.
+Đầu ra: Mật khẩu được cập nhật.
+
+B. Nhóm chức năng Dự đoán AI
+
+(UC6) Dự đoán nguy cơ đột quỵ
+Mô tả: Người dùng nhập các chỉ số sức khỏe để AI dự đoán nguy cơ đột quỵ.
+Đầu vào: Tuổi, giới tính, chiều cao, cân nặng, huyết áp tâm thu, huyết áp tâm trương, cholesterol, glucose, tiền sử tăng huyết áp, tiền sử bệnh tim, hút thuốc, loại công việc.
+Đầu ra: Điểm nguy cơ (0-100), mức độ nguy cơ (thấp/trung bình/cao), phân loại BMI, phân loại huyết áp, phân loại cholesterol.
+Xử lý: Gửi dữ liệu đến Flask API, model Random Forest xử lý và trả về kết quả.
+
+(UC7) Dự đoán nguy cơ tiểu đường
+Mô tả: Người dùng nhập các chỉ số để đánh giá nguy cơ tiểu đường type 2.
+Đầu vào: Tuổi, giới tính, chiều cao, cân nặng, đường huyết lúc đói, huyết áp tâm thu, tiền sử gia đình, mức độ hoạt động.
+Đầu ra: Điểm nguy cơ (0-100), mức độ nguy cơ, BMI, khuyến nghị.
+
+(UC8) Xem kết quả dự đoán
+Mô tả: Hiển thị chi tiết kết quả dự đoán với biểu đồ và khuyến nghị.
+Đầu vào: Kết quả từ UC6 hoặc UC7.
+Đầu ra: Màn hình hiển thị điểm số, mức độ nguy cơ, các chỉ số chi tiết, khuyến nghị.
+
+(UC9) Xem lịch sử dự đoán
+Mô tả: Xem danh sách các lần dự đoán trước đó.
+Đầu vào: User ID.
+Đầu ra: Danh sách dự đoán theo thời gian.
+
+C. Nhóm chức năng Theo dõi sức khỏe
+
+(UC10) Nhập chỉ số sức khỏe
+Mô tả: Người dùng ghi nhận các chỉ số sức khỏe hàng ngày.
+Đầu vào: Huyết áp tâm thu, huyết áp tâm trương, đường huyết, cân nặng, ghi chú.
+Đầu ra: Dữ liệu được lưu vào Firebase.
+
+(UC11) Xem biểu đồ huyết áp
+Mô tả: Hiển thị biểu đồ huyết áp theo thời gian.
+Đầu vào: User ID, khoảng thời gian (7 ngày/30 ngày/90 ngày).
+Đầu ra: Biểu đồ đường với fl_chart.
+
+(UC12) Xem biểu đồ đường huyết
+Mô tả: Hiển thị biểu đồ đường huyết theo thời gian.
+Đầu vào: User ID, khoảng thời gian.
+Đầu ra: Biểu đồ đường với ngưỡng cảnh báo.
+
+(UC13) Xem biểu đồ BMI
+Mô tả: Hiển thị biểu đồ BMI theo thời gian.
+Đầu vào: User ID, khoảng thời gian.
+Đầu ra: Biểu đồ BMI với phân loại.
+
+(UC14) Xem lịch sử sức khỏe
+Mô tả: Xem danh sách các bản ghi sức khỏe.
+Đầu vào: User ID.
+Đầu ra: Danh sách bản ghi theo ngày.
+
+D. Nhóm chức năng Kết nối bác sĩ
+
+(UC15) Xem danh sách bác sĩ
+Mô tả: Hiển thị danh sách bác sĩ trong hệ thống.
+Đầu vào: Bộ lọc (chuyên khoa, đánh giá).
+Đầu ra: Danh sách bác sĩ với thông tin cơ bản.
+
+(UC16) Xem chi tiết bác sĩ
+Mô tả: Xem thông tin chi tiết của bác sĩ.
+Đầu vào: Doctor ID.
+Đầu ra: Thông tin bác sĩ, chuyên khoa, đánh giá, lịch làm việc.
+
+(UC17) Đặt lịch hẹn
+Mô tả: Người dùng đặt lịch khám với bác sĩ.
+Đầu vào: Doctor ID, ngày, giờ, lý do khám.
+Đầu ra: Yêu cầu lịch hẹn được tạo, chờ bác sĩ duyệt.
+
+(UC18) Chat với bác sĩ
+Mô tả: Nhắn tin trực tiếp với bác sĩ.
+Đầu vào: Nội dung tin nhắn, hình ảnh (tùy chọn).
+Đầu ra: Tin nhắn được gửi, realtime với Firebase.
+
+(UC19) Đánh giá bác sĩ
+Mô tả: Đánh giá và nhận xét về bác sĩ sau khi khám.
+Đầu vào: Số sao (1-5), nhận xét.
+Đầu ra: Đánh giá được lưu.
+
+E. Nhóm chức năng SOS khẩn cấp
+
+(UC20) Gửi yêu cầu SOS
+Mô tả: Gửi yêu cầu cấp cứu khi có dấu hiệu bất thường.
+Đầu vào: Vị trí GPS (tự động), mô tả triệu chứng (tùy chọn).
+Đầu ra: Yêu cầu SOS được tạo, thông báo đến bác sĩ trực.
+
+(UC21) Theo dõi trạng thái SOS
+Mô tả: Xem trạng thái xử lý của yêu cầu SOS.
+Đầu vào: SOS ID.
+Đầu ra: Trạng thái (chờ xử lý/đang xử lý/hoàn thành), thông tin bác sĩ tiếp nhận.
+
+F. Nhóm chức năng Quản lý gia đình
+
+(UC22) Tạo nhóm gia đình
+Mô tả: Tạo nhóm để quản lý sức khỏe gia đình.
+Đầu vào: Tên nhóm.
+Đầu ra: Nhóm được tạo, người tạo là admin.
+
+(UC23) Mời thành viên
+Mô tả: Mời người thân vào nhóm gia đình.
+Đầu vào: Email hoặc mã mời.
+Đầu ra: Lời mời được gửi.
+
+(UC24) Theo dõi sức khỏe người thân
+Mô tả: Xem chỉ số sức khỏe của thành viên trong nhóm.
+Đầu vào: Member ID.
+Đầu ra: Thông tin sức khỏe của thành viên.
+
+G. Nhóm chức năng Nhắc nhở thuốc
+
+(UC25) Tạo nhắc nhở
+Mô tả: Tạo nhắc nhở uống thuốc.
+Đầu vào: Tên thuốc, liều lượng, thời gian, tần suất.
+Đầu ra: Nhắc nhở được tạo, local notification được lên lịch.
+
+(UC26) Sửa nhắc nhở
+Mô tả: Chỉnh sửa thông tin nhắc nhở.
+Đầu vào: Reminder ID, thông tin mới.
+Đầu ra: Nhắc nhở được cập nhật.
+
+(UC27) Xóa nhắc nhở
+Mô tả: Xóa nhắc nhở không cần thiết.
+Đầu vào: Reminder ID.
+Đầu ra: Nhắc nhở bị xóa.
+
+H. Nhóm chức năng Kiến thức và Cộng đồng
+
+(UC28) Đọc bài viết sức khỏe
+Mô tả: Xem các bài viết về sức khỏe và phòng ngừa đột quỵ.
+Đầu vào: Article ID hoặc danh mục.
+Đầu ra: Nội dung bài viết.
+
+(UC29) Tham gia diễn đàn
+Mô tả: Xem và tham gia thảo luận trong diễn đàn.
+Đầu vào: Thread ID.
+Đầu ra: Nội dung thảo luận.
+
+(UC30) Đăng bài viết
+Mô tả: Đăng bài chia sẻ kinh nghiệm lên diễn đàn.
+Đầu vào: Tiêu đề, nội dung, hình ảnh (tùy chọn).
+Đầu ra: Bài viết được đăng.
+
+
+2.1.2. Chức năng bác sĩ (Doctor)
+
+A. Nhóm chức năng Xác thực
+
+(UC1) Đăng nhập
+Mô tả: Bác sĩ đăng nhập vào hệ thống.
+Đầu vào: Email, mật khẩu.
+Đầu ra: Đăng nhập thành công, chuyển đến Doctor Dashboard.
+
+(UC2) Đổi mật khẩu
+Mô tả: Bác sĩ thay đổi mật khẩu.
+Đầu vào: Mật khẩu cũ, mật khẩu mới.
+Đầu ra: Mật khẩu được cập nhật.
+
+B. Nhóm chức năng Dashboard
+
+(UC3) Xem thống kê ca trực
+Mô tả: Hiển thị thống kê các ca trong ngày/tuần.
+Đầu vào: Doctor ID, khoảng thời gian.
+Đầu ra: Số ca SOS, số lịch hẹn, số bệnh nhân mới.
+
+(UC4) Xem tổng quan hoạt động
+Mô tả: Xem tổng quan các hoạt động gần đây.
+Đầu vào: Doctor ID.
+Đầu ra: Danh sách hoạt động gần đây.
+
+C. Nhóm chức năng Quản lý bệnh nhân
+
+(UC5) Xem danh sách bệnh nhân
+Mô tả: Xem danh sách bệnh nhân đã từng khám.
+Đầu vào: Doctor ID, bộ lọc.
+Đầu ra: Danh sách bệnh nhân.
+
+(UC6) Xem hồ sơ bệnh nhân
+Mô tả: Xem thông tin chi tiết của bệnh nhân.
+Đầu vào: Patient ID.
+Đầu ra: Thông tin cá nhân, lịch sử khám, lịch sử dự đoán.
+
+(UC7) Xem lịch sử sức khỏe bệnh nhân
+Mô tả: Xem các chỉ số sức khỏe của bệnh nhân.
+Đầu vào: Patient ID.
+Đầu ra: Biểu đồ và danh sách chỉ số sức khỏe.
+
+(UC8) Thêm đơn thuốc
+Mô tả: Kê đơn thuốc cho bệnh nhân.
+Đầu vào: Patient ID, danh sách thuốc, liều lượng, hướng dẫn.
+Đầu ra: Đơn thuốc được tạo, thông báo đến bệnh nhân.
+
+D. Nhóm chức năng Quản lý lịch hẹn
+
+(UC9) Xem danh sách lịch hẹn
+Mô tả: Xem tất cả lịch hẹn của bác sĩ.
+Đầu vào: Doctor ID, trạng thái, ngày.
+Đầu ra: Danh sách lịch hẹn.
+
+(UC10) Duyệt yêu cầu lịch hẹn
+Mô tả: Chấp nhận yêu cầu đặt lịch từ bệnh nhân.
+Đầu vào: Appointment ID.
+Đầu ra: Lịch hẹn được xác nhận, thông báo đến bệnh nhân.
+
+(UC11) Từ chối lịch hẹn
+Mô tả: Từ chối yêu cầu đặt lịch.
+Đầu vào: Appointment ID, lý do.
+Đầu ra: Lịch hẹn bị từ chối, thông báo đến bệnh nhân.
+
+(UC12) Hoàn thành lịch hẹn
+Mô tả: Đánh dấu lịch hẹn đã hoàn thành.
+Đầu vào: Appointment ID, ghi chú.
+Đầu ra: Lịch hẹn được đánh dấu hoàn thành.
+
+E. Nhóm chức năng Xử lý SOS
+
+(UC13) Xem hàng đợi SOS
+Mô tả: Xem danh sách các ca SOS đang chờ xử lý.
+Đầu vào: Trạng thái.
+Đầu ra: Danh sách ca SOS với thông tin vị trí, triệu chứng.
+
+(UC14) Nhận ca SOS
+Mô tả: Bác sĩ nhận xử lý ca SOS.
+Đầu vào: SOS ID.
+Đầu ra: Ca SOS được gán cho bác sĩ, thông báo đến bệnh nhân.
+
+(UC15) Xử lý ca SOS
+Mô tả: Cập nhật thông tin xử lý ca SOS.
+Đầu vào: SOS ID, ghi chú xử lý.
+Đầu ra: Thông tin được cập nhật.
+
+(UC16) Hoàn thành ca SOS
+Mô tả: Đánh dấu ca SOS đã xử lý xong.
+Đầu vào: SOS ID, kết quả xử lý.
+Đầu ra: Ca SOS được đóng.
+
+F. Nhóm chức năng Chat tư vấn
+
+(UC17) Xem danh sách chat
+Mô tả: Xem danh sách các cuộc hội thoại với bệnh nhân.
+Đầu vào: Doctor ID.
+Đầu ra: Danh sách chat.
+
+(UC18) Chat với bệnh nhân
+Mô tả: Nhắn tin tư vấn cho bệnh nhân.
+Đầu vào: Nội dung tin nhắn.
+Đầu ra: Tin nhắn được gửi realtime.
+
+(UC19) Chọn bệnh nhân để chat
+Mô tả: Bắt đầu cuộc hội thoại mới với bệnh nhân.
+Đầu vào: Patient ID.
+Đầu ra: Cuộc hội thoại được tạo.
+
+G. Nhóm chức năng Lịch làm việc
+
+(UC20) Xem lịch làm việc
+Mô tả: Xem lịch làm việc và các slot khám.
+Đầu vào: Doctor ID, tuần.
+Đầu ra: Lịch làm việc theo tuần.
+
+(UC21) Tạo slot khám
+Mô tả: Tạo khung giờ khám bệnh.
+Đầu vào: Ngày, giờ bắt đầu, giờ kết thúc, số lượng bệnh nhân tối đa.
+Đầu ra: Slot khám được tạo.
+
+(UC22) Sửa slot khám
+Mô tả: Chỉnh sửa thông tin slot khám.
+Đầu vào: Slot ID, thông tin mới.
+Đầu ra: Slot được cập nhật.
+
+(UC23) Xóa slot khám
+Mô tả: Xóa slot khám.
+Đầu vào: Slot ID.
+Đầu ra: Slot bị xóa.
+
+H. Nhóm chức năng Đánh giá
+
+(UC24) Xem đánh giá từ bệnh nhân
+Mô tả: Xem các đánh giá và nhận xét từ bệnh nhân.
+Đầu vào: Doctor ID.
+Đầu ra: Danh sách đánh giá, điểm trung bình.
+
+
+2.1.3. Chức năng quản trị viên (Admin)
+
+A. Nhóm chức năng Xác thực
+
+(UC1) Đăng nhập Admin
+Mô tả: Quản trị viên đăng nhập vào Admin Panel.
+Đầu vào: Email, mật khẩu.
+Đầu ra: Đăng nhập thành công, chuyển đến Admin Dashboard.
+
+(UC2) Quên mật khẩu
+Mô tả: Yêu cầu đặt lại mật khẩu admin.
+Đầu vào: Email admin.
+Đầu ra: Email chứa link đặt lại mật khẩu.
+
+B. Nhóm chức năng Dashboard
+
+(UC3) Xem thống kê tổng quan
+Mô tả: Hiển thị thống kê toàn hệ thống.
+Đầu vào: Khoảng thời gian.
+Đầu ra: Tổng số users, bác sĩ, bệnh nhân, ca SOS, lịch hẹn, dự đoán.
+
+(UC4) Xem biểu đồ thống kê
+Mô tả: Hiển thị biểu đồ thống kê theo thời gian.
+Đầu vào: Loại thống kê, khoảng thời gian.
+Đầu ra: Biểu đồ tương ứng.
+
+C. Nhóm chức năng Quản lý Users
+
+(UC5) Xem danh sách users
+Mô tả: Xem tất cả người dùng trong hệ thống.
+Đầu vào: Bộ lọc, phân trang.
+Đầu ra: Danh sách users.
+
+(UC6) Thêm user
+Mô tả: Tạo tài khoản user mới.
+Đầu vào: Thông tin user.
+Đầu ra: User được tạo.
+
+(UC7) Sửa thông tin user
+Mô tả: Chỉnh sửa thông tin user.
+Đầu vào: User ID, thông tin mới.
+Đầu ra: User được cập nhật.
+
+(UC8) Xóa user
+Mô tả: Xóa tài khoản user.
+Đầu vào: User ID.
+Đầu ra: User bị xóa.
+
+(UC9) Khóa/Mở khóa user
+Mô tả: Khóa hoặc mở khóa tài khoản user.
+Đầu vào: User ID, trạng thái.
+Đầu ra: Trạng thái user được cập nhật.
+
+D. Nhóm chức năng Quản lý Bác sĩ
+
+(UC10) Xem danh sách bác sĩ
+Mô tả: Xem tất cả bác sĩ trong hệ thống.
+Đầu vào: Bộ lọc, phân trang.
+Đầu ra: Danh sách bác sĩ.
+
+(UC11) Thêm bác sĩ
+Mô tả: Tạo tài khoản bác sĩ mới.
+Đầu vào: Thông tin bác sĩ, chuyên khoa, chứng chỉ.
+Đầu ra: Bác sĩ được tạo.
+
+(UC12) Sửa thông tin bác sĩ
+Mô tả: Chỉnh sửa thông tin bác sĩ.
+Đầu vào: Doctor ID, thông tin mới.
+Đầu ra: Bác sĩ được cập nhật.
+
+(UC13) Xóa bác sĩ
+Mô tả: Xóa tài khoản bác sĩ.
+Đầu vào: Doctor ID.
+Đầu ra: Bác sĩ bị xóa.
+
+(UC14) Duyệt bác sĩ
+Mô tả: Duyệt tài khoản bác sĩ mới đăng ký.
+Đầu vào: Doctor ID.
+Đầu ra: Bác sĩ được kích hoạt.
+
+E. Nhóm chức năng Quản lý Bệnh nhân
+
+(UC15) Xem danh sách bệnh nhân
+Mô tả: Xem tất cả bệnh nhân trong hệ thống.
+Đầu vào: Bộ lọc, phân trang.
+Đầu ra: Danh sách bệnh nhân.
+
+(UC16) Xem chi tiết bệnh nhân
+Mô tả: Xem thông tin chi tiết bệnh nhân.
+Đầu vào: Patient ID.
+Đầu ra: Thông tin bệnh nhân.
+
+(UC17) Xem lịch sử sức khỏe
+Mô tả: Xem lịch sử sức khỏe của bệnh nhân.
+Đầu vào: Patient ID.
+Đầu ra: Lịch sử sức khỏe.
+
+F. Nhóm chức năng Quản lý SOS
+
+(UC18) Xem danh sách ca SOS
+Mô tả: Xem tất cả ca SOS trong hệ thống.
+Đầu vào: Trạng thái, khoảng thời gian.
+Đầu ra: Danh sách ca SOS.
+
+(UC19) Giám sát ca SOS
+Mô tả: Theo dõi chi tiết ca SOS.
+Đầu vào: SOS ID.
+Đầu ra: Thông tin chi tiết ca SOS.
+
+(UC20) Phân công bác sĩ
+Mô tả: Phân công bác sĩ xử lý ca SOS.
+Đầu vào: SOS ID, Doctor ID.
+Đầu ra: Ca SOS được gán cho bác sĩ.
+
+G. Nhóm chức năng Quản lý Dự đoán
+
+(UC21) Xem lịch sử dự đoán
+Mô tả: Xem tất cả lịch sử dự đoán trong hệ thống.
+Đầu vào: Bộ lọc, phân trang.
+Đầu ra: Danh sách dự đoán.
+
+(UC22) Thống kê dự đoán
+Mô tả: Xem thống kê về các dự đoán.
+Đầu vào: Khoảng thời gian.
+Đầu ra: Thống kê theo mức độ nguy cơ.
+
+H. Nhóm chức năng Quản lý Lịch hẹn
+
+(UC23) Xem danh sách lịch hẹn
+Mô tả: Xem tất cả lịch hẹn trong hệ thống.
+Đầu vào: Trạng thái, khoảng thời gian.
+Đầu ra: Danh sách lịch hẹn.
+
+(UC24) Giám sát lịch hẹn
+Mô tả: Theo dõi chi tiết lịch hẹn.
+Đầu vào: Appointment ID.
+Đầu ra: Thông tin chi tiết lịch hẹn.
+
+I. Nhóm chức năng Quản lý Kiến thức
+
+(UC25) Xem danh sách bài viết
+Mô tả: Xem tất cả bài viết kiến thức.
+Đầu vào: Danh mục, trạng thái.
+Đầu ra: Danh sách bài viết.
+
+(UC26) Thêm bài viết
+Mô tả: Tạo bài viết kiến thức mới.
+Đầu vào: Tiêu đề, nội dung, danh mục, hình ảnh.
+Đầu ra: Bài viết được tạo.
+
+(UC27) Sửa bài viết
+Mô tả: Chỉnh sửa bài viết.
+Đầu vào: Article ID, nội dung mới.
+Đầu ra: Bài viết được cập nhật.
+
+(UC28) Xóa bài viết
+Mô tả: Xóa bài viết.
+Đầu vào: Article ID.
+Đầu ra: Bài viết bị xóa.
+
+J. Nhóm chức năng Quản lý Cộng đồng
+
+(UC29) Xem danh sách bài đăng
+Mô tả: Xem tất cả bài đăng trong diễn đàn.
+Đầu vào: Trạng thái, danh mục.
+Đầu ra: Danh sách bài đăng.
+
+(UC30) Duyệt bài đăng
+Mô tả: Duyệt bài đăng của người dùng.
+Đầu vào: Post ID.
+Đầu ra: Bài đăng được duyệt.
+
+(UC31) Xóa bài đăng
+Mô tả: Xóa bài đăng vi phạm.
+Đầu vào: Post ID, lý do.
+Đầu ra: Bài đăng bị xóa.
+
+
+2.2. Yêu cầu phi chức năng
+
+2.2.1. Yêu cầu về hiệu năng
+
+(NFR1) Thời gian phản hồi
+Thời gian tải màn hình không quá 2 giây trong điều kiện mạng bình thường.
+Thời gian xử lý dự đoán AI không quá 3 giây.
+Thời gian gửi/nhận tin nhắn chat dưới 1 giây.
+
+(NFR2) Khả năng chịu tải
+Hệ thống hỗ trợ tối thiểu 1000 người dùng đồng thời.
+Firebase Realtime Database tự động scale theo nhu cầu.
+
+(NFR3) Tối ưu hóa
+Sử dụng cached_network_image để cache hình ảnh.
+Sử dụng Hive để cache dữ liệu offline.
+Lazy loading cho danh sách dài.
+
+2.2.2. Yêu cầu về bảo mật
+
+(NFR4) Xác thực
+Sử dụng Firebase Authentication với JWT token.
+Hỗ trợ đăng nhập 2 yếu tố (Google Sign-In).
+Token tự động refresh.
+
+(NFR5) Phân quyền
+Phân quyền theo role: User, Doctor, Admin.
+Kiểm tra quyền truy cập ở cả client và server (Firebase Rules).
+
+(NFR6) Mã hóa
+Mã hóa mật khẩu với SHA-256.
+Kết nối HTTPS cho tất cả API calls.
+Firebase Security Rules bảo vệ dữ liệu.
+
+2.2.3. Yêu cầu về khả dụng
+
+(NFR7) Uptime
+Hệ thống đảm bảo uptime 99.9% (Firebase SLA).
+
+(NFR8) Offline mode
+Ứng dụng hoạt động offline với dữ liệu đã cache.
+Tự động đồng bộ khi có kết nối mạng.
+Hiển thị indicator khi offline.
+
+(NFR9) Backup
+Firebase tự động backup dữ liệu.
+Có thể export dữ liệu JSON.
+
+2.2.4. Yêu cầu về khả năng mở rộng
+
+(NFR10) Kiến trúc
+Kiến trúc module hóa, dễ thêm tính năng mới.
+Tách biệt UI, Business Logic, Data Layer.
+Sử dụng Provider pattern cho state management.
+
+(NFR11) API
+Flask API có thể scale độc lập.
+Hỗ trợ thêm model AI mới.
+
+2.2.5. Yêu cầu về giao diện
+
+(NFR12) Responsive
+Giao diện responsive trên nhiều kích thước màn hình.
+Hỗ trợ cả mobile và web.
+
+(NFR13) Accessibility
+Font size có thể điều chỉnh.
+Contrast đủ cao cho người dùng lớn tuổi.
+Hỗ trợ tiếng Việt Unicode.
+
+(NFR14) UX
+Thiết kế theo Material Design 3.
+Màu chủ đạo: #135BEC (xanh dương).
+Transition animation mượt mà (300ms).
+
+
+2.3. Biểu đồ Use Case
+
+2.3.1. Biểu đồ Use Case tổng quan
+
+Biểu đồ Use Case tổng quan thể hiện mối quan hệ giữa 3 actor chính (Người dùng, Bác sĩ, Quản trị viên) với các nhóm chức năng của hệ thống SEWS.
+
+File PlantUML: docs/plant-uml/p2/usecase_overview.puml
+
+Mô tả:
+Người dùng (User) có thể truy cập các chức năng: Xác thực, Dự đoán AI, Theo dõi sức khỏe, Kết nối y tế, SOS khẩn cấp, Quản lý gia đình, Nhắc nhở thuốc, Kiến thức và Cộng đồng.
+
+Bác sĩ (Doctor) có thể truy cập các chức năng: Xác thực, Chat tư vấn, Quản lý lịch hẹn, Xử lý SOS.
+
+Quản trị viên (Admin) có thể truy cập các chức năng: Xác thực, Giám sát SOS, Quản lý nội dung, Quản lý users, Quản lý bác sĩ, Thống kê báo cáo.
+
+2.3.2. Biểu đồ Use Case chi tiết cho User
+
+File PlantUML: docs/plant-uml/p2/usecase_user.puml
+
+Biểu đồ này chi tiết hóa 30 use case của module User, được nhóm thành 8 package:
+Xác thực (5 use cases)
+Dự đoán AI (4 use cases)
+Theo dõi sức khỏe (5 use cases)
+Kết nối bác sĩ (5 use cases)
+SOS khẩn cấp (2 use cases)
+Quản lý gia đình (3 use cases)
+Nhắc nhở thuốc (3 use cases)
+Kiến thức và Cộng đồng (3 use cases)
+
+2.3.3. Biểu đồ Use Case chi tiết cho Doctor
+
+File PlantUML: docs/plant-uml/p2/usecase_doctor.puml
+
+Biểu đồ này chi tiết hóa 24 use case của module Doctor, được nhóm thành 8 package:
+Xác thực (2 use cases)
+Dashboard (2 use cases)
+Quản lý bệnh nhân (4 use cases)
+Quản lý lịch hẹn (4 use cases)
+Xử lý SOS (4 use cases)
+Chat tư vấn (3 use cases)
+Lịch làm việc (4 use cases)
+Đánh giá (1 use case)
+
+2.3.4. Biểu đồ Use Case chi tiết cho Admin
+
+File PlantUML: docs/plant-uml/p2/usecase_admin.puml
+
+Biểu đồ này chi tiết hóa 31 use case của module Admin, được nhóm thành 10 package:
+Xác thực (2 use cases)
+Dashboard (2 use cases)
+Quản lý Users (5 use cases)
+Quản lý Bác sĩ (5 use cases)
+Quản lý Bệnh nhân (3 use cases)
+Quản lý SOS (3 use cases)
+Quản lý Dự đoán (2 use cases)
+Quản lý Lịch hẹn (2 use cases)
+Quản lý Kiến thức (4 use cases)
+Quản lý Cộng đồng (3 use cases)
+
+
+2.4. Tổng kết yêu cầu
+
+Thống kê Use Case:
+Module User: 30 use cases
+Module Doctor: 24 use cases
+Module Admin: 31 use cases
+Tổng cộng: 85 use cases
+
+Thống kê yêu cầu phi chức năng:
+Hiệu năng: 3 yêu cầu
+Bảo mật: 3 yêu cầu
+Khả dụng: 3 yêu cầu
+Khả năng mở rộng: 2 yêu cầu
+Giao diện: 3 yêu cầu
+Tổng cộng: 14 yêu cầu phi chức năng

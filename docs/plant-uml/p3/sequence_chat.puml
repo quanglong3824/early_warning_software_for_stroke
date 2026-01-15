@@ -1,0 +1,76 @@
+@startuml Sequence_Chat
+title Biểu đồ tuần tự - Chat với bác sĩ
+
+actor "Người dùng" as User
+participant "ScreenChatDetail" as ChatScreen
+participant "ChatService" as Service
+participant "Firebase Realtime DB" as DB
+participant "NotificationService" as Notify
+actor "Bác sĩ" as Doctor
+
+User -> ChatScreen: Mở màn hình chat
+activate ChatScreen
+
+ChatScreen -> Service: getMessages(conversationId)
+activate Service
+Service -> DB: Listen to messages node
+activate DB
+DB --> Service: Stream<List<Message>>
+deactivate DB
+Service --> ChatScreen: Stream<List<Message>>
+deactivate Service
+
+ChatScreen --> User: Hiển thị tin nhắn
+
+User -> ChatScreen: Nhập và gửi tin nhắn
+ChatScreen -> Service: sendMessage(conversationId, data)
+activate Service
+
+Service -> DB: Push new message
+activate DB
+DB --> Service: messageId
+deactivate DB
+
+Service -> DB: Update conversation.lastMessage
+activate DB
+DB --> Service: Success
+deactivate DB
+
+Service -> Notify: notifyDoctor(doctorId)
+activate Notify
+Notify -> Doctor: Push notification "Tin nhắn mới"
+Notify --> Service: Sent
+deactivate Notify
+
+Service --> ChatScreen: Success
+deactivate Service
+
+note over DB: Firebase Realtime DB\ntự động sync đến\ntất cả clients
+
+DB -> ChatScreen: onChildAdded (new message)
+ChatScreen --> User: Hiển thị tin nhắn mới
+
+== Bác sĩ trả lời ==
+
+Doctor -> Doctor: Mở chat và gửi tin nhắn
+Doctor -> Service: sendMessage(conversationId, data)
+activate Service
+
+Service -> DB: Push new message
+activate DB
+DB --> Service: messageId
+deactivate DB
+
+Service -> Notify: notifyPatient(userId)
+activate Notify
+Notify -> User: Push notification "Bác sĩ đã trả lời"
+Notify --> Service: Sent
+deactivate Notify
+
+Service --> Doctor: Success
+deactivate Service
+
+DB -> ChatScreen: onChildAdded (doctor's message)
+ChatScreen --> User: Hiển thị tin nhắn từ bác sĩ
+
+@enduml

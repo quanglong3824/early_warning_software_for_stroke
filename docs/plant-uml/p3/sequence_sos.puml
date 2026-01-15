@@ -1,0 +1,83 @@
+@startuml Sequence_SOS
+title Biểu đồ tuần tự - Gửi yêu cầu SOS khẩn cấp
+
+actor "Người dùng" as User
+participant "ScreenSOS" as SOSScreen
+participant "SOSService" as Service
+participant "LocationService" as Location
+participant "Firebase DB" as DB
+participant "NotificationService" as Notify
+actor "Bác sĩ" as Doctor
+
+User -> SOSScreen: Nhấn nút SOS
+activate SOSScreen
+
+SOSScreen -> Location: getCurrentLocation()
+activate Location
+Location -> Location: Request permission
+Location -> Location: Get GPS coordinates
+Location -> Location: Reverse geocoding
+Location --> SOSScreen: Position + Address
+deactivate Location
+
+SOSScreen -> Service: createSOS(userId, location)
+activate Service
+
+Service -> DB: Write SOS case
+activate DB
+DB --> Service: sosId
+deactivate DB
+
+Service -> Notify: sendToAllDoctors(sosId)
+activate Notify
+Notify -> Doctor: Push notification
+Notify --> Service: Sent
+deactivate Notify
+
+Service --> SOSScreen: sosId
+deactivate Service
+
+SOSScreen -> SOSScreen: Navigate to ScreenSOSStatus
+SOSScreen --> User: Hiển thị trạng thái chờ
+deactivate SOSScreen
+
+== Bác sĩ nhận ca ==
+
+Doctor -> Doctor: Xem SOS Queue
+Doctor -> Service: acknowledgeSOS(sosId, doctorId)
+activate Service
+
+Service -> DB: Update status = acknowledged
+activate DB
+DB --> Service: Success
+deactivate DB
+
+Service -> Notify: notifyPatient(userId)
+activate Notify
+Notify -> User: Push notification "Bác sĩ đã nhận ca"
+Notify --> Service: Sent
+deactivate Notify
+
+Service --> Doctor: Success
+deactivate Service
+
+== Hoàn thành xử lý ==
+
+Doctor -> Service: completeSOS(sosId, notes)
+activate Service
+
+Service -> DB: Update status = completed
+activate DB
+DB --> Service: Success
+deactivate DB
+
+Service -> Notify: notifyPatient(userId)
+activate Notify
+Notify -> User: Push notification "Ca SOS đã hoàn thành"
+Notify --> Service: Sent
+deactivate Notify
+
+Service --> Doctor: Success
+deactivate Service
+
+@enduml

@@ -1,0 +1,82 @@
+@startuml UseCase_Doctor
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Bác sĩ" as Doctor
+
+rectangle "Module Doctor - SEWS" {
+    package "Xác thực" {
+        usecase "Đăng nhập" as UC1
+        usecase "Đổi mật khẩu" as UC2
+    }
+    
+    package "Dashboard" {
+        usecase "Xem thống kê ca trực" as UC3
+        usecase "Xem tổng quan hoạt động" as UC4
+    }
+    
+    package "Quản lý bệnh nhân" {
+        usecase "Xem danh sách bệnh nhân" as UC5
+        usecase "Xem hồ sơ bệnh nhân" as UC6
+        usecase "Xem lịch sử sức khỏe bệnh nhân" as UC7
+        usecase "Thêm đơn thuốc" as UC8
+    }
+    
+    package "Quản lý lịch hẹn" {
+        usecase "Xem danh sách lịch hẹn" as UC9
+        usecase "Duyệt yêu cầu lịch hẹn" as UC10
+        usecase "Từ chối lịch hẹn" as UC11
+        usecase "Hoàn thành lịch hẹn" as UC12
+    }
+    
+    package "Xử lý SOS" {
+        usecase "Xem hàng đợi SOS" as UC13
+        usecase "Nhận ca SOS" as UC14
+        usecase "Xử lý ca SOS" as UC15
+        usecase "Hoàn thành ca SOS" as UC16
+    }
+    
+    package "Chat tư vấn" {
+        usecase "Xem danh sách chat" as UC17
+        usecase "Chat với bệnh nhân" as UC18
+        usecase "Chọn bệnh nhân để chat" as UC19
+    }
+    
+    package "Lịch làm việc" {
+        usecase "Xem lịch làm việc" as UC20
+        usecase "Tạo slot khám" as UC21
+        usecase "Sửa slot khám" as UC22
+        usecase "Xóa slot khám" as UC23
+    }
+    
+    package "Đánh giá" {
+        usecase "Xem đánh giá từ bệnh nhân" as UC24
+    }
+}
+
+Doctor --> UC1
+Doctor --> UC2
+Doctor --> UC3
+Doctor --> UC4
+Doctor --> UC5
+Doctor --> UC6
+Doctor --> UC7
+Doctor --> UC8
+Doctor --> UC9
+Doctor --> UC10
+Doctor --> UC11
+Doctor --> UC12
+Doctor --> UC13
+Doctor --> UC14
+Doctor --> UC15
+Doctor --> UC16
+Doctor --> UC17
+Doctor --> UC18
+Doctor --> UC19
+Doctor --> UC20
+Doctor --> UC21
+Doctor --> UC22
+Doctor --> UC23
+Doctor --> UC24
+
+@enduml

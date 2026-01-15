@@ -1,0 +1,612 @@
+PHỤ LỤC
+
+
+PHỤ LỤC A: DANH SÁCH API
+
+A.1. Flask AI API
+
+Base URL: http://localhost:5000 (development)
+
+A.1.1. Health Check
+
+Endpoint: GET /health
+Mô tả: Kiểm tra trạng thái server
+Response:
+{
+  "status": "healthy",
+  "model_loaded": true,
+  "preprocessor_loaded": true
+}
+
+A.1.2. Stroke Prediction
+
+Endpoint: POST /predict
+Mô tả: Dự đoán nguy cơ đột quỵ
+
+Request Body:
+{
+  "age": 50,
+  "gender": "male",
+  "heightCm": 170,
+  "weightKg": 70,
+  "systolicBP": 140,
+  "diastolicBP": 90,
+  "cholesterol": 200,
+  "glucose": 100,
+  "hypertension": true,
+  "heartDisease": false,
+  "smoking": false,
+  "workType": "moderate"
+}
+
+Response:
+{
+  "success": true,
+  "riskScore": 45,
+  "riskLevel": "medium",
+  "riskLevelVi": "Nguy cơ trung bình",
+  "strokeProbability": 0.45,
+  "bmi": "24.2",
+  "bmiCategory": "Bình thường",
+  "bpCategory": "Tăng huyết áp độ 1",
+  "cholesterolCategory": "Biên cao",
+  "predictionMethod": "AI"
+}
+
+A.2. Firebase Realtime Database Paths
+
+A.2.1. Users
+
+Path: /users/{userId}
+Methods: GET, PUT, PATCH, DELETE
+Fields: uid, name, email, phone, photoURL, role, gender, dateOfBirth, address, createdAt, status
+
+A.2.2. Doctors
+
+Path: /doctors/{doctorId}
+Methods: GET, PUT, PATCH, DELETE
+Fields: doctorId, name, email, phone, photoURL, specialization, hospital, department, licenseNumber, yearsOfExperience, bio, isVerified, isAvailable, createdAt
+
+A.2.3. Doctor Stats
+
+Path: /doctorStats/{doctorId}
+Methods: GET, PUT, PATCH
+Fields: totalPatients, totalAppointments, completedAppointments, averageRating, totalReviews, updatedAt
+
+A.2.4. Appointments
+
+Path: /appointments/{appointmentId}
+Methods: GET, PUT, PATCH, DELETE
+Fields: appointmentId, userId, doctorId, doctorName, patientName, appointmentTime, location, reason, status, createdBy, createdAt, confirmedAt, cancelReason, notes
+
+A.2.5. Health Records
+
+Path: /healthRecords/{userId}/{recordId}
+Methods: GET, PUT, DELETE
+Fields: id, userId, recordedAt, systolicBP, diastolicBP, heartRate, bloodSugar, weight, height, notes, createdAt
+
+A.2.6. Predictions
+
+Path: /predictions/{userId}/{predictionId}
+Methods: GET, PUT
+Fields: id, userId, type, riskScore, riskLevel, inputData, createdAt
+
+A.2.7. Conversations
+
+Path: /conversations/{conversationId}
+Methods: GET, PUT, PATCH
+Fields: conversationId, userId, doctorId, doctorName, patientName, lastMessage, lastMessageTime, userUnreadCount, doctorUnreadCount, createdAt, updatedAt
+
+A.2.8. Messages
+
+Path: /messages/{conversationId}/{messageId}
+Methods: GET, PUT
+Fields: messageId, conversationId, senderId, senderName, message, type, createdAt, isRead
+
+A.2.9. SOS
+
+Path: /sos/{sosId}
+Methods: GET, PUT, PATCH
+Fields: id, patientId, patientName, status, userLocation, createdAt, acknowledgedAt, acknowledgedBy, completedAt, notes
+
+A.2.10. Family Groups
+
+Path: /familyGroups/{groupId}
+Methods: GET, PUT, PATCH, DELETE
+Fields: groupId, name, createdBy, createdAt, members
+
+A.2.11. Reminders
+
+Path: /reminders/{userId}/{reminderId}
+Methods: GET, PUT, DELETE
+Fields: id, userId, title, description, time, frequency, isActive, createdAt
+
+A.2.12. Knowledge
+
+Path: /knowledge/{articleId}
+Methods: GET, PUT, DELETE
+Fields: id, title, content, category, imageUrl, author, isPublished, createdAt, updatedAt
+
+A.2.13. Forum
+
+Path: /forum/{threadId}
+Methods: GET, PUT, PATCH, DELETE
+Fields: id, userId, userName, title, content, category, likesCount, commentsCount, isApproved, createdAt
+
+A.2.14. Doctor Schedules
+
+Path: /doctorSchedules/{doctorId}/{date}/{slotId}
+Methods: GET, PUT, DELETE
+Fields: startTime, endTime, maxPatients, bookedCount, isAvailable
+
+A.2.15. Reviews
+
+Path: /reviews/{doctorId}/{reviewId}
+Methods: GET, PUT
+Fields: userId, userName, rating, comment, createdAt
+
+
+PHỤ LỤC B: CẤU TRÚC THƯ MỤC DỰ ÁN
+
+early_warning_software_for_stroke/
+├── android/                          # Android native code
+│   ├── app/
+│   │   ├── build.gradle
+│   │   ├── google-services.json
+│   │   └── src/main/
+│   │       ├── AndroidManifest.xml
+│   │       └── kotlin/
+│   └── build.gradle
+├── assets/                           # Static assets
+│   ├── data/
+│   │   └── stroke_data.csv
+│   ├── img/
+│   │   └── SEWS_2D.png
+│   └── models/                       # AI/ML files
+│       ├── app.py                    # Flask API server
+│       ├── moHinhDotQuy_final.pkl   # Random Forest model
+│       ├── preprocessor.pkl          # Data preprocessor
+│       ├── model_metadata.json
+│       ├── requirements.txt
+│       ├── analyze_model.py
+│       ├── export_model_info.py
+│       └── test/                     # Backend tests
+├── docs/                             # Documentation
+│   ├── BAO_CAO_PHAN_MEM.md          # Main report
+│   ├── PHAN_1_TONG_QUAN_DU_AN.md
+│   ├── PHAN_2_PHAN_TICH_YEU_CAU.md
+│   ├── PHAN_3_THIET_KE_HE_THONG.md
+│   ├── PHAN_4_CONG_NGHE_SU_DUNG.md
+│   ├── PHAN_5_CAI_DAT_TRIEN_KHAI.md
+│   ├── PHAN_6_HUONG_DAN_SU_DUNG.md
+│   ├── PHAN_7_KIEM_THU.md
+│   ├── PHAN_8_KET_LUAN.md
+│   ├── PHU_LUC.md
+│   └── plant-uml/                    # PlantUML diagrams
+│       ├── p2/                       # Part 2 diagrams
+│       │   ├── usecase_overview.puml
+│       │   ├── usecase_user.puml
+│       │   ├── usecase_doctor.puml
+│       │   └── usecase_admin.puml
+│       └── p3/                       # Part 3 diagrams
+│           ├── architecture.puml
+│           ├── database_schema.puml
+│           ├── class_diagram_models.puml
+│           ├── class_diagram_services.puml
+│           ├── sequence_stroke_prediction.puml
+│           ├── sequence_sos.puml
+│           ├── sequence_appointment.puml
+│           └── sequence_chat.puml
+├── lib/                              # Flutter source code
+│   ├── main.dart                     # Entry point
+│   ├── firebase_options.dart         # Firebase config
+│   ├── data/
+│   │   ├── models/                   # 14 data models
+│   │   │   ├── user_model.dart
+│   │   │   ├── doctor_models.dart
+│   │   │   ├── appointment_model.dart
+│   │   │   ├── health_record_model.dart
+│   │   │   ├── prediction_result_model.dart
+│   │   │   ├── chat_models.dart
+│   │   │   └── ...
+│   │   └── providers/
+│   │       └── app_data_provider.dart
+│   ├── features/                     # 91 screens
+│   │   ├── user/                     # 54 user screens
+│   │   │   ├── auth/
+│   │   │   │   ├── screen_splash.dart
+│   │   │   │   ├── screen_onboarding.dart
+│   │   │   │   ├── screen_login.dart
+│   │   │   │   ├── screen_register.dart
+│   │   │   │   └── screen_forgot_password.dart
+│   │   │   ├── dashboard/
+│   │   │   │   └── screen_dashboard.dart
+│   │   │   ├── health/
+│   │   │   │   ├── screen_health_hub.dart
+│   │   │   │   ├── screen_health_history.dart
+│   │   │   │   └── screen_add_health_record.dart
+│   │   │   ├── prediction/
+│   │   │   │   ├── screen_prediction_hub.dart
+│   │   │   │   ├── screen_stroke_form.dart
+│   │   │   │   ├── screen_stroke_result.dart
+│   │   │   │   ├── screen_diabetes_form.dart
+│   │   │   │   └── screen_diabetes_result.dart
+│   │   │   ├── doctors/
+│   │   │   │   ├── screen_doctors_hub.dart
+│   │   │   │   ├── screen_doctor_list.dart
+│   │   │   │   ├── screen_doctor_detail.dart
+│   │   │   │   └── screen_rate_doctor.dart
+│   │   │   ├── appointments/
+│   │   │   │   ├── screen_appointments.dart
+│   │   │   │   └── screen_report_appointment.dart
+│   │   │   ├── chat/
+│   │   │   │   ├── screen_chat_list.dart
+│   │   │   │   ├── screen_chat_detail.dart
+│   │   │   │   └── screen_select_doctor_chat.dart
+│   │   │   ├── sos/
+│   │   │   │   ├── screen_sos.dart
+│   │   │   │   └── screen_sos_status.dart
+│   │   │   ├── family/
+│   │   │   │   ├── screen_family.dart
+│   │   │   │   ├── screen_family_management.dart
+│   │   │   │   ├── screen_family_groups.dart
+│   │   │   │   ├── screen_group_detail.dart
+│   │   │   │   └── screen_invite_members.dart
+│   │   │   ├── reminders/
+│   │   │   │   ├── screen_reminders.dart
+│   │   │   │   ├── screen_reminders_list.dart
+│   │   │   │   ├── screen_add_reminder.dart
+│   │   │   │   └── screen_edit_reminder.dart
+│   │   │   ├── knowledge/
+│   │   │   │   ├── screen_knowledge.dart
+│   │   │   │   └── screen_article_detail.dart
+│   │   │   ├── forum/
+│   │   │   │   ├── screen_forum.dart
+│   │   │   │   └── screen_topic_detail.dart
+│   │   │   ├── profile/
+│   │   │   │   ├── screen_profile.dart
+│   │   │   │   └── screen_edit_profile.dart
+│   │   │   ├── settings/
+│   │   │   │   ├── screen_settings.dart
+│   │   │   │   ├── screen_notification_settings.dart
+│   │   │   │   └── screen_change_password.dart
+│   │   │   └── legal/
+│   │   │       ├── screen_terms_of_service.dart
+│   │   │       └── screen_privacy_policy.dart
+│   │   ├── doctor/                   # 17 doctor screens
+│   │   │   ├── auth/
+│   │   │   │   └── screen_doctor_login.dart
+│   │   │   ├── dashboard/
+│   │   │   │   └── screen_doctor_dashboard.dart
+│   │   │   ├── patients/
+│   │   │   │   ├── screen_patient_list.dart
+│   │   │   │   └── screen_patient_profile.dart
+│   │   │   ├── appointments/
+│   │   │   │   ├── screen_appointment_management.dart
+│   │   │   │   └── screen_appointment_request_detail.dart
+│   │   │   ├── sos/
+│   │   │   │   ├── screen_sos_queue.dart
+│   │   │   │   └── screen_sos_case_detail.dart
+│   │   │   ├── chat/
+│   │   │   │   ├── screen_doctor_chat.dart
+│   │   │   │   ├── screen_doctor_chat_detail.dart
+│   │   │   │   └── screen_select_patient_chat.dart
+│   │   │   ├── reviews/
+│   │   │   │   └── screen_doctor_reviews.dart
+│   │   │   ├── schedule/
+│   │   │   │   └── screen_schedule_management.dart
+│   │   │   ├── medication/
+│   │   │   │   └── screen_add_medication.dart
+│   │   │   ├── settings/
+│   │   │   │   └── screen_doctor_settings.dart
+│   │   │   └── notifications/
+│   │   │       └── screen_doctor_notifications.dart
+│   │   └── admin/                    # 20 admin screens
+│   │       ├── screen_admin_splash.dart
+│   │       ├── screen_admin_login.dart
+│   │       ├── screen_admin_forgot_password.dart
+│   │       ├── screen_admin_main.dart
+│   │       ├── dashboard/
+│   │       │   └── screen_admin_dashboard.dart
+│   │       ├── users/
+│   │       │   └── screen_admin_users.dart
+│   │       ├── doctors/
+│   │       │   └── screen_admin_doctors.dart
+│   │       ├── patients/
+│   │       │   └── screen_admin_patients.dart
+│   │       ├── sos/
+│   │       │   └── screen_admin_sos.dart
+│   │       ├── predictions/
+│   │       │   └── screen_admin_predictions.dart
+│   │       ├── appointments/
+│   │       │   └── screen_admin_appointments.dart
+│   │       ├── knowledge/
+│   │       │   └── screen_admin_knowledge.dart
+│   │       └── community/
+│   │           └── screen_admin_community.dart
+│   ├── services/                     # 34 services
+│   │   ├── auth_service.dart
+│   │   ├── stroke_prediction_service.dart
+│   │   ├── diabetes_prediction_service.dart
+│   │   ├── health_record_service.dart
+│   │   ├── health_chart_service.dart
+│   │   ├── appointment_service.dart
+│   │   ├── doctor_service.dart
+│   │   ├── doctor_schedule_service.dart
+│   │   ├── chat_service.dart
+│   │   ├── sos_service.dart
+│   │   ├── notification_service.dart
+│   │   ├── enhanced_notification_service.dart
+│   │   ├── family_service.dart
+│   │   ├── reminder_service.dart
+│   │   ├── knowledge_service.dart
+│   │   ├── forum_service.dart
+│   │   ├── location_service.dart
+│   │   ├── offline_cache_service.dart
+│   │   ├── connectivity_service.dart
+│   │   ├── image_service.dart
+│   │   └── ...
+│   ├── widgets/                      # 7 shared widgets
+│   │   ├── app_drawer.dart
+│   │   ├── app_bottom_nav.dart
+│   │   ├── doctor_drawer.dart
+│   │   ├── doctor_bottom_nav.dart
+│   │   ├── admin_sidebar.dart
+│   │   ├── sos_floating_button.dart
+│   │   └── offline_indicator.dart
+│   ├── utils/                        # 4 utilities
+│   │   ├── navigation_utils.dart
+│   │   ├── date_utils.dart
+│   │   ├── validation_utils.dart
+│   │   └── constants.dart
+│   └── mixins/
+│       └── connectivity_mixin.dart
+├── release/                          # Release builds
+│   └── SEWS_v1.0.0.apk              # Android APK (67.3MB)
+├── test/                             # Test files
+│   └── services/                     # 13 service tests
+│       ├── article_visibility_test.dart
+│       ├── family_relationship_bidirectionality_test.dart
+│       ├── family_sos_notification_test.dart
+│       ├── follow_up_reminder_scheduling_test.dart
+│       ├── health_data_filtering_test.dart
+│       ├── leave_period_blocking_test.dart
+│       ├── medication_adherence_calculation_test.dart
+│       ├── notification_delivery_test.dart
+│       ├── offline_queue_integrity_test.dart
+│       ├── pagination_consistency_test.dart
+│       ├── search_performance_test.dart
+│       ├── sync_retry_logic_test.dart
+│       └── time_slot_availability_test.dart
+├── web/                              # Web platform files
+│   ├── index.html
+│   ├── manifest.json
+│   └── icons/
+├── pubspec.yaml                      # Flutter dependencies
+├── pubspec.lock
+├── firebase.json                     # Firebase config
+├── .firebaserc
+├── start.sh                          # Start script
+├── README.md
+└── .gitignore
+
+
+PHỤ LỤC C: TÀI LIỆU THAM KHẢO
+
+C.1. Tài liệu kỹ thuật
+
+(1) Flutter Documentation
+https://docs.flutter.dev
+Truy cập: 2024
+
+(2) Firebase Documentation
+https://firebase.google.com/docs
+Truy cập: 2024
+
+(3) Flask Documentation
+https://flask.palletsprojects.com
+Truy cập: 2024
+
+(4) scikit-learn Documentation
+https://scikit-learn.org/stable/documentation.html
+Truy cập: 2024
+
+(5) Provider Package
+https://pub.dev/packages/provider
+Truy cập: 2024
+
+(6) fl_chart Package
+https://pub.dev/packages/fl_chart
+Truy cập: 2024
+
+C.2. Tài liệu y khoa
+
+(7) World Health Organization - Stroke
+https://www.who.int/health-topics/stroke
+Truy cập: 2024
+
+(8) American Stroke Association
+https://www.stroke.org
+Truy cập: 2024
+
+(9) Stroke Risk Factors
+Goldstein LB, et al. "Guidelines for the Primary Prevention of Stroke"
+Stroke. 2011;42:517-584
+
+(10) Machine Learning in Healthcare
+Rajkomar A, et al. "Machine Learning in Medicine"
+N Engl J Med. 2019;380:1347-1358
+
+C.3. Tài liệu thiết kế
+
+(11) Material Design 3
+https://m3.material.io
+Truy cập: 2024
+
+(12) Flutter UI Guidelines
+https://docs.flutter.dev/ui
+Truy cập: 2024
+
+C.4. Công cụ và thư viện
+
+(13) PlantUML
+https://plantuml.com
+Truy cập: 2024
+
+(14) Postman
+https://www.postman.com
+Truy cập: 2024
+
+(15) Android Studio
+https://developer.android.com/studio
+Truy cập: 2024
+
+(16) Visual Studio Code
+https://code.visualstudio.com
+Truy cập: 2024
+
+
+PHỤ LỤC D: SỬ DỤNG TRÍ TUỆ NHÂN TẠO TRONG DỰ ÁN
+
+D.0. Lý do sử dụng AI trong phát triển
+
+Dự án SEWS là một đồ án có quy mô lớn với:
+  91 màn hình UI (User: 54, Doctor: 17, Admin: 20)
+  34 service classes
+  14 data models
+  16 file unit tests
+  Tích hợp nhiều công nghệ: Flutter, Firebase, Flask, AI/ML
+
+Với quy mô này, việc một cá nhân hoặc nhóm nhỏ hoàn thành trong thời gian giới hạn của đồ án là thách thức lớn. Do đó, việc sử dụng AI như một công cụ hỗ trợ là cần thiết và hợp lý để:
+
+(1) Tăng năng suất: AI giúp viết nhanh các phần code lặp lại, boilerplate, giúp developer tập trung vào logic nghiệp vụ quan trọng.
+
+(2) Đảm bảo tiến độ: Với khối lượng công việc lớn, AI giúp hoàn thành đúng deadline mà vẫn đảm bảo chất lượng.
+
+(3) Học hỏi: Trong quá trình làm việc với AI, developer học được nhiều best practices, patterns mới.
+
+(4) Thực tế ngành: Việc sử dụng AI trong phát triển phần mềm đang trở thành xu hướng phổ biến trong ngành công nghệ, đây là kỹ năng cần thiết cho developer hiện đại.
+
+Lưu ý quan trọng: Mặc dù có sự hỗ trợ của AI, developer vẫn chịu trách nhiệm hoàn toàn về:
+  Thiết kế kiến trúc và quyết định kỹ thuật
+  Review và đảm bảo chất lượng code
+  Hiểu rõ từng dòng code trong dự án
+  Test và debug
+  Tích hợp các thành phần với nhau
+
+
+D.1. AI trong sản phẩm (Product AI)
+
+D.1.1. Mô hình dự đoán đột quỵ
+
+Thuật toán: Random Forest Classifier
+Thư viện: scikit-learn (Python)
+File model: moHinhDotQuy_final.pkl
+Số features: 14 features đầu vào
+Output: Xác suất nguy cơ đột quỵ (0-100%)
+
+Quá trình phát triển model:
+(1) Thu thập dữ liệu từ các nguồn y tế công khai
+(2) Tiền xử lý dữ liệu với pandas, numpy
+(3) Feature engineering: tạo các features mới (nhomTuoi, nhomBMI, nhomGlucose, diemNguyCo)
+(4) Train model với scikit-learn RandomForestClassifier
+(5) Đánh giá model với cross-validation
+(6) Export model với joblib
+
+D.1.2. Thuật toán dự đoán tiểu đường
+
+Phương pháp: Rule-based algorithm
+Các yếu tố đánh giá: Tuổi, BMI, đường huyết, huyết áp, tiền sử gia đình, mức độ hoạt động
+Output: Điểm nguy cơ và phân loại (thấp/trung bình/cao)
+
+D.2. AI hỗ trợ phát triển (Development AI)
+
+D.2.1. Công cụ AI đã sử dụng
+
+(1) GitHub Copilot
+Mục đích: Hỗ trợ viết code, auto-completion
+Ứng dụng: Viết các service classes, widget code, boilerplate code
+Ngôn ngữ: Dart, Python
+
+(2) Claude AI (Anthropic)
+Mục đích: Hỗ trợ thiết kế kiến trúc, review code, viết documentation
+Ứng dụng:
+  Thiết kế cấu trúc thư mục dự án
+  Review và tối ưu code
+  Viết báo cáo phần mềm
+  Tạo PlantUML diagrams
+  Debug và fix lỗi
+
+(3) ChatGPT (OpenAI)
+Mục đích: Nghiên cứu, giải đáp thắc mắc kỹ thuật
+Ứng dụng:
+  Tìm hiểu best practices Flutter
+  Giải quyết các vấn đề kỹ thuật
+  Tối ưu thuật toán
+
+D.2.2. Phạm vi sử dụng AI trong coding
+
+A. Các phần được AI hỗ trợ
+
+Boilerplate code: Các template code lặp lại (model classes, service classes)
+Documentation: Comments, README, báo cáo
+Unit tests: Một số test cases cơ bản
+UI components: Các widget đơn giản
+Refactoring: Tối ưu và cải thiện code có sẵn
+
+B. Các phần do developer tự viết
+
+Business logic: Logic nghiệp vụ chính của ứng dụng
+Architecture decisions: Quyết định về kiến trúc hệ thống
+AI/ML model: Training và tuning model dự đoán
+Integration: Tích hợp các services với nhau
+Testing strategy: Chiến lược và kế hoạch kiểm thử
+Security: Các quyết định về bảo mật
+
+D.2.3. Quy trình làm việc với AI
+
+Bước 1: Developer xác định yêu cầu và thiết kế tổng quan
+Bước 2: Sử dụng AI để generate code template hoặc boilerplate
+Bước 3: Developer review, chỉnh sửa và tùy chỉnh code
+Bước 4: Developer viết business logic và integration
+Bước 5: Sử dụng AI để review và suggest improvements
+Bước 6: Developer test và finalize
+
+D.3. Đánh giá hiệu quả sử dụng AI
+
+D.3.1. Ưu điểm
+
+Tăng tốc độ phát triển: Giảm 30-40% thời gian viết boilerplate code
+Cải thiện chất lượng: AI giúp phát hiện bugs và suggest best practices
+Documentation: Tự động hóa việc viết documentation
+Learning: Học hỏi các patterns và techniques mới
+
+D.3.2. Hạn chế
+
+Cần review kỹ: Code từ AI cần được review và test kỹ lưỡng
+Context limitation: AI không hiểu toàn bộ context của dự án
+Dependency: Không nên phụ thuộc hoàn toàn vào AI
+Security concerns: Cần cẩn thận với sensitive code
+
+D.3.3. Nguyên tắc sử dụng AI
+
+(1) AI là công cụ hỗ trợ, không thay thế developer
+(2) Luôn review và test code được generate bởi AI
+(3) Không share sensitive information (API keys, passwords) với AI
+(4) Hiểu rõ code trước khi sử dụng
+(5) Ghi nhận nguồn gốc khi sử dụng AI-generated content
+
+D.4. Tổng kết
+
+Dự án SEWS sử dụng AI ở hai cấp độ:
+
+Cấp độ 1 - Product AI:
+  Random Forest model cho dự đoán đột quỵ
+  Rule-based algorithm cho dự đoán tiểu đường
+
+Cấp độ 2 - Development AI:
+  GitHub Copilot cho code completion
+  Claude AI cho architecture design và documentation
+  ChatGPT cho research và problem solving
+
+Việc sử dụng AI giúp tăng hiệu quả phát triển trong khi vẫn đảm bảo chất lượng code thông qua quy trình review nghiêm ngặt của developer
