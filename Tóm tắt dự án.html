@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEWS - Hệ thống Cảnh báo Sớm Đột quỵ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ============================================
+           SEWS PRESENTATION - PROFESSIONAL STYLE
+           Sharp edges, clean layout, corporate look
+        ============================================ */
+
+        /* 1. RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            margin: 0;
+            padding: 40px 0;
+            display: grid;
+            gap: 60px;
+            place-items: center;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 2. SLIDE CONTAINER - Sharp, Professional */
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: #1a1a1a;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        /* Slide inner padding */
+        .slide-container:not(.bleed-image-layout):not(.full-bg-image) {
+            padding: 56px 72px 72px;
+        }
+
+        /* Left accent bar for content slides */
+        .slide-container:not(.full-bg-image)::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #0066cc 0%, #003d7a 100%);
+        }
+
+        /* 3. TYPOGRAPHY - Clean & Hierarchical */
+        h1, h2, h3, h4 {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            font-weight: 600;
+            color: #0a0a0a;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin-bottom: 48px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #0066cc;
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+
+        p, li {
+            font-size: 20px;
+            line-height: 1.7;
+            color: #333333;
+        }
+
+        strong {
+            color: #0a0a0a;
+            font-weight: 600;
+        }
+
+        /* 4. LAYOUT UTILITIES */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+            height: 100%;
+        }
+
+        .image-wrapper {
+            overflow: hidden;
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* 5. LISTS - Professional Bullets */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 32px;
+            font-size: 20px;
+        }
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background: #0066cc;
+        }
+
+        li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 6. TILES / CARDS - Sharp Edges */
+        .tiled-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
+        }
+
+        .tile {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-top: 4px solid #0066cc;
+            padding: 24px 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .tile img {
+            width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .tile .icon {
+            font-size: 36px;
+            color: #0066cc;
+            margin-bottom: 20px;
+            background: #f0f7ff;
+            width: 72px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0a0a0a;
+            margin-bottom: 12px;
+        }
+
+        .tile p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555555;
+            margin: 0;
+        }
+
+        /* 7. TITLE SLIDE - Full Background */
+        .full-bg-image {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .full-bg-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 51, 102, 0.95) 0%, rgba(0, 26, 51, 0.92) 100%);
+            z-index: 1;
+        }
+
+        .full-bg-image .content-overlay {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            text-align: center;
+            max-width: 960px;
+            padding: 0 48px;
+        }
+
+        .full-bg-image h1 {
+            color: #ffffff;
+            font-size: 80px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .full-bg-image p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        .title-info {
+            margin-top: 64px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            text-align: left;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 32px;
+        }
+
+        .info-box h4 {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* 8. BLEED IMAGE LAYOUT */
+        .bleed-image-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 0;
+        }
+
+        .bleed-image-layout::before {
+            display: none;
+        }
+
+        .bleed-image-layout > .content-container {
+            padding: 56px 48px 56px 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            border-left: 6px solid #0066cc;
+        }
+
+        .bleed-image-layout > .image-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .bleed-image-side {
+            width: 100%;
+            height: 100%;
+            max-height: 720px;
+            object-fit: contain;
+            padding: 24px;
+        }
+
+        /* 9. TIMELINE - Clean & Modern */
+        .timeline-container {
+            position: relative;
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 16px;
+            left: 5%;
+            width: 90%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding-top: 56px;
+        }
+
+        .timeline-dot {
+            width: 32px;
+            height: 32px;
+            background: #0066cc;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-content h3 {
+            color: #0a0a0a;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .timeline-content p {
+            font-size: 16px;
+            color: #555555;
+            line-height: 1.6;
+        }
+
+        /* 10. FOOTER - Minimal */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: #888888;
+            padding: 16px 72px;
+            background: #fafafa;
+            border-top: 1px solid #e0e0e0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 11. ORDERED LISTS */
+        ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            counter-reset: item;
+        }
+
+        ol li {
+            margin-bottom: 16px;
+            padding-left: 40px;
+            position: relative;
+            counter-increment: item;
+        }
+
+        ol li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            background: #0066cc;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 12. UTILITY OVERRIDES */
+        .two-column.tiled {
+            gap: 24px;
+        }
+
+        .two-column.tiled .tile {
+            height: 100%;
+        }
+
+        .two-column.tiled .tile h3 {
+            font-size: 18px;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+            width: 100%;
+        }
+
+        .two-column.tiled .tile ul {
+            margin-top: 0;
+        }
+
+        .two-column.tiled .tile li {
+            font-size: 17px;
+            margin-bottom: 14px;
+        }
+
+        /* ============================================
+           13. TEXTURES & DECORATIVE ELEMENTS
+        ============================================ */
+
+        /* Dot pattern texture for slides - ENHANCED */
+        .slide-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, #0066cc 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            opacity: 0.035;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Corner geometric accent - LARGER */
+        .slide-container .corner-accent {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            width: 160px;
+            height: 160px;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container .corner-accent::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid #0066cc;
+        }
+
+        .slide-container .corner-accent::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            right: -20px;
+            bottom: -20px;
+            background: #0066cc;
+        }
+
+        /* Floating decorative icons - MORE VISIBLE */
+        .deco-icon {
+            position: absolute;
+            opacity: 0.08;
+            color: #0066cc;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .deco-icon.top-right {
+            top: 70px;
+            right: 90px;
+            font-size: 80px;
+        }
+
+        .deco-icon.bottom-left {
+            bottom: 90px;
+            left: 90px;
+            font-size: 64px;
+        }
+
+        .deco-icon.mid-right {
+            top: 50%;
+            right: 50px;
+            font-size: 56px;
+            transform: translateY(-50%);
+        }
+
+        .deco-icon.top-left {
+            top: 100px;
+            left: 120px;
+            font-size: 48px;
+        }
+
+        .deco-icon.bottom-right {
+            bottom: 120px;
+            right: 120px;
+            font-size: 52px;
+        }
+
+        .deco-icon.center-left {
+            top: 45%;
+            left: 30px;
+            font-size: 44px;
+        }
+
+        /* Grid lines texture - MORE VISIBLE */
+        .texture-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 102, 204, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 102, 204, 0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Diagonal lines accent - LARGER */
+        .texture-diagonal {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 350px;
+            height: 350px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0, 102, 204, 0.04) 10px,
+                rgba(0, 102, 204, 0.04) 20px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Circle accents - MULTIPLE SIZES */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .circle-accent.large {
+            width: 400px;
+            height: 400px;
+            border: 3px solid rgba(0, 102, 204, 0.06);
+        }
+
+        .circle-accent.medium {
+            width: 250px;
+            height: 250px;
+            border: 2px solid rgba(0, 102, 204, 0.05);
+        }
+
+        .circle-accent.small {
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(0, 102, 204, 0.07);
+        }
+
+        .circle-accent.filled {
+            background: rgba(0, 102, 204, 0.03);
+            border: none;
+        }
+
+        .circle-accent.top-left {
+            top: -120px;
+            left: -120px;
+        }
+
+        .circle-accent.bottom-right {
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .circle-accent.top-right {
+            top: -80px;
+            right: -80px;
+        }
+
+        .circle-accent.center-right {
+            top: 50%;
+            right: -60px;
+            transform: translateY(-50%);
+        }
+
+        /* Plus/Cross patterns scattered */
+        .plus-pattern {
+            position: absolute;
+            font-size: 28px;
+            color: #0066cc;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Geometric shapes */
+        .geo-square {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(0, 102, 204, 0.08);
+            transform: rotate(45deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .geo-triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 86px solid rgba(0, 102, 204, 0.04);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Gradient overlay for depth */
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.02) 0%, transparent 40%, rgba(0, 102, 204, 0.015) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Corner brackets */
+        .corner-bracket {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .corner-bracket::before,
+        .corner-bracket::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 102, 204, 0.12);
+        }
+
+        .corner-bracket.top-left::before {
+            width: 100%;
+            height: 4px;
+            top: 0;
+            left: 0;
+        }
+
+        .corner-bracket.top-left::after {
+            width: 4px;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .corner-bracket.bottom-right::before {
+            width: 100%;
+            height: 4px;
+            bottom: 0;
+            right: 0;
+        }
+
+        .corner-bracket.bottom-right::after {
+            width: 4px;
+            height: 100%;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* Floating dots cluster */
+        .dots-cluster {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dots-cluster span {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(0, 102, 204, 0.15);
+        }
+
+        .dots-cluster span:nth-child(1) { top: 0; left: 0; }
+        .dots-cluster span:nth-child(2) { top: 0; left: 16px; }
+        .dots-cluster span:nth-child(3) { top: 0; left: 32px; }
+        .dots-cluster span:nth-child(4) { top: 16px; left: 0; }
+        .dots-cluster span:nth-child(5) { top: 16px; left: 16px; }
+        .dots-cluster span:nth-child(6) { top: 16px; left: 32px; }
+        .dots-cluster span:nth-child(7) { top: 32px; left: 0; }
+        .dots-cluster span:nth-child(8) { top: 32px; left: 16px; }
+        .dots-cluster span:nth-child(9) { top: 32px; left: 32px; }
+
+        /* Line accents */
+        .line-accent {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .line-accent.horizontal {
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(0, 102, 204, 0.15), transparent);
+        }
+
+        .line-accent.vertical {
+            width: 3px;
+            height: 150px;
+            background: linear-gradient(180deg, rgba(0, 102, 204, 0.15), transparent);
+        }
+
+        /* Ensure content stays above textures */
+        .slide-title,
+        .content-area,
+        .footer,
+        .content-overlay,
+        .title-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Title slide special textures */
+        .full-bg-image .texture-grid,
+        .full-bg-image::after {
+            display: none;
+        }
+
+        .full-bg-image .deco-icon {
+            color: #ffffff;
+            opacity: 0.15;
+        }
+
+        .full-bg-image .circle-accent {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .full-bg-image .circle-accent.filled {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .full-bg-image .line-accent.horizontal {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .full-bg-image .dots-cluster span {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Hexagon pattern for title slide - LARGER */
+        .hex-pattern {
+            position: absolute;
+            top: 50%;
+            right: 3%;
+            transform: translateY(-50%);
+            font-size: 280px;
+            color: rgba(255, 255, 255, 0.06);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hex-pattern-left {
+            position: absolute;
+            top: 20%;
+            left: 3%;
+            font-size: 180px;
+            color: rgba(255, 255, 255, 0.04);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Medical cross accent for health slides - LARGER */
+        .medical-cross {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .medical-cross::before,
+        .medical-cross::after {
+            content: '';
+            position: absolute;
+            background: #0066cc;
+        }
+
+        .medical-cross::before {
+            width: 26px;
+            height: 80px;
+            left: 27px;
+            top: 0;
+        }
+
+        .medical-cross::after {
+            width: 80px;
+            height: 26px;
+            left: 0;
+            top: 27px;
+        }
+
+        /* Wave pattern - MORE VISIBLE */
+        .wave-pattern {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60'%3E%3Cpath d='M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30' fill='none' stroke='%230066cc' stroke-width='2' opacity='0.1'/%3E%3C/svg%3E") repeat-x;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Pulse rings animation */
+        .pulse-ring {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(0, 102, 204, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            right: 30px;
+            bottom: 30px;
+            border: 2px solid rgba(0, 102, 204, 0.08);
+            border-radius: 50%;
+        }
+
+        .pulse-ring::after {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            right: 60px;
+            bottom: 60px;
+            border: 2px solid rgba(0, 102, 204, 0.06);
+            border-radius: 50%;
+        }
+
+        /* Data flow lines */
+        .data-flow {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .data-flow::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.1), rgba(0, 102, 204, 0.2), rgba(0, 102, 204, 0.1), transparent);
+        }
+
+        /* Circuit pattern */
+        .circuit-pattern {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .circuit-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 60px;
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        .circuit-pattern::after {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            width: 80px;
+            height: 2px;
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        /* Bleed layout adjustments */
+        .bleed-image-layout::after,
+        .bleed-image-layout .texture-grid {
+            display: none;
+        }
+
+        .bleed-image-layout .content-container {
+            position: relative;
+        }
+
+        /* Accent bar enhancement */
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(180deg, #0066cc 0%, #0052a3 50%, #003d7a 100%);
+            z-index: 2;
+        }
+
+        .accent-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 8px;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 102, 204, 0.3) 0%, rgba(0, 102, 204, 0.1) 100%);
+        }
+
+        /* ============================================
+           14. PRINT STYLES FOR PDF EXPORT
+        ============================================ */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                gap: 0 !important;
+            }
+
+            .slide-container {
+                width: 100% !important;
+                height: 100vh !important;
+                max-height: 100vh !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                break-after: page !important;
+                break-inside: avoid !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+
+            .slide-container:last-child {
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+
+            /* Ensure backgrounds print */
+            .full-bg-image::before,
+            .texture-grid,
+            .gradient-overlay,
+            .texture-diagonal,
+            .circle-accent,
+            .geo-square,
+            .geo-triangle,
+            .dots-cluster span,
+            .corner-bracket::before,
+            .corner-bracket::after,
+            .medical-cross::before,
+            .medical-cross::after,
+            .pulse-ring,
+            .pulse-ring::before,
+            .pulse-ring::after,
+            .line-accent,
+            .tile,
+            .tile .icon,
+            .footer {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Hide browser print headers/footers suggestion */
+            @page {
+                size: landscape;
+                margin: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide-container full-bg-image" style="background-image: url('Ảnh giao diện/User - Màn hình chính.png');">
+    <i class="fa-solid fa-hexagon-vertical-nft hex-pattern"></i>
+    <i class="fa-solid fa-brain hex-pattern-left"></i>
+    <i class="deco-icon fa-solid fa-heartbeat" style="top: 80px; right: 120px; font-size: 100px;"></i>
+    <i class="deco-icon fa-solid fa-shield-heart" style="bottom: 120px; left: 100px; font-size: 80px;"></i>
+    <i class="deco-icon fa-solid fa-stethoscope" style="top: 150px; left: 180px; font-size: 60px;"></i>
+    <i class="deco-icon fa-solid fa-hospital" style="bottom: 180px; right: 200px; font-size: 70px;"></i>
+    <div class="circle-accent large filled" style="top: -150px; right: -150px;"></div>
+    <div class="circle-accent medium" style="bottom: -80px; left: -80px;"></div>
+    <div class="line-accent horizontal" style="top: 40%; left: 0; width: 150px;"></div>
+    <div class="line-accent horizontal" style="bottom: 35%; right: 0; width: 120px; transform: rotate(180deg);"></div>
+    <div class="dots-cluster" style="top: 60px; left: 60px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="dots-cluster" style="bottom: 80px; right: 80px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="content-overlay">
+        <h1>SEWS</h1>
+        <p>Hệ thống Cảnh báo Sớm Đột quỵ</p>
+        <div class="title-info">
+            <div class="info-box">
+                <h4>Giảng viên hướng dẫn</h4>
+                <p>Hoàng Công Trình</p>
+            </div>
+            <div class="info-box">
+                <h4>Sinh viên thực hiện</h4>
+                <p>Lê Quang Long<br>Trịnh Thanh Luân<br>Trần Hoàng Quân</p>
+            </div>
+            <div class="info-box">
+                <h4>Phiên bản</h4>
+                <p>1.0.0+1</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Overview (Context) -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-globe"></i>
+    <i class="deco-icon fa-solid fa-earth-americas" style="bottom: 150px; right: 150px; font-size: 50px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-chart-pie" style="top: 180px; left: 40px; font-size: 40px; opacity: 0.06;"></i>
+    <div class="medical-cross" style="top: 100px; right: 180px;"></div>
+    <div class="medical-cross" style="bottom: 200px; left: 50px; transform: scale(0.6);"></div>
+    <div class="circle-accent large" style="top: -180px; left: -180px;"></div>
+    <div class="circle-accent small" style="bottom: 100px; right: 80px;"></div>
+    <div class="geo-square" style="top: 200px; right: 60px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="dots-cluster" style="bottom: 120px; left: 150px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Bối cảnh & Tính cấp thiết</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul style="font-size: 24px;">
+                    <li><strong>Khủng hoảng toàn cầu:</strong> Đột quỵ là nguyên nhân hàng đầu gây tử vong và tàn tật trên thế giới.</li>
+                    <li><strong>Thống kê báo động:</strong> Khoảng 15 triệu ca mắc mới mỗi năm, dẫn đến 5 triệu ca tử vong.</li>
+                    <li><strong>"Giờ vàng" (Golden Hour):</strong> Can thiệp trong 3-4.5 giờ đầu giúp giảm đáng kể tỷ lệ tử vong và biến chứng.</li>
+                    <li><strong>Giải pháp đề xuất:</strong> Ứng dụng AI và công nghệ di động để phát hiện sớm và phản ứng nhanh.</li>
+                </ul>
+            </div>
+            <div class="image-wrapper" style="height: 450px;">
+                <img src="Ảnh giao diện/User - Màn hình đánh giá đột quỵ.png" alt="Đánh giá đột quỵ">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Tổng quan</span>
+    </div>
+</div>
+
+<!-- Slide 3: Core Objectives -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-bullseye"></i>
+    <i class="deco-icon fa-solid fa-crosshairs" style="top: 180px; left: 50px; font-size: 45px; opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-flag-checkered" style="bottom: 130px; right: 100px; font-size: 55px; opacity: 0.05;"></i>
+    <div class="circle-accent medium" style="top: -100px; right: -100px;"></div>
+    <div class="circle-accent small filled" style="bottom: 150px; left: 80px;"></div>
+    <div class="geo-triangle" style="bottom: 100px; right: 50px;"></div>
+    <div class="pulse-ring" style="top: 50%; left: -80px; transform: translateY(-50%) scale(0.7);"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="line-accent vertical" style="top: 100px; right: 50px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Mục tiêu Cốt lõi</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-brain"></i></div>
+                <h3>Dự đoán bằng AI</h3>
+                <p>Dự đoán nguy cơ đột quỵ sử dụng thuật toán Random Forest dựa trên 14 chỉ số sức khỏe.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3>Theo dõi Sức khỏe</h3>
+                <p>Giám sát các chỉ số sinh tồn như Huyết áp, Glucose, và BMI với biểu đồ trực quan.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-truck-medical"></i></div>
+                <h3>Cấp cứu SOS</h3>
+                <p>Chia sẻ vị trí GPS tức thì và gửi cảnh báo đến bác sĩ trong tình huống khẩn cấp.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Mục tiêu</span>
+    </div>
+</div>
+
+<!-- Slide 4: User Roles -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-users"></i>
+    <i class="deco-icon bottom-left fa-solid fa-sitemap" style="opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-user-group" style="top: 160px; left: 60px; font-size: 40px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-network-wired" style="bottom: 140px; right: 80px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="bottom: -200px; right: -200px;"></div>
+    <div class="circle-accent small" style="top: 120px; left: 60px;"></div>
+    <div class="geo-square" style="bottom: 180px; left: 40px;"></div>
+    <div class="dots-cluster" style="top: 100px; right: 200px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Đối tượng & Phân hệ</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile" style="border-top-color: #059669;">
+                <div class="icon" style="color: #059669; background-color: #ecfdf5;"><i class="fa-solid fa-user"></i></div>
+                <h3>Bệnh nhân (User)</h3>
+                <p><strong>54 Màn hình</strong><br>Tính năng: Kiểm tra AI, Nhật ký sức khỏe, Chat, SOS, Nhắc thuốc.</p>
+                <img src="Ảnh giao diện/User - Màn hình dự đoán.png" alt="User App">
+            </div>
+            <div class="tile" style="border-top-color: #0066cc;">
+                <div class="icon" style="color: #0066cc; background-color: #f0f7ff;"><i class="fa-solid fa-user-doctor"></i></div>
+                <h3>Bác sĩ</h3>
+                <p><strong>17 Màn hình</strong><br>Tính năng: Quản lý bệnh nhân, Lịch hẹn, Xử lý cấp cứu.</p>
+                <img src="Ảnh giao diện/Doctor - Màn hình chính.png" alt="Doctor App">
+            </div>
+            <div class="tile" style="border-top-color: #4f46e5;">
+                <div class="icon" style="color: #4f46e5; background-color: #eef2ff;"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Quản trị viên</h3>
+                <p><strong>20 Màn hình</strong><br>Tính năng: Giám sát hệ thống, Quản lý người dùng, Phân tích.</p>
+                <img src="Ảnh giao diện/Admin - Màn hình chính.png" alt="Admin App">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Phạm vi hệ thống</span>
+    </div>
+</div>
+
+<!-- Slide 5: Architecture (Bleed Layout) -->
+<div class="slide-container bleed-image-layout">
+    <div class="content-container">
+        <i class="deco-icon fa-solid fa-layer-group" style="top: 70px; right: 30px; font-size: 60px; opacity: 0.07;"></i>
+        <i class="deco-icon fa-solid fa-cubes" style="bottom: 150px; right: 50px; font-size: 45px; opacity: 0.05;"></i>
+        <i class="deco-icon fa-solid fa-server" style="top: 200px; left: 30px; font-size: 35px; opacity: 0.05;"></i>
+        <div class="circle-accent medium" style="top: -80px; right: -80px;"></div>
+        <div class="circuit-pattern" style="bottom: 80px; left: 20px;"></div>
+        <div class="dots-cluster" style="top: 140px; right: 100px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="line-accent vertical" style="top: 80px; left: 20px;"></div>
+        <div class="texture-diagonal" style="bottom: 0; left: 0; right: auto;"></div>
+        <h2 class="slide-title">Kiến trúc Hệ thống</h2>
+        <div class="content-area">
+            <p><strong>Kiến trúc Phân lớp (Layered Architecture)</strong></p>
+            <ul>
+                <li><strong>Tầng Giao diện (Presentation):</strong> Flutter Mobile App (Android/Web).</li>
+                <li><strong>Tầng Nghiệp vụ (Business):</strong> 34 lớp Service xử lý logic cốt lõi.</li>
+                <li><strong>Tầng Dữ liệu (Data):</strong> Firebase (Realtime DB, Auth) & Hive (Cache cục bộ).</li>
+                <li><strong>Tầng AI:</strong> Python Flask Server chứa mô hình Random Forest.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="image-container">
+        <img class="bleed-image-side" src="Ảnh giao diện/Admin - Màn hình chính.png" alt="Kiến trúc hệ thống">
+    </div>
+</div>
+
+<!-- Slide 6: Technology Stack -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-code"></i>
+    <i class="deco-icon bottom-left fa-solid fa-database" style="opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-terminal" style="top: 180px; left: 50px; font-size: 40px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-gears" style="bottom: 140px; right: 100px; font-size: 55px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-cloud" style="top: 130px; right: 200px; font-size: 45px; opacity: 0.04;"></i>
+    <div class="circle-accent large" style="top: -150px; left: -150px;"></div>
+    <div class="circle-accent small filled" style="bottom: 120px; right: 60px;"></div>
+    <div class="circuit-pattern" style="top: 150px; right: 50px;"></div>
+    <div class="geo-square" style="bottom: 200px; left: 60px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="data-flow" style="bottom: 100px; left: 100px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Công nghệ Sử dụng</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div class="tile" style="align-items: flex-start; text-align: left;">
+                <h3 style="border-bottom: 2px solid #e5e7eb; width: 100%; padding-bottom: 10px;">Frontend & Di động</h3>
+                <ul style="margin-top: 20px;">
+                    <li><strong>Flutter SDK 3.5.4+:</strong> Phát triển đa nền tảng.</li>
+                    <li><strong>Dart:</strong> Ngôn ngữ lập trình cốt lõi.</li>
+                    <li><strong>fl_chart:</strong> Trực quan hóa dữ liệu.</li>
+                    <li><strong>Hive:</strong> Lưu trữ dữ liệu offline.</li>
+                </ul>
+            </div>
+            <div class="tile" style="align-items: flex-start; text-align: left;">
+                <h3 style="border-bottom: 2px solid #e5e7eb; width: 100%; padding-bottom: 10px;">Backend & AI</h3>
+                <ul style="margin-top: 20px;">
+                    <li><strong>Firebase:</strong> Auth, Realtime DB, Cloud Messaging.</li>
+                    <li><strong>Python (Flask):</strong> Dịch vụ API cho AI.</li>
+                    <li><strong>Scikit-learn:</strong> Thuật toán Random Forest Classifier.</li>
+                    <li><strong>Google Maps API:</strong> Dịch vụ vị trí cho SOS.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Công nghệ</span>
+    </div>
+</div>
+
+<!-- Slide 7: AI Implementation -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-robot"></i>
+    <i class="deco-icon mid-right fa-solid fa-microchip" style="opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-brain" style="top: 150px; left: 50px; font-size: 50px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-network-wired" style="bottom: 130px; left: 80px; font-size: 45px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-diagram-project" style="bottom: 180px; right: 120px; font-size: 40px; opacity: 0.05;"></i>
+    <div class="circle-accent medium" style="bottom: -100px; left: -100px;"></div>
+    <div class="circle-accent small" style="top: 100px; right: 150px;"></div>
+    <div class="pulse-ring" style="top: 40%; right: -60px; transform: scale(0.6);"></div>
+    <div class="circuit-pattern" style="bottom: 100px; right: 40px;"></div>
+    <div class="dots-cluster" style="top: 200px; left: 120px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Triển khai Module AI</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <p><strong>Mô hình: Random Forest Classifier</strong></p>
+                <p style="margin-bottom: 30px;">Phương pháp học máy tổ hợp (ensemble learning) phù hợp cho phân loại y tế nhờ độ chính xác cao và khả năng chống overfitting.</p>
+                <ul>
+                    <li><strong>Đầu vào:</strong> 14 đặc trưng sức khỏe (Tuổi, BMI, Glucose, Huyết áp, Bệnh tim, Loại công việc...).</li>
+                    <li><strong>Đầu ra:</strong> Xác suất rủi ro (%) và Mức độ cảnh báo (Thấp, Trung bình, Cao).</li>
+                    <li><strong>Triển khai:</strong> Host qua Flask API để suy luận thời gian thực.</li>
+                </ul>
+            </div>
+            <div class="image-wrapper">
+                <img src="Ảnh giao diện/Admin - Màn hình dự đoán.png" alt="Mô hình AI">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Trí tuệ nhân tạo</span>
+    </div>
+</div>
+
+<!-- Slide 8: API AI Architecture -->
+<div class="slide-container bleed-image-layout">
+    <div class="content-container">
+        <i class="deco-icon fa-solid fa-server" style="top: 70px; right: 30px; font-size: 60px; opacity: 0.07;"></i>
+        <i class="deco-icon fa-solid fa-code" style="bottom: 150px; right: 50px; font-size: 45px; opacity: 0.05;"></i>
+        <div class="circle-accent medium" style="top: -80px; right: -80px;"></div>
+        <div class="circuit-pattern" style="bottom: 80px; left: 20px;"></div>
+        <div class="texture-diagonal" style="bottom: 0; left: 0; right: auto;"></div>
+        <h2 class="slide-title">API AI - Kiến trúc Backend</h2>
+        <div class="content-area">
+            <p><strong>Flask REST API Server</strong></p>
+            <ul>
+                <li><strong>Server:</strong> Flask chạy trên port 5001 với Debug mode.</li>
+                <li><strong>Model AI:</strong> AdaBoostClassifier với ColumnTransformer preprocessor.</li>
+                <li><strong>Endpoints:</strong>
+                    <br>• <code style="background:#f0f0f0;padding:2px 6px;">/health</code> - Kiểm tra trạng thái server
+                    <br>• <code style="background:#f0f0f0;padding:2px 6px;">/predict</code> - Dự đoán nguy cơ đột quỵ
+                </li>
+                <li><strong>Tích hợp:</strong> Chạy song song với Flutter Web App.</li>
+                <li><strong>Network:</strong> Hỗ trợ localhost và LAN (192.168.x.x).</li>
+            </ul>
+        </div>
+    </div>
+    <div class="image-container">
+        <img class="bleed-image-side" src="Ảnh giao diện/API AI.png" alt="API AI Server">
+    </div>
+</div>
+
+<!-- Slide 9: User Features Detail -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-user" style="color: #059669;"></i>
+    <i class="deco-icon fa-solid fa-mobile-screen" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="top: -150px; left: -150px;"></div>
+    <div class="circle-accent small filled" style="bottom: 120px; right: 80px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title" style="border-color: #059669;">Tính năng Bệnh nhân (User) - 54 Màn hình</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li><strong>Đăng ký/Đăng nhập:</strong> Xác thực bảo mật, quên mật khẩu qua email.</li>
+                    <li><strong>Dự đoán AI:</strong> Đánh giá nguy cơ đột quỵ và tiểu đường với 14 chỉ số.</li>
+                    <li><strong>Theo dõi sức khỏe:</strong> Biểu đồ huyết áp, glucose, BMI theo thời gian.</li>
+                    <li><strong>Đặt lịch khám:</strong> Chọn bác sĩ, ngày giờ, xem lịch sử lịch hẹn.</li>
+                    <li><strong>Chat bác sĩ:</strong> Nhắn tin trực tiếp với bác sĩ phụ trách.</li>
+                    <li><strong>SOS khẩn cấp:</strong> Gửi vị trí GPS và cảnh báo đến bác sĩ.</li>
+                    <li><strong>Nhắc nhở thuốc:</strong> Đặt lịch uống thuốc với thông báo.</li>
+                </ul>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <img src="Ảnh giao diện/User - Màn hình dự đoán.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Dự đoán">
+                <img src="Ảnh giao diện/User - Màn hình sức khoẻ.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Sức khỏe">
+                <img src="Ảnh giao diện/User - Màn hình tạo lịch hẹn.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Lịch hẹn">
+                <img src="Ảnh giao diện/User - SOS.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="SOS">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Phân hệ Bệnh nhân</span>
+    </div>
+</div>
+
+<!-- Slide 10: Doctor Features Detail -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-user-doctor" style="color: #0066cc;"></i>
+    <i class="deco-icon fa-solid fa-stethoscope" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="bottom: -150px; right: -150px;"></div>
+    <div class="circle-accent small" style="top: 120px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title" style="border-color: #0066cc;">Tính năng Bác sĩ - 17 Màn hình</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li><strong>Dashboard:</strong> Tổng quan bệnh nhân đang theo dõi và lịch hẹn.</li>
+                    <li><strong>Quản lý bệnh nhân:</strong> Xem danh sách, hồ sơ sức khỏe chi tiết.</li>
+                    <li><strong>Lịch hẹn:</strong> Xác nhận, từ chối hoặc hoàn thành lịch khám.</li>
+                    <li><strong>Chat bệnh nhân:</strong> Tư vấn trực tiếp qua tin nhắn.</li>
+                    <li><strong>Xử lý SOS:</strong> Nhận cảnh báo khẩn cấp với vị trí GPS.</li>
+                    <li><strong>Cập nhật hồ sơ:</strong> Chỉnh sửa thông tin cá nhân, chuyên khoa.</li>
+                </ul>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <img src="Ảnh giao diện/Doctor - Màn hình chính.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Dashboard">
+                <img src="Ảnh giao diện/Doctor - Màn hình chat bệnh nhân.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Chat">
+                <img src="Ảnh giao diện/Doctor - Đăng nhập.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Đăng nhập">
+                <img src="Ảnh giao diện/Doctor -  Màn hình chỉnh sửa thông tin.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Chỉnh sửa">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Phân hệ Bác sĩ</span>
+    </div>
+</div>
+
+<!-- Slide 11: Admin Features Detail -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-shield-halved" style="color: #4f46e5;"></i>
+    <i class="deco-icon fa-solid fa-chart-bar" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="top: -150px; right: -150px;"></div>
+    <div class="circle-accent small filled" style="bottom: 120px; left: 80px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title" style="border-color: #4f46e5;">Tính năng Quản trị viên - 20 Màn hình</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li><strong>Dashboard:</strong> Thống kê tổng quan hệ thống, biểu đồ.</li>
+                    <li><strong>Quản lý User:</strong> CRUD tài khoản bệnh nhân.</li>
+                    <li><strong>Quản lý Bác sĩ:</strong> Thêm, sửa, xóa tài khoản bác sĩ.</li>
+                    <li><strong>Quản lý Lịch hẹn:</strong> Giám sát tất cả lịch khám trong hệ thống.</li>
+                    <li><strong>Theo dõi Dự đoán:</strong> Xem lịch sử dự đoán AI của bệnh nhân.</li>
+                    <li><strong>Xử lý SOS:</strong> Giám sát và phân công xử lý cấp cứu.</li>
+                </ul>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <img src="Ảnh giao diện/Admin - Màn hình chính.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Dashboard">
+                <img src="Ảnh giao diện/Admin - Màn hình bệnh nhân.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Bệnh nhân">
+                <img src="Ảnh giao diện/Admin - Màn hình bác sĩ.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="Bác sĩ">
+                <img src="Ảnh giao diện/Admin - SOS.png" style="max-height: 200px; object-fit: contain; border: 1px solid #e0e0e0;" alt="SOS">
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Phân hệ Quản trị</span>
+    </div>
+</div>
+
+<!-- Slide 12: Key Functional Results -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-chart-line"></i>
+    <i class="deco-icon bottom-left fa-solid fa-mobile-screen" style="opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-trophy" style="top: 150px; left: 60px; font-size: 50px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-check-double" style="bottom: 150px; right: 100px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-star" style="top: 200px; right: 180px; font-size: 35px; opacity: 0.04;"></i>
+    <div class="circle-accent large" style="top: -180px; right: -180px;"></div>
+    <div class="circle-accent small filled" style="bottom: 150px; left: 50px;"></div>
+    <div class="geo-triangle" style="top: 150px; right: 60px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="dots-cluster" style="bottom: 100px; right: 200px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Kết quả Đạt được</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="image-wrapper" style="height: 500px; width: 280px; margin: 0 auto; border: 4px solid #0a0a0a; padding: 0;">
+                <img src="Ảnh giao diện/User - Màn hình chính.png" style="object-fit: cover;" alt="Giao diện Mobile App">
+            </div>
+            <div>
+                <ul>
+                    <li><strong>Dự đoán AI thời gian thực:</strong> Phản hồi tức thì về nguy cơ đột quỵ.</li>
+                    <li><strong>Theo dõi sức khỏe:</strong> Biểu đồ tương tác theo dõi chỉ số theo thời gian.</li>
+                    <li><strong>Đặt lịch bác sĩ:</strong> Đặt lịch và quản lý lịch trình mượt mà.</li>
+                    <li><strong>Cảnh báo SOS:</strong> Tín hiệu khẩn cấp một chạm kèm theo dõi GPS trực tiếp.</li>
+                    <li><strong>Hệ thống Chat:</strong> Kênh giao tiếp trực tiếp giữa bệnh nhân và bác sĩ.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Kết quả</span>
+    </div>
+</div>
+
+<!-- Slide 9: Non-Functional Requirements -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-shield-check"></i>
+    <i class="deco-icon fa-solid fa-bolt" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-server" style="bottom: 130px; left: 80px; font-size: 40px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-fingerprint" style="bottom: 160px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent medium" style="top: -100px; left: -100px;"></div>
+    <div class="circle-accent small" style="bottom: 100px; right: 100px;"></div>
+    <div class="pulse-ring" style="bottom: -60px; left: 50%; transform: translateX(-50%) scale(0.5);"></div>
+    <div class="geo-square" style="top: 180px; right: 50px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="line-accent horizontal" style="bottom: 80px; left: 100px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Yêu cầu Phi chức năng (NFRs)</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <h3>Hiệu năng</h3>
+                <p>Phản hồi UI < 2s.<br>Suy luận AI < 3s.<br>Tối ưu 60fps trên thiết bị di động.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-lock"></i></div>
+                <h3>Bảo mật</h3>
+                <p>Xác thực Firebase Auth.<br>Mã hóa dữ liệu người dùng.<br>Phân quyền truy cập (RBAC).</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-wifi"></i></div>
+                <h3>Tính sẵn sàng</h3>
+                <p>Uptime 99.9% (Firebase SLA).<br><strong>Chế độ Offline:</strong> Đầy đủ chức năng qua Hive cache.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Chất lượng hệ thống</span>
+    </div>
+</div>
+
+<!-- Slide 10: Offline Mode & Connectivity -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-wifi-slash"></i>
+    <i class="deco-icon fa-solid fa-database" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-sync" style="bottom: 140px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="top: -150px; right: -150px;"></div>
+    <div class="circle-accent small filled" style="bottom: 120px; left: 80px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Chế độ Offline & Đồng bộ</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-hard-drive"></i></div>
+                <h3>Hive Local Cache</h3>
+                <p>Lưu trữ dữ liệu offline với Hive NoSQL.<br>Cache hồ sơ sức khỏe, lịch hẹn, tin nhắn.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-signal"></i></div>
+                <h3>Connectivity Service</h3>
+                <p>Phát hiện trạng thái mạng realtime.<br>Hiển thị Offline Indicator trên UI.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                <h3>Auto Sync</h3>
+                <p>Tự động đồng bộ khi có mạng trở lại.<br>Queue các thao tác offline.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Offline Mode</span>
+    </div>
+</div>
+
+<!-- Slide 11: Notification System -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-bell"></i>
+    <i class="deco-icon fa-solid fa-mobile-screen" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-paper-plane" style="bottom: 140px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="bottom: -150px; left: -150px;"></div>
+    <div class="circle-accent small" style="top: 120px; right: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Hệ thống Thông báo</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-cloud"></i></div>
+                <h3>Firebase Cloud Messaging</h3>
+                <p>Push notification realtime.<br>Hỗ trợ Android, iOS, Web.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
+                <h3>Local Notification</h3>
+                <p>Nhắc nhở uống thuốc theo lịch.<br>Thông báo lịch hẹn sắp tới.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-link"></i></div>
+                <h3>Deep Linking</h3>
+                <p>Nhấn thông báo → Mở đúng màn hình.<br>Hỗ trợ: Chat, SOS, Lịch hẹn, Nhắc nhở.</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Notification</span>
+    </div>
+</div>
+
+<!-- Slide 12: Family Management -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-people-group"></i>
+    <i class="deco-icon fa-solid fa-heart" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-location-dot" style="bottom: 140px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="top: -150px; left: -150px;"></div>
+    <div class="circle-accent small filled" style="bottom: 120px; right: 80px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Quản lý Gia đình</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li><strong>Tạo nhóm gia đình:</strong> Người dùng tạo và quản lý nhóm gia đình.</li>
+                    <li><strong>Mời thành viên:</strong> Gửi lời mời qua mã code hoặc link.</li>
+                    <li><strong>Theo dõi sức khỏe:</strong> Xem chỉ số sức khỏe của người thân.</li>
+                    <li><strong>Nhận cảnh báo SOS:</strong> Thông báo khi người thân kích hoạt SOS.</li>
+                    <li><strong>Chia sẻ vị trí:</strong> Xem vị trí GPS của thành viên trong trường hợp khẩn cấp.</li>
+                </ul>
+            </div>
+            <div class="tiled-content" style="grid-template-columns: 1fr;">
+                <div class="tile" style="border-top-color: #10B981;">
+                    <div class="icon" style="color: #10B981; background-color: #ecfdf5;"><i class="fa-solid fa-shield-heart"></i></div>
+                    <h3>Bảo vệ Người thân</h3>
+                    <p>Giúp gia đình theo dõi và hỗ trợ người có nguy cơ đột quỵ cao, đặc biệt là người cao tuổi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Family Management</span>
+    </div>
+</div>
+
+<!-- Slide 13: Community & Knowledge -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-comments"></i>
+    <i class="deco-icon fa-solid fa-book-medical" style="top: 160px; left: 50px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-graduation-cap" style="bottom: 140px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="bottom: -150px; right: -150px;"></div>
+    <div class="circle-accent small" style="top: 120px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Cộng đồng & Kiến thức Y tế</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile" style="border-top-color: #8B5CF6; height: fit-content;">
+                <div class="icon" style="color: #8B5CF6; background-color: #f3f0ff;"><i class="fa-solid fa-users"></i></div>
+                <h3>Diễn đàn Cộng đồng</h3>
+                <ul style="text-align: left; margin-top: 16px;">
+                    <li>Đăng bài chia sẻ kinh nghiệm</li>
+                    <li>Bình luận và tương tác</li>
+                    <li>Hỏi đáp với cộng đồng</li>
+                    <li>Admin kiểm duyệt nội dung</li>
+                </ul>
+            </div>
+            <div class="tile" style="border-top-color: #F59E0B; height: fit-content;">
+                <div class="icon" style="color: #F59E0B; background-color: #fffbeb;"><i class="fa-solid fa-newspaper"></i></div>
+                <h3>Kiến thức Y tế</h3>
+                <ul style="text-align: left; margin-top: 16px;">
+                    <li>Bài viết về đột quỵ, tiểu đường</li>
+                    <li>Hướng dẫn phòng ngừa</li>
+                    <li>Tips chăm sóc sức khỏe</li>
+                    <li>Admin quản lý nội dung</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Community & Knowledge</span>
+    </div>
+</div>
+
+<!-- Slide 14: Demo Flow -->
+<div class="slide-container bleed-image-layout">
+    <div class="content-container">
+        <i class="deco-icon fa-solid fa-play-circle" style="top: 70px; right: 30px; font-size: 60px; opacity: 0.07;"></i>
+        <i class="deco-icon fa-solid fa-arrows-spin" style="bottom: 150px; right: 50px; font-size: 45px; opacity: 0.05;"></i>
+        <i class="deco-icon fa-solid fa-route" style="top: 180px; left: 30px; font-size: 35px; opacity: 0.05;"></i>
+        <div class="circle-accent small" style="top: 100px; right: 100px;"></div>
+        <div class="dots-cluster" style="bottom: 120px; left: 80px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="line-accent vertical" style="top: 100px; right: 20px;"></div>
+        <div class="texture-diagonal" style="bottom: 0; left: 0; right: auto;"></div>
+        <h2 class="slide-title">Luồng Demo Hệ thống</h2>
+        <div class="content-area">
+            <p><strong>Kịch bản trải nghiệm người dùng:</strong></p>
+            <ol style="font-size: 20px; line-height: 2; margin-left: 20px; color: #4B5563;">
+                <li><strong>Xác thực:</strong> Đăng nhập/Đăng ký bảo mật.</li>
+                <li><strong>Nhập liệu:</strong> Cập nhật các chỉ số sức khỏe.</li>
+                <li><strong>Phân tích:</strong> Xem kết quả dự đoán rủi ro từ AI.</li>
+                <li><strong>Hành động:</strong> Xem biểu đồ sức khỏe hoặc Đặt lịch khám.</li>
+                <li><strong>Khẩn cấp:</strong> Kích hoạt SOS trong tình huống nguy hiểm.</li>
+            </ol>
+        </div>
+    </div>
+    <div class="image-container" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; padding: 16px; align-items: center; justify-items: center;">
+        <img src="Ảnh giao diện/User - Đăng nhập.png" style="max-height: 320px; object-fit: contain;" alt="Đăng nhập">
+        <img src="Ảnh giao diện/User - Màn hình sức khoẻ.png" style="max-height: 320px; object-fit: contain;" alt="Sức khỏe">
+        <img src="Ảnh giao diện/User - Màn hình dự đoán.png" style="max-height: 320px; object-fit: contain;" alt="Dự đoán">
+        <img src="Ảnh giao diện/User - SOS.png" style="max-height: 320px; object-fit: contain;" alt="SOS">
+    </div>
+</div>
+
+<!-- Slide 15: Development Roadmap -->
+<div class="slide-container">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon top-right fa-solid fa-road"></i>
+    <i class="deco-icon bottom-left fa-solid fa-rocket" style="opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-flag" style="top: 150px; left: 60px; font-size: 45px; opacity: 0.05;"></i>
+    <i class="deco-icon fa-solid fa-compass" style="top: 130px; right: 200px; font-size: 40px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-lightbulb" style="bottom: 150px; right: 100px; font-size: 50px; opacity: 0.05;"></i>
+    <div class="circle-accent large" style="bottom: -200px; left: -200px;"></div>
+    <div class="circle-accent medium" style="top: -120px; right: -120px;"></div>
+    <div class="geo-triangle" style="bottom: 120px; left: 50px;"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="data-flow" style="top: 200px; right: 100px;"></div>
+    <div class="texture-diagonal"></div>
+    <h2 class="slide-title">Lộ trình Phát triển</h2>
+    <div class="content-area">
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Ngắn hạn</h3>
+                    <p>Sửa lỗi (Beta).<br>Huấn luyện lại mô hình AI.<br>Triển khai API lên Cloud.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Trung hạn</h3>
+                    <p>Tích hợp thiết bị IoT.<br>Đồng bộ Google Fit.<br>Trợ lý ảo Chatbot AI.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h3>Dài hạn</h3>
+                    <p>Thị giác máy tính (Triệu chứng).<br>Phân tích giọng nói.<br>Video Call khám từ xa.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Đồ án Tốt nghiệp</span>
+        <span>Hướng phát triển</span>
+    </div>
+</div>
+
+<!-- Slide 12: Conclusion -->
+<div class="slide-container" style="text-align: center; justify-content: center;">
+    <div class="texture-grid"></div>
+    <div class="gradient-overlay"></div>
+    <i class="deco-icon fa-solid fa-heart" style="top: 80px; left: 120px; font-size: 70px; opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-star" style="top: 120px; right: 150px; font-size: 55px; opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-hands-clapping" style="bottom: 130px; left: 180px; font-size: 60px; opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-comments" style="bottom: 150px; right: 130px; font-size: 55px; opacity: 0.06;"></i>
+    <i class="deco-icon fa-solid fa-award" style="top: 200px; left: 250px; font-size: 45px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-thumbs-up" style="top: 180px; right: 280px; font-size: 40px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-graduation-cap" style="bottom: 200px; left: 100px; font-size: 50px; opacity: 0.04;"></i>
+    <i class="deco-icon fa-solid fa-medal" style="bottom: 220px; right: 250px; font-size: 45px; opacity: 0.04;"></i>
+    <div class="circle-accent large" style="top: -180px; left: -180px;"></div>
+    <div class="circle-accent large" style="bottom: -180px; right: -180px;"></div>
+    <div class="circle-accent medium filled" style="top: 50%; left: -100px; transform: translateY(-50%);"></div>
+    <div class="circle-accent medium filled" style="top: 50%; right: -100px; transform: translateY(-50%);"></div>
+    <div class="pulse-ring" style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.5);"></div>
+    <div class="corner-bracket top-left" style="top: 56px; left: 80px;"></div>
+    <div class="corner-bracket bottom-right" style="bottom: 70px; right: 80px;"></div>
+    <div class="dots-cluster" style="top: 60px; right: 60px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="dots-cluster" style="bottom: 80px; left: 60px;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="content-area" style="align-items: center;">
+        <h1 style="color: #0a0a0a; font-size: 72px;">Cảm ơn Thầy và các bạn!</h1>
+        <p style="font-size: 32px; max-width: 800px; margin: 20px auto;">Dự án SEWS chứng minh tính khả thi của việc kết hợp AI và công nghệ di động để tạo ra các giải pháp chăm sóc sức khỏe thiết thực.</p>
+        <div style="margin-top: 60px;">
+            <h3 style="color: #0066cc;">Hỏi & Đáp</h3>
+        </div>
+    </div>
+    <div class="footer">
+        <span>SEWS - Hệ thống Cảnh báo Sớm Đột quỵ</span>
+        <span>Kết thúc</span>
+    </div>
+</div>
+
+</body>
+</html>
+```
